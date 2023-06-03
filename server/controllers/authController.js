@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-// const Child = mongoose.model("Child");
-// const Class = mongoose.model("Class");
 const User = mongoose.model("Users");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+
 exports.login = async (request, response, next) => {
   try {
     const user = await User.findOne({ email: request.body.email });
@@ -52,7 +51,6 @@ exports.signup = async (request, response, next) => {
       request.body.password,
       process.env.PASS_SEC
     ).toString(),
-    image: request.body.image,
     address: request.body.address,
   });
   try {

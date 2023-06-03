@@ -47,10 +47,25 @@ router
     controller.removeFavourite
   )
   .delete(
+    // clear favourites array
     verifyTokenAndAuthorization,
     validator.clearFavourites,
     validationError,
     controller.clearFavourites
   );
-
+router
+  .route("/:id/image")
+  .post(
+    verifyTokenAndAuthorization,
+    validator.addProfileImage,
+    validationError,
+    controller.upload.single("image"),
+    controller.addProfileImage
+  )
+  .delete(
+    verifyTokenAndAuthorization,
+    validator.deleteProfileImage,
+    validationError,
+    controller.deleteProfileImage
+  );
 module.exports = router;

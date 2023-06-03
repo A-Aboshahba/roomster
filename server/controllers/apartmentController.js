@@ -1,5 +1,3 @@
-require("../model/apartmentModel");
-// const { request } = require("express");
 const mongoose = require("mongoose");
 const Apartment = mongoose.model("Apartments");
 

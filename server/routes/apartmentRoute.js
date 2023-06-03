@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const apartmentController = require("../controllers/apartmentController");
-const validationError = require("../middlewares/validators/validationError");
-const validator = require("../middlewares/validators/apartmentValidator");
-const authMiddleware = require("../middlewares/authenicatedMW");
+const validationError = require("./../middelwares/validators/validationError");
+const validator = require("./../middelwares/validators/apartmentValidator");
+const authMiddleware = require("./../middelwares/authenicatedMW");
 router
   .route("/")
   .post(

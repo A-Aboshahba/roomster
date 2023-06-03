@@ -8,7 +8,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
-// const apartmentRouter = require("./routes/apartmentRoute");
+const apartmentRouter = require("./routes/apartmentRoute");
 //############################################################################
 const server = express();
 let port = process.env.PORT || 8080;

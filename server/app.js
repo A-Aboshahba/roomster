@@ -1,6 +1,6 @@
 require("./models/userModel");
-// require("./models/apartmentModel");
-// require("./models/reviewModel");
+require("./models/apartmentModel");
+require("./models/reviewModel");
 const express = require("express");
 // const multer = require("multer");
 require("dotenv").config();
@@ -30,7 +30,7 @@ mongoose
 //###__routes__##########################################################
 server.use("/auth", authRoute);
 server.use("/user", userRoute);
-// server.use("/apartments", apartmentRouter);
+server.use("/apartments", apartmentRouter);
 //#######################################################################
 server.use((request, response, next) => {
   response.status(404).json({ message: "Page Not Found..!" });

@@ -123,9 +123,9 @@ module.exports.clearFavourites = (request, response, next) => {
 };
 ////////////////////
 cloudinary.config({
-  cloud_name: "ds2uqpwc2",
-  api_key: "436674829799529",
-  api_secret: "wEfWi_gtZQAh2vHOC2H9OMb0EoE",
+  cloud_name: process.env.cloudinary_cloud_name,
+  api_key: process.env.cloudinary_api_key,
+  api_secret: process.env.cloudinary_api_secret,
 });
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,

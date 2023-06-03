@@ -12,10 +12,10 @@ const LocationCards = () => {
   return (
     <Box sx={{ mx: 2 }}>
       <Grid container rowSpacing={3} columnSpacing={3}>
-        {cards.map((location) => {
+        {cards.map((location, index) => {
           return (
             <Grid key={location.id} item xs={12} sm={4} md={4} lg={3}>
-              <CarouselCard location={location} />
+              <CarouselCard location={location} index={index} />
             </Grid>
           );
         })}

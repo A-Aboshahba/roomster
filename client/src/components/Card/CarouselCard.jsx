@@ -22,13 +22,13 @@ import {
   fixedBottom,
 } from "../../theme/commonStyles.jsx";
 import "./CarouselCard.css";
-import { PropTypes } from 'prop-types';
+import { PropTypes } from "prop-types";
+import { Link } from "react-router-dom";
 
-const CarouselCard = ({location} ) => {
+const CarouselCard = ({ location, index }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [icon, setIcon] = React.useState(false);
   const maxSteps = location.locationImages.length; // so that we know how many dots
-
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
@@ -112,28 +112,30 @@ const CarouselCard = ({location} ) => {
         />
       </Box>
 
-      <Box sx={flexBetween}>
-        <Box sx={{ mt: 2 }}>
-          <Typography component="h3"> {location.location}ss</Typography>
-          <Typography component="h4"> {location.days}</Typography>
-          <Typography component="h5"> {location.price}</Typography>
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <Box sx={dFlex}>
-            {location.isNew ? (
-              <React.Fragment>
-                <Typography component="h5">New</Typography>
-                <AiFillStar size={18} />
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Typography component="h5"> {location.rating}</Typography>
-                <AiFillStar size={18} />
-              </React.Fragment>
-            )}
+      <Link to={`housingDetails/${index + 1}`} className="Link">
+        <Box sx={flexBetween}>
+          <Box sx={{ mt: 2 }}>
+            <Typography component="h3"> {location.location}</Typography>
+            <Typography component="h4"> {location.days}</Typography>
+            <Typography component="h5"> {location.price}</Typography>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Box sx={dFlex}>
+              {location.isNew ? (
+                <React.Fragment>
+                  <Typography component="h5">New</Typography>
+                  <AiFillStar size={18} />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Typography component="h5"> {location.rating}</Typography>
+                  <AiFillStar size={18} />
+                </React.Fragment>
+              )}
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Link>
     </Box>
   );
 };

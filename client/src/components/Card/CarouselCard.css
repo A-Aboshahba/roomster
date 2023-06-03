@@ -11,3 +11,8 @@
 .carouselCard:hover .MuiMobileStepper-dotActive {
     background-color: #fff;
 }
+
+.Link {
+    text-decoration: none;
+    color: inherit;
+}

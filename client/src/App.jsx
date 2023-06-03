@@ -1,31 +1,30 @@
-import { Container } from '@mui/material';
-import Navbar from './components/navbar.jsx';
-import Homepage from './pages/homePage/homepage.jsx';
-import Footer from './components/Footer.jsx';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SignInSide from './pages/loginPage.jsx';
-import Signup from './pages/registerPage.jsx';
-import Profile from './pages/profile/Profile.jsx';
-
-
+import { Container } from "@mui/material";
+import Navbar from "./components/navbar.jsx";
+import Homepage from "./pages/homePage/homepage.jsx";
+import Footer from "./components/Footer.jsx";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignInSide from "./pages/loginPage.jsx";
+import Signup from "./pages/registerPage.jsx";
+import Profile from "./pages/profile/Profile.jsx";
+import HousingDetails from "./pages/housingDetails/housingDetails.jsx";
 function App() {
   return (
     <>
       <Navbar />
-      <Container maxWidth='xl' >
+      <Container maxWidth="xl">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Homepage />}/>
-            <Route path="login" element={<SignInSide />}/>
-            <Route path="register" element={<Signup />}/>
-            <Route path="profile" element={<Profile />}/>
+            <Route path="/" element={<Homepage />} />
+            <Route path="login" element={<SignInSide />} />
+            <Route path="register" element={<Signup />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="housingDetails/:id" element={<HousingDetails />} />
           </Routes>
         </BrowserRouter>
-
       </Container>
       <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

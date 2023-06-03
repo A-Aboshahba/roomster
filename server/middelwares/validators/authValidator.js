@@ -4,7 +4,7 @@ module.exports.login = [
   body("email")
     .notEmpty()
     .withMessage("email cant be blank")
-    .isString()
+    .isEmail()
     .withMessage("email must be alphapetic"),
   body("password")
     .isString()
@@ -39,11 +39,6 @@ module.exports.signup = [
     .withMessage("email cant be blank")
     .isEmail()
     .withMessage("enter valid email"),
-  body("image")
-    .isString()
-    .withMessage("image must be alphapetic")
-    .notEmpty()
-    .withMessage("image cant be blank"),
   body("address.country")
     .isString()
     .withMessage("country must be alphapetic")

@@ -38,12 +38,6 @@ module.exports.updateSingleUser = [
     .isEmail()
     .withMessage("enter valid email")
     .optional(),
-  body("image")
-    .isString()
-    .withMessage("image must be alphapetic")
-    .notEmpty()
-    .withMessage("image cant be blank")
-    .optional(),
   body("address.country")
     .isString()
     .withMessage("country must be alphapetic")
@@ -71,5 +65,11 @@ module.exports.removeFavourite = [
 ];
 
 module.exports.clearFavourites = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.addProfileImage = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.deleteProfileImage = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
 ];

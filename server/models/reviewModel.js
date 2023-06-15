@@ -24,5 +24,5 @@ const model = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
+model.set("strictPopulate", false);
 mongoose.model("Reviews", model);

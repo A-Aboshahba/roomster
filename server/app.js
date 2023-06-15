@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
+const reviewRouter = require("./routes/reviewRoute");
 //############################################################################
 const server = express();
 let port = process.env.PORT || 8080;
@@ -31,6 +32,7 @@ mongoose
 server.use("/auth", authRoute);
 server.use("/user", userRoute);
 server.use("/apartments", apartmentRouter);
+server.use("/reviews", reviewRouter);
 //#######################################################################
 server.use((request, response, next) => {
   response.status(404).json({ message: "Page Not Found..!" });

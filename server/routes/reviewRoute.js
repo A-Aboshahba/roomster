@@ -23,6 +23,7 @@ router
     validationError
   )
   .delete(
+    authMiddleware.verifyTokenAndAuthorization,
     reviewController.deleteReview,
     validator.deleteSpecificReview,
     validationError

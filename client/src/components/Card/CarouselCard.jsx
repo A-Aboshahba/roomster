@@ -9,9 +9,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 // 3rd party
 import SwipeableViews from "react-swipeable-views";
-
 // react icons
-import { AiFillStar, AiFillHeart } from "react-icons/ai";
+import { AiFillStar, AiFillHeart, AiTwotoneDelete } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import {
   flexBetween,
@@ -29,7 +28,9 @@ import { Link } from "react-router-dom";
 const CarouselCard = ({ location, index }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [icon, setIcon] = React.useState(false);
-  const maxSteps = location.locationImages.length; // so that we know how many dots
+  const maxSteps = location.locationImages.length;
+  //? to check for we in wish list page
+  const wishListPage = window.location.pathname === "/wishlist";
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
@@ -55,7 +56,13 @@ const CarouselCard = ({ location, index }) => {
         style={{ cursor: "pointer" }}
         onClick={() => setIcon(!icon)}
       >
-        {icon ? (
+        {wishListPage ? (
+          <AiTwotoneDelete
+            size={30}
+            fill="#8e0707"
+            onClick={(e) => e.target.closest(".carouselCard").remove()}
+          />
+        ) : icon ? (
           <AiFillHeart size={24} color="#fff" fill="#b12929" />
         ) : (
           <FaRegHeart size={24} color="#fff" />
@@ -123,15 +130,15 @@ const CarouselCard = ({ location, index }) => {
           <Box sx={{ mt: 2 }}>
             <Box sx={dFlex}>
               {location.isNew ? (
-                <React.Fragment>
+                <>
                   <Typography component="h5">New</Typography>
                   <AiFillStar size={18} />
-                </React.Fragment>
+                </>
               ) : (
-                <React.Fragment>
+                <>
                   <Typography component="h5"> {location.rating}</Typography>
                   <AiFillStar size={18} />
-                </React.Fragment>
+                </>
               )}
             </Box>
           </Box>

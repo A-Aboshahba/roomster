@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material"
 import FilterAndSearch from "../../components/homeComponents/FilterAndSearch"
 import LocationCards from "../../components/Card/LocationCard"
-
+import "./homeStyle.css"
 
 
 function Homepage() {

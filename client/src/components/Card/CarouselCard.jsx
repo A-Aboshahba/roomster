@@ -112,7 +112,7 @@ const CarouselCard = ({ location, index }) => {
         />
       </Box>
 
-      <Link to={`housingDetails/${index + 1}`} className="Link">
+      <Link to={`/housingDetails/${index + 1}`} className="Link">
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
             <Typography component="h3"> {location.location}</Typography>

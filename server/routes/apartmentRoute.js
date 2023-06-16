@@ -22,10 +22,10 @@ router.patch(
 );
 router.patch(
   "/:id/imgs",
+  apartmentController.upload.array("images", 10),
   authMiddleware.verifyTokenAndAuthorization,
   validator.getSpecifiedApartmentById,
   validationError,
-  apartmentController.upload.array("images", 10),
   apartmentController.addMultipleImages
 );
 router.delete(
@@ -53,10 +53,11 @@ router.get(
 // );
 router.patch(
   "/:id/image",
+  apartmentController.upload.single("image"),
   authMiddleware.verifyTokenAndAuthorization,
   validator.getSpecifiedApartmentById,
   validationError,
-  apartmentController.upload.single("image"),
+
   apartmentController.addSingleImage
 );
 router.delete(
@@ -65,5 +66,21 @@ router.delete(
   validator.getSpecifiedApartmentById,
   validationError,
   apartmentController.removeSingleImage
+);
+router.post(
+  //apartment id
+  "/:id/rent",
+  authMiddleware.verifyTokenAndAuthorization,
+  validator.rentApartment,
+  validationError,
+  apartmentController.rentApartment
+);
+router.delete(
+  //reservation id and userId in body
+  "/:id/rent",
+  authMiddleware.verifyTokenAndAuthorization,
+  validator.cancelRent,
+  validationError,
+  apartmentController.cancelRent
 );
 module.exports = router;

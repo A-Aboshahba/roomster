@@ -192,7 +192,7 @@ exports.removeSingleImage = (request, response, next) => {
 
 exports.addSingleImage = (request, response, next) => {
   const result = request.file;
-  console.log(result);
+  console.log("request obj", request.body.userId);
 
   const publicId = request.file.path.replace(/^.*[\\\/]/, "").split(".")[0];
 

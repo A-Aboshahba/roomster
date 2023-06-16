@@ -4,14 +4,12 @@ const apartmentController = require("../controllers/apartmentController");
 const validationError = require("./../middelwares/validators/validationError");
 const validator = require("./../middelwares/validators/apartmentValidator");
 const authMiddleware = require("./../middelwares/authenicatedMW");
-router
-  .route("/")
-  .post(
-    authMiddleware.verifyTokenAndAuthorization,
-    validator.postValidationArr,
-    validationError,
-    apartmentController.addNewApartment
-  );
+router.route("/").post(
+  authMiddleware.verifyTokenAndAuthorization,
+  // validator.postValidationArr,
+  // validationError,
+  apartmentController.addNewApartment
+);
 router.get("/all", apartmentController.getAllApartments);
 router.patch(
   "/:id",
@@ -22,10 +20,11 @@ router.patch(
 );
 router.patch(
   "/:id/imgs",
+  apartmentController.upload.array("images", 10),
   authMiddleware.verifyTokenAndAuthorization,
   validator.getSpecifiedApartmentById,
   validationError,
-  apartmentController.upload.array("images", 10),
+
   apartmentController.addMultipleImages
 );
 router.delete(
@@ -53,10 +52,10 @@ router.get(
 // );
 router.patch(
   "/:id/image",
+  apartmentController.upload.single("image"),
   authMiddleware.verifyTokenAndAuthorization,
   validator.getSpecifiedApartmentById,
   validationError,
-  apartmentController.upload.single("image"),
   apartmentController.addSingleImage
 );
 router.delete(

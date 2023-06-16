@@ -37,7 +37,9 @@ const isAdmin = (request, repsone, next) => {
 };
 
 const verifyTokenAndAuthorization = (request, respsone, next) => {
+  console.log(request.body.userId);
   verifyToken(request, respsone, () => {
+    // console.log(request.accessToken._id, request.body.userId);
     if (
       request.accessToken._id === request.params.id ||
       request.accessToken._id === request.body.userId ||

@@ -54,13 +54,12 @@ exports.postValidationArr = [
 
 exports.putValidationArr = [
   body("userId")
-    .isEmpty()
-    .withMessage("ownerId is empty")
+    .notEmpty()
+    .withMessage("user Id is empty")
     .isMongoId()
-    .withMessage("name is not valid object id ")
-    .optional(),
+    .withMessage("name is not valid object id "),
   body("apartmentSpecification.noOfBalcony")
-    .isEmpty()
+    .notEmpty()
     .withMessage("noOfBalcony is empty")
     .isNumeric()
     .withMessage("noOfBalcony is't number  ")

@@ -1,11 +1,9 @@
-import React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { locations as cardLocations } from "../../data/allData.jsx";
 import CarouselCard from "./CarouselCard";
+import { useState } from "react";
 
-const LocationCards = () => {
-  const [cards] = React.useState(cardLocations);
+const LocationCards = ({ cards }) => {
   if (!cards.length) {
     return null;
   }

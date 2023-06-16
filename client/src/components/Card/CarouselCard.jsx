@@ -24,6 +24,7 @@ import "./CarouselCard.css";
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location, index }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [icon, setIcon] = React.useState(false);

@@ -1,0 +1,19 @@
+.pointer {
+    cursor: pointer;
+}
+
+.centerItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.betweenItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+a{
+    text-decoration: none;
+    color: black;
+}

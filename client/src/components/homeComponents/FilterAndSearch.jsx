@@ -4,8 +4,8 @@ import Tab from "@mui/material/Tab";
 
 // react icons
 import { locationsTab } from "../../data/allData";
-import MaxWidthDialog from "./FilteModal";
 import { Grid, useMediaQuery } from "@mui/material";
+import FilterButton from "./FilterButton";
 
 const FilterAndSearch = () => {
     const [value, setValue] = React.useState(0);
@@ -37,7 +37,7 @@ const FilterAndSearch = () => {
                     </Tabs>
             </Grid>
             <Grid item xs={12}  md={2} lg={1}>
-                <MaxWidthDialog />
+                <FilterButton />
             </Grid>
         </Grid>
     );

@@ -9,7 +9,7 @@ function Homepage() {
     <>
             <FilterAndSearch />
             <Grid container columnSpacing={2} rowSpacing={4} >
-                {[...'x'.repeat(20)].map((value, index) => {
+                {[...'x'.repeat(1)].map((value, index) => {
                     return  <LocationCards key={index} />
                 })}
             </Grid>

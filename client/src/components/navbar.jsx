@@ -19,12 +19,12 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
 
@@ -104,22 +104,20 @@ function Navbar(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
+        <Link to='profile'>
+          <MenuItem onClick={handleClose}>
+            <Avatar /> Profile
+          </MenuItem>
+        </Link>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <ShoppingCartIcon fontSize="small" />
-          </ListItemIcon>
-          wishlist
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
+        <Link to='wishlist'>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <ShoppingCartIcon fontSize="small" />
+            </ListItemIcon>
+            wishlist
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Logout fontSize="small" />
@@ -141,11 +139,13 @@ function Navbar(props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
+          <Link to={item} key={item}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => console.log("first")} sx={{ textAlign: "center" }}>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
         <Divider />
         <ListItem disablePadding>
@@ -204,14 +204,15 @@ function Navbar(props) {
             className="center"
           >
             {navItems.map((item) => (
-              <Button
-                component="div"
-                key={item}
-                size="large"
-                sx={{ color: "#000" }}
-              >
-                {item}
-              </Button>
+              <Link to={item} key={item}>
+                <Button
+                  component="div"
+                  size="large"
+                  sx={{ color: "#000" }}
+                >
+                  {item}
+                </Button>
+              </Link>
             ))}
 
             {/* icon dark mode  */}

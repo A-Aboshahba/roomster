@@ -14,7 +14,7 @@ const verifyToken = (request, response, next) => {
         throw error;
       } else {
         request.accessToken = user;
-        console.log(request.accessToken);
+        // console.log(request.accessToken);
         next();
       }
     });

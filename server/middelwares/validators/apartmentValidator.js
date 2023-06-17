@@ -150,19 +150,19 @@ exports.putValidationArr = [
     .withMessage("description isn't String ")
     .optional(),
   body("apartmentSpecification.noOfBalcony")
-    .isEmpty()
+    .notEmpty()
     .withMessage("noOfBalcony is empty")
     .isNumeric()
     .withMessage("noOfBalcony is't number  ")
     .optional(),
   body("apartmentSpecification.noOfRooms")
-    .isEmpty()
+    .notEmpty()
     .withMessage("noOfRooms is empty")
     .isNumeric()
     .withMessage("noOfRooms isn't number")
     .optional(),
   body("apartmentSpecification.noOfBeds")
-    .isEmpty()
+    .notEmpty()
     .withMessage("noOfBeds is empty")
     .isNumeric()
     .withMessage("noOfBeds isn't number  ")

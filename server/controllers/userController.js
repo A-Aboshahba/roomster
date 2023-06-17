@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("Users");
+const Reservation = mongoose.model("Reservations");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const multer = require("multer");
@@ -193,4 +194,41 @@ exports.deleteProfileImage = (request, response, next) => {
         .catch((err) => next(err));
     })
     .catch((err) => next(err));
+};
+
+module.exports.getUserReservations = (request, response, next) => {
+  Reservation.find({ userId: request.params.id })
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+module.exports.getAllReservations = (request, response, next) => {
+  Reservation.find({})
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+module.exports.getSingleReservations = (request, response, next) => {
+  Reservation.find({ _id: request.params.id })
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
 };

@@ -12,7 +12,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
 import "../index.css";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -40,9 +39,6 @@ function Navbar(props) {
 
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
-  const handleClickLanguage = (event) => {
-    setAnchorLanguage(event.currentTarget);
-  };
   const handleCloseLanguage = () => {
     setAnchorLanguage(null);
   };
@@ -234,18 +230,7 @@ function Navbar(props) {
                   textAlign: "center",
                 }}
               >
-                <Tooltip title="Language / اللغة">
-                  <IconButton
-                    onClick={handleClickLanguage}
-                    size="small"
-                    sx={{ ml: 2 }}
-                    aria-controls={openLanguage ? "language-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openLanguage ? "true" : undefined}
-                  >
-                    <LanguageRoundedIcon sx={{ width: 32, height: 32 }} />
-                  </IconButton>
-                </Tooltip>
+          
               </Box>
               <Menu
                 anchorEl={anchorLanguage}

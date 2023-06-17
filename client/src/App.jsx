@@ -10,7 +10,6 @@ function App() {
       <Container maxWidth="xl">
         <Routers />
       </Container>
-      <Footer />
     </BrowserRouter>
   );
 }

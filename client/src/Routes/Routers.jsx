@@ -6,6 +6,7 @@ import Profile from "../pages/profile/Profile";
 import HousingDetails from "../pages/housingDetails/housingDetails";
 import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
+import MyTrips from "../pages/MyTrips/MyTrips";
 
 function Routers() {
   return (
@@ -17,6 +18,7 @@ function Routers() {
       <Route path="housingDetails/:id" element={<HousingDetails />} />
       <Route path="Manage Housing" element={<ManageHousing />} />
       <Route path="wishlist" element={<WishList />} />
+      <Route path="My Trips" element={<MyTrips />} />
       <Route path="*" element={<Homepage />} />
     </Routes>
   );

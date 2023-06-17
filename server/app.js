@@ -1,6 +1,7 @@
 require("./models/userModel");
 require("./models/apartmentModel");
 require("./models/reviewModel");
+require("./models/reservationModel");
 const express = require("express");
 // const multer = require("multer");
 require("dotenv").config();

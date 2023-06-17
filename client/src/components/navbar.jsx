@@ -104,13 +104,13 @@ function Navbar(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link to='profile'>
+        <Link to="profile">
           <MenuItem onClick={handleClose}>
             <Avatar /> Profile
           </MenuItem>
         </Link>
         <Divider />
-        <Link to='wishlist'>
+        <Link to="wishlist">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <ShoppingCartIcon fontSize="small" />
@@ -141,7 +141,10 @@ function Navbar(props) {
         {navItems.map((item) => (
           <Link to={item} key={item}>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => console.log("first")} sx={{ textAlign: "center" }}>
+              <ListItemButton
+                onClick={() => console.log("first")}
+                sx={{ textAlign: "center" }}
+              >
                 <ListItemText primary={item} />
               </ListItemButton>
             </ListItem>
@@ -205,11 +208,7 @@ function Navbar(props) {
           >
             {navItems.map((item) => (
               <Link to={item} key={item}>
-                <Button
-                  component="div"
-                  size="large"
-                  sx={{ color: "#000" }}
-                >
+                <Button component="div" size="large" sx={{ color: "#000" }}>
                   {item}
                 </Button>
               </Link>

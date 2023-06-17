@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const Apartment = mongoose.model("Apartments");
-
+const Reservation = mongoose.model("Reservations");
+import {
+  addRentToArr,
+  checkIfRentAvailable,
+  removeEndedRents,
+  deleteCanceledRent,
+} from "../middelwares/rentMW";
 const cloudinary = require("cloudinary").v2;
 // configuration file
 cloudinary.config({
@@ -215,7 +221,6 @@ exports.addSingleImage = (request, response, next) => {
 
 exports.addMultipleImages = (request, response, next) => {
   const images = [];
-
   for (const image of request.files) {
     const publicId = image.path.replace(/^.*[\\\/]/, "").split(".")[0];
     const fetchedImage = { url: image.path, publicId: publicId };
@@ -236,4 +241,106 @@ exports.addMultipleImages = (request, response, next) => {
         .json({ message: "images added to apartment successfully" });
     })
     .catch((err) => next(err));
+};
+
+exports.rentApartment = (request, response, next) => {
+  let rentedArray = [];
+  Apartment.findById(request.params.id)
+    .then((doc) => {
+      if (!doc) {
+        let error = new Error("this apartment doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      const isAvailableForRent = checkIfRentAvailable(
+        request.body,
+        doc.reservationsArr
+      );
+      console.log(isAvailableForRent);
+      if (isAvailableForRent) {
+        const newResevationInSchema = new Reservation({
+          userId: request.body.userId,
+          apartmentId: request.params.id,
+          startDate: request.body.startDate,
+          endDate: request.body.endDate,
+          totalPrice: request.body.totalPrice,
+        });
+        rentedArray = doc.reservationsArr;
+        return newResevationInSchema.save();
+      }
+    })
+    .then((resultFromResevationSchema) => {
+      if (!resultFromResevationSchema) {
+        let error = new Error(
+          "can't add this reservation to resevations schema"
+        );
+        error.statusCode = 404;
+        throw error;
+      }
+      const newRent = {
+        startDate: request.body.startDate,
+        endDate: request.body.endDate,
+        totalPrice: request.body.totalPrice,
+        reservationId: resultFromResevationSchema._id,
+      };
+      console.log(rentedArray);
+      const newResevationArr = addRentToArr(newRent, rentedArray);
+      const udpatedReservationsArr = removeEndedRents(newResevationArr);
+      console.log(udpatedReservationsArr);
+      return Apartment.updateOne(
+        { _id: request.params.id },
+        { $set: { reservationsArr: udpatedReservationsArr } }
+      );
+    })
+    .then((updatedApartmentDoc) => {
+      if (updatedApartmentDoc.matchedCount == 0) {
+        let error = new Error("cant update apartment reservations array ");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json({ message: "rented successfully" });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.cancelRent = (request, response, next) => {
+  Reservation.findOne({ _id: request.params.id })
+    .then((reservation) => {
+      if (!reservation) {
+        let error = new Error("this resrevation doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      return Apartment.findOne({ _id: reservation.apartmentId });
+    })
+    .then((apartment) => {
+      if (!apartment) {
+        let error = new Error("this apartment doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      const newRentsArr = deleteCanceledRent(
+        apartment.reservationsArr,
+        request.params.id
+      );
+      return Apartment.updateOne(
+        { _id: apartment._id },
+        { $set: { reservationsArr: newRentsArr } }
+      );
+    })
+    .then((updatedApartment) => {
+      if (updatedApartment.matchedCount == 0) {
+        let error = new Error("this apartment doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      response
+        .status(200)
+        .json({ message: " reservation is deleted successfully" });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

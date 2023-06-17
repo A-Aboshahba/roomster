@@ -1,4 +1,4 @@
-export function checkIfRentAvailable(newRent, rentedArr) {
+exports.checkIfRentAvailable = (newRent, rentedArr) => {
   for (let i = 0; i < rentedArr.length; i++) {
     //dummy  rents : [[5,9],[15,20]]
     const rentedStartDate = rentedArr[i].startDate;
@@ -15,9 +15,9 @@ export function checkIfRentAvailable(newRent, rentedArr) {
     }
   }
   return true; // rental period is free
-}
+};
 
-export const removeEndedRents = (rentedArr) => {
+exports.removeEndedRents = (rentedArr) => {
   for (let i = rentedArr.length - 1; i >= 0; i--) {
     if (rentedArr[i].endDate < new Date()) {
       console.log("removing: ");
@@ -27,7 +27,7 @@ export const removeEndedRents = (rentedArr) => {
   return rentedArr;
 };
 
-export const addRentToArr = (newRent, rentedArr) => {
+exports.addRentToArr = (newRent, rentedArr) => {
   console.log("Added new rent");
   // Find the correct index to insert the new rental period
   let insertIndex = rentedArr.length;
@@ -43,7 +43,7 @@ export const addRentToArr = (newRent, rentedArr) => {
   return rentedArr;
 };
 
-export const deleteCanceledRent = (rentedArr, reservationId) => {
+exports.deleteCanceledRent = (rentedArr, reservationId) => {
   // for (let i = rentedArr.length - 1; i >= 0; i--) {
   //   if (rentedArr[i].reservationId === reservationId) {
   //     console.log("removing: ");

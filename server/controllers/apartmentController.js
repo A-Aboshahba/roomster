@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const Apartment = mongoose.model("Apartments");
 const Reservation = mongoose.model("Reservations");
-import {
+const {
   addRentToArr,
   checkIfRentAvailable,
   removeEndedRents,
   deleteCanceledRent,
-} from "../middelwares/rentMW";
+} = require("../middelwares/rentMW");
 const cloudinary = require("cloudinary").v2;
 // configuration file
 cloudinary.config({

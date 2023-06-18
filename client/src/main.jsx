@@ -5,6 +5,8 @@ import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 import { green } from '@mui/material/colors';
 import { grey } from '@mui/material/colors';
+import store from './store/store';
+import { Provider } from 'react-redux';
 
 let theme = createTheme({
   palette: {
@@ -27,6 +29,8 @@ theme = createTheme(theme, {
 })
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider theme={theme}>
+    <Provider store={store}>
       <App />
+    </Provider>
   </ThemeProvider>
 )

@@ -45,9 +45,8 @@ function SignInSide() {
             <Grid container component="main" sx={{ height: '85vh' }}>
                 <CssBaseline />
                 <Grid
-                    item={false}
+                    item
                     sm={4}
-                    mditem={false}
                     md={7}
                     sx={{
                         backgroundImage:

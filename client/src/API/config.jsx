@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const Roomster = axios.create({
     baseURL: "http://localhost:3030/",
-   
 });
 
 Roomster.interceptors.request.use(
@@ -14,7 +13,6 @@ Roomster.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log("first")
         return config;
     },
     error => {

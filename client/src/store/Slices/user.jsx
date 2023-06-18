@@ -17,7 +17,7 @@ export const getUserInfo = createAsyncThunk('api/getUserInfo',
       const decodedToken = jwt_decode(token);
       const { data } = await Roomster.get(`user/${decodedToken._id}`);
       return data;
-    } else return {}
+    } else return null
   }
 );
 
@@ -35,14 +35,16 @@ const userSlice = createSlice({
     builder
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isAllowed = true;
+        if (state.user) {
+          state.isAllowed = true;
+        } else state.isAllowed = false;
       })
 
   }
 
 });
 
-export const {addUserInfo} = userSlice.actions;
+export const { addUserInfo } = userSlice.actions;
 
 export default userSlice.reducer
 

@@ -252,6 +252,11 @@ exports.rentApartment = (request, response, next) => {
         error.statusCode = 404;
         throw error;
       }
+      console.log(
+        request.body.startDate,
+        request.body.endDate,
+        doc.reservationsArr
+      );
       const isAvailableForRent = checkIfRentAvailable(
         request.body,
         doc.reservationsArr
@@ -271,9 +276,7 @@ exports.rentApartment = (request, response, next) => {
     })
     .then((resultFromResevationSchema) => {
       if (!resultFromResevationSchema) {
-        let error = new Error(
-          "can't add this reservation to resevations schema"
-        );
+        let error = new Error("reservation is overlapping on existed one");
         error.statusCode = 404;
         throw error;
       }
@@ -283,10 +286,10 @@ exports.rentApartment = (request, response, next) => {
         totalPrice: request.body.totalPrice,
         reservationId: resultFromResevationSchema._id,
       };
-      console.log(rentedArray);
+      // console.log(rentedArray);
       const newResevationArr = addRentToArr(newRent, rentedArray);
       const udpatedReservationsArr = removeEndedRents(newResevationArr);
-      console.log(udpatedReservationsArr);
+      // console.log(udpatedReservationsArr);
       return Apartment.updateOne(
         { _id: request.params.id },
         { $set: { reservationsArr: udpatedReservationsArr } }
@@ -306,13 +309,14 @@ exports.rentApartment = (request, response, next) => {
 };
 
 exports.cancelRent = (request, response, next) => {
-  Reservation.findOne({ _id: request.params.id })
+  Reservation.findOneAndDelete({ _id: request.params.id })
     .then((reservation) => {
       if (!reservation) {
         let error = new Error("this resrevation doesn't exist");
         error.statusCode = 404;
         throw error;
       }
+      // console.log("rservation : ", reservation);
       return Apartment.findOne({ _id: reservation.apartmentId });
     })
     .then((apartment) => {
@@ -321,10 +325,12 @@ exports.cancelRent = (request, response, next) => {
         error.statusCode = 404;
         throw error;
       }
+      // console.log("rented array : ", apartment.reservationsArr);
       const newRentsArr = deleteCanceledRent(
         apartment.reservationsArr,
         request.params.id
       );
+      // console.log("new rented array : ", newRentsArr);
       return Apartment.updateOne(
         { _id: apartment._id },
         { $set: { reservationsArr: newRentsArr } }

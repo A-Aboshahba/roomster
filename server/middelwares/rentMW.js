@@ -1,23 +1,35 @@
-export function checkIfRentAvailable(newRent, rentedArr) {
+exports.checkIfRentAvailable = (newRent, rentedArr) => {
   for (let i = 0; i < rentedArr.length; i++) {
     //dummy  rents : [[5,9],[15,20]]
     const rentedStartDate = rentedArr[i].startDate;
     const rentedEndDate = rentedArr[i].endDate;
+    const newStart = new Date(newRent.startDate);
+    const newEnd = new Date(newRent.endDate);
+    console.log(
+      "rentedArr[i].startDate :",
+      rentedArr[i].startDate,
+      "rentedArr[i].endDate: ",
+      rentedArr[i].endDate,
+      "newRent.startDate",
+      newStart,
+      "newRent.endDate",
+      newEnd
+    );
     if (
-      newRent.endDate <= newRent.startDate || // try to rent [12,7]
-      (newRent.startDate >= rentedStartDate && // try to rent [7,12]
-        newRent.startDate <= rentedEndDate) ||
-      (newRent.endDate >= rentedStartDate && // try to rent [4,8]
-        newRent.endDate <= rentedEndDate) ||
-      (newRent.startDate < rentedStartDate && newRent.endDate > rentedEndDate) // try to rent [4,12]
+      newEnd <= newStart || // try to rent [12,7]
+      (newStart >= rentedStartDate && // try to rent [7,12]
+        newStart <= rentedEndDate) ||
+      (newEnd >= rentedStartDate && // try to rent [4,8]
+        newEnd <= rentedEndDate) ||
+      (newStart < rentedStartDate && newEnd > rentedEndDate) // try to rent [4,12]
     ) {
       return false; // rental period overlaps with a previously rented period
     }
   }
   return true; // rental period is free
-}
+};
 
-export const removeEndedRents = (rentedArr) => {
+exports.removeEndedRents = (rentedArr) => {
   for (let i = rentedArr.length - 1; i >= 0; i--) {
     if (rentedArr[i].endDate < new Date()) {
       console.log("removing: ");
@@ -27,13 +39,14 @@ export const removeEndedRents = (rentedArr) => {
   return rentedArr;
 };
 
-export const addRentToArr = (newRent, rentedArr) => {
+exports.addRentToArr = (newRent, rentedArr) => {
   console.log("Added new rent");
+  // const newStart = new Date(newRent.startDate);
   // Find the correct index to insert the new rental period
   let insertIndex = rentedArr.length;
   for (let i = 0; i < rentedArr.length; i++) {
     //dummy  rents : [[5,9],[15,20]]
-    if (rentedArr[i].startDate > newRent.startDate) {
+    if (rentedArr[i].startDate > new Date(newRent.startDate)) {
       insertIndex = i; // add to rents [22,25]
       break;
     }
@@ -43,15 +56,15 @@ export const addRentToArr = (newRent, rentedArr) => {
   return rentedArr;
 };
 
-export const deleteCanceledRent = (rentedArr, reservationId) => {
+exports.deleteCanceledRent = (rentedArr, reservationId) => {
   // for (let i = rentedArr.length - 1; i >= 0; i--) {
   //   if (rentedArr[i].reservationId === reservationId) {
   //     console.log("removing: ");
   //     rentedArr.splice(i, 1);
   //   }
   // }
-  rentedArr = rentedArr.filter(
-    (reservation) => reservation.reservationId !== reservationId
-  );
+  rentedArr = rentedArr.filter((reservation) => {
+    reservation.reservationId !== reservationId;
+  });
   return rentedArr;
 };

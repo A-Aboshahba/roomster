@@ -68,4 +68,21 @@ router
     validationError,
     controller.deleteProfileImage
   );
+router
+  .route("/:id/reservations")
+  .get(
+    verifyTokenAndAuthorization,
+    validator.getUserReservations,
+    validationError,
+    controller.getUserReservations
+  );
+router.route("/reservations/all").get(isAdmin, controller.getAllReservations);
+router
+  .route("/reservation/:id")
+  .get(
+    verifyTokenAndAuthorization,
+    validator.getSingleReservations,
+    validationError,
+    controller.getSingleReservations
+  );
 module.exports = router;

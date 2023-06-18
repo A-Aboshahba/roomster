@@ -73,3 +73,10 @@ module.exports.addProfileImage = [
 module.exports.deleteProfileImage = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
 ];
+module.exports.getUserReservations = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.getSingleReservations = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+  body("userId").isMongoId().withMessage("user id isn't objectId"),
+];

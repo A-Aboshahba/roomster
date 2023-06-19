@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Apartment = mongoose.model("Apartments");
 const Reservation = mongoose.model("Reservations");
+const ApiFeature = require("../utils/ApiFeature");
 const {
   addRentToArr,
   checkIfRentAvailable,
@@ -27,18 +28,43 @@ const multer = require("multer");
 exports.upload = multer({ storage: storage });
 
 exports.getAllApartments = (request, response, next) => {
-  Apartment.find({})
-    .then((docs) => {
+  const apiFeature = new ApiFeature(
+    Apartment.find({}).populate({
+      path: "userId",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    }),
+    request.query
+  );
+
+  apiFeature
+    .paginate()
+    .filter()
+    .fields()
+    .search()
+    .sort()
+    .mongooseQuery.then((docs) => {
       if (!docs) {
-        let error = new Error("there're no apartments to show");
+        let error = new Error("there're no apartments  to show");
         error.statusCode = 404;
         throw error;
       }
-      response.status(200).json(docs);
+
+      response.status(200).json({ data: docs, page: apiFeature.page });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
+
+  // Apartment.find({})
+  //   .then((docs) => {
+  //     if (!docs) {
+  //       let error = new Error("there're no apartments to show");
+  //       error.statusCode = 404;
+  //       throw error;
+  //     }
+  //     response.status(200).json(docs);
+  //   })
+  //   .catch((err) => {
+  //     next(err);
+  //   });
 };
 
 // b31rp2qoowoxtv8llsen

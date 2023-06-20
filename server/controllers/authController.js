@@ -29,7 +29,7 @@ exports.login = async (request, response, next) => {
           { expiresIn: "1d" }
         );
         // others.accessToken = accessTokenn;
-        response.status(200).json({ accessTokenn: accessTokenn });
+        response.status(200).json({ accessToken: accessTokenn });
         // console.log("logged in");
       }
     }

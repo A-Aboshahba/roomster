@@ -24,6 +24,7 @@ module.exports.signup = [
     .withMessage("lastName cant be blank")
     .isString()
     .withMessage("lastName must be alphapetic"),
+  body("isAdmin").isEmpty().withMessage("cant put this propety"),
   body("fullName")
     .notEmpty()
     .withMessage("fullName cant be blank")

@@ -3,17 +3,22 @@ const User = mongoose.model("Users");
 const ApiFeature = require("../utils/ApiFeature");
 const Reservation = mongoose.model("Reservations");
 const ObjectId = require("mongoose").Types.ObjectId;
-
+const CryptoJS = require("crypto-js");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 module.exports.getAllUsers = (request, response, next) => {
   const apiFeature = new ApiFeature(
-    User.find().populate({
-      path: "favourites",
-      // select: { fullName: 1, email: 1, _id: 0 },
-    }),
+    User.find()
+      .populate({
+        path: "favourites",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      })
+      .populate({
+        path: "rentedApartments",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      }),
     request.query
   );
   apiFeature
@@ -33,6 +38,15 @@ module.exports.getAllUsers = (request, response, next) => {
 
 module.exports.getSingleUser = (request, response, next) => {
   User.findOne({ _id: request.params.id })
+    .find()
+    .populate({
+      path: "favourites",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    })
+    .populate({
+      path: "rentedApartments",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    })
     .then((data) => {
       if (!data) {
         let error = new Error("there're no user to show");
@@ -45,6 +59,12 @@ module.exports.getSingleUser = (request, response, next) => {
 };
 
 module.exports.updateSingleUser = (request, response, next) => {
+  if (request.body.password) {
+    request.body.password = CryptoJS.AES.encrypt(
+      request.body.password,
+      process.env.PASS_SEC
+    ).toString();
+  }
   User.updateOne({ _id: request.params.id }, request.body)
     .then((data) => {
       if (data.matchedCount == 0) {

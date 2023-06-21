@@ -63,7 +63,13 @@ const CarouselCard = ({ location, index }) => {
         ) : icon ? (
           <AiFillHeart size={24} color="#fff" fill="#b12929" />
         ) : (
-          <FaRegHeart size={24} color="#fff" />
+          <FaRegHeart
+            size={24}
+            color="#fff"
+            onClick={() => {
+              console.log(location._id);
+            }}
+          />
         )}
       </Box>
 
@@ -72,6 +78,7 @@ const CarouselCard = ({ location, index }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
+
           enableMouseEvents>
           {location.images.map((step) => {
             return (
@@ -80,6 +87,7 @@ const CarouselCard = ({ location, index }) => {
                   component="img"
                   sx={carouselImage}
                   src={step.url}
+
                   alt={step.publicId}></Box>
               </div>
             );
@@ -118,7 +126,9 @@ const CarouselCard = ({ location, index }) => {
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
             <Typography component="h3"> {location.title}</Typography>
+
             {/* <Typography component="h4"> {location.days}</Typography> */}
+
             <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>
@@ -130,7 +140,6 @@ const CarouselCard = ({ location, index }) => {
                 </>
               ) : (
                 <>
-                  <Typography component="h5"> {location.rating}</Typography>
                   <AiFillStar size={18} />
                 </>
               )}

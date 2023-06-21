@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 const CarouselCard = ({ location, index }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [icon, setIcon] = React.useState(false);
-  const maxSteps = location.locationImages.length;
+  const maxSteps = location.images.length;
   //? to check for we in wish list page
   const wishListPage = window.location.pathname === "/wishlist";
 
@@ -65,25 +65,31 @@ const CarouselCard = ({ location, index }) => {
         ) : icon ? (
           <AiFillHeart size={24} color="#fff" fill="#b12929" />
         ) : (
-          <FaRegHeart size={24} color="#fff" />
+          <FaRegHeart
+            size={24}
+            color="#fff"
+            onClick={() => {
+              console.log(location._id);
+            }}
+          />
         )}
       </Box>
 
-      {location.locationImages.length && (
+      {location.images.length && (
         <SwipeableViews
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
           enableMouseEvents
         >
-          {location.locationImages.map((step) => {
+          {location.images.map((step) => {
             return (
-              <div key={step.id}>
+              <div key={step.publicId}>
                 <Box
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.id}
+                  alt={step.publicId}
                 ></Box>
               </div>
             );
@@ -123,8 +129,7 @@ const CarouselCard = ({ location, index }) => {
       <Link to={`/housingDetails/${index + 1}`} className="Link">
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
-            <Typography component="h3"> {location.location}</Typography>
-            <Typography component="h4"> {location.days}</Typography>
+            <Typography component="h3"> {location.title}</Typography>
             <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>
@@ -136,7 +141,6 @@ const CarouselCard = ({ location, index }) => {
                 </>
               ) : (
                 <>
-                  <Typography component="h5"> {location.rating}</Typography>
                   <AiFillStar size={18} />
                 </>
               )}

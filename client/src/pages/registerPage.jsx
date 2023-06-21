@@ -13,39 +13,45 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Roomster from '../API/config';
+import { useNavigate } from 'react-router';
 
 function Signup() {
+const navigate= useNavigate();
+async function addUser(values){
+const res =await  Roomster.post('auth/signup',values);
+console.log(res.message);
+}
 
-    const validationSchema = Yup.object().shape({
-        firstName: Yup.string()
-            .max(15, 'Must be 15 characters or less')
-            .required('Required'),
-        lastName: Yup.string()
-            .max(20, 'Must be 20 characters or less')
-            .required('Required'),
-        email: Yup.string()
-            .email('Invalid email address')
-            .required('Required'),
-        password: Yup.string()
-            .required('Required')
-            .min(6, 'Must be at least 6 characters'),
-        allowExtraEmails: Yup.boolean(),
-    });
-
-    const formik = useFormik({
-        initialValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            allowExtraEmails: false,
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values);
-            alert(JSON.stringify(values, null, 2));
-        },
-    });
+const validationSchema = Yup.object().shape({
+    firstName: Yup.string().max(15, "Must be 15 characters or less").required("Required"),
+    lastName: Yup.string().max(20, "Must be 20 characters or less").required("Required"),
+    fullName: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email address").required("Required"),
+    password: Yup.string().required("Required").min(6, "Must be at least 6 characters"),
+    confirmPassword: Yup.string().required("Required").oneOf([Yup.ref("password"), null], "Passwords must match"),
+    address: Yup.object().shape({
+    country: Yup.string().required("Required"),
+    city: Yup.string().required("Required"),
+    }), });
+const formik = useFormik({
+    initialValues: {
+    firstName: "",
+    lastName: "",
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    address: {
+        country: "",
+        city: "",
+    },
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+    addUser(values);
+    navigate('/login')
+    },});
 
     return (
         <ThemeProvider theme={createTheme()}>
@@ -53,7 +59,7 @@ function Signup() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: {sm:12,lg:15},
+                        marginTop: {sm:8,lg:8},
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -100,6 +106,45 @@ function Signup() {
                                 <TextField
                                     required
                                     fullWidth
+                                    id="fullName"
+                                    label="Full Name"
+                                    name="fullName"
+                                    autoComplete="name"
+                                    value={formik.valuesfullName}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+                                    helperText={formik.touched.fullName && formik.errors.fullName}/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="address.country"
+                                    label="Country"
+                                    name="address.country"
+                                    autoComplete="country"
+                                    value={formik.values.address.country}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.address?.country && Boolean(formik.errors.address?.country)}
+                                    helperText={formik.touched.address?.country && formik.errors.address?.country}/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                    <TextField
+                                    required
+                                    fullWidth
+                                    id="address.city"
+                                    label="City"
+                                    name="address.city"
+                                    autoComplete="city"
+                                    value={formik.values.address.city}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.address?.city && Boolean(formik.errors.address?.city)}
+                                    helperText={formik.touched.address?.city && formik.errors.address?.city} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
@@ -126,10 +171,23 @@ function Signup() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirmPassword"
+                                    autoComplete="new-password"
+                                    value={formik.values.confirmPassword}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword} />
+                            </Grid>
+                            <Grid item xs={12}>
                                 <FormControlLabel
                                     control={<Checkbox name="allowExtraEmails" color="primary" value={formik.values.allowExtraEmails} onChange={formik.handleChange} />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
-                                />
+                                    label="I want to receive inspiration, marketing promotions and updates via email." />
                             </Grid>
                         </Grid>
                         <Button
@@ -142,7 +200,7 @@ function Signup() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="./loginPage.jsx" variant="body2">
+                                <Link href="./login" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

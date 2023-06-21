@@ -14,12 +14,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Roomster from '../API/config';
-import { useDispatch } from 'react-redux';
-import { addUserInfo } from '../store/Slices/user';
+import { useNavigate } from 'react-router';
 
 function SignInSide() {
-
-    const dispatch = useDispatch()
+const navigate= useNavigate();
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Required'),
@@ -34,9 +32,9 @@ function SignInSide() {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             const { data } = await Roomster.post('auth/login', values);
-            localStorage.setItem("token", data.accessTokenn)
-            dispatch(addUserInfo(data.user))
-
+            localStorage.setItem("token", data.accessToken)
+            console.log(data.accessToken)
+            navigate('/');
         },
     });
 

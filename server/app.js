@@ -3,6 +3,7 @@ require("./models/apartmentModel");
 require("./models/reviewModel");
 require("./models/reservationModel");
 const express = require("express");
+const cors = require("cors");
 // const multer = require("multer");
 require("dotenv").config();
 const morgan = require("morgan");
@@ -18,6 +19,21 @@ let port = process.env.PORT || 8080;
 server.use(express.json());
 server.use(morgan("common"));
 
+server.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  })
+);
+server.use((request, response, next) => {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header(
+    "Access-Control-Allow-Methods",
+    "GET,POST,DELETE,PUT,OPTIONS"
+  );
+  response.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  next();
+});
 //####__server_and_db_initialization__########################################
 mongoose
   .connect(process.env.MONGO_URL)

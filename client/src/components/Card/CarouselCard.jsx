@@ -28,7 +28,7 @@ import { Link } from "react-router-dom";
 const CarouselCard = ({ location, index }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [icon, setIcon] = React.useState(false);
-  const maxSteps = location.locationImages.length;
+  const maxSteps = location.images.length;
   //? to check for we in wish list page
   const wishListPage = window.location.pathname === "/wishlist";
 
@@ -49,13 +49,11 @@ const CarouselCard = ({ location, index }) => {
       sx={{
         flexGrow: 1,
         position: "relative",
-      }}
-    >
+      }}>
       <Box
         sx={fixedIcon}
         style={{ cursor: "pointer" }}
-        onClick={() => setIcon(!icon)}
-      >
+        onClick={() => setIcon(!icon)}>
         {wishListPage ? (
           <AiTwotoneDelete
             size={30}
@@ -69,22 +67,20 @@ const CarouselCard = ({ location, index }) => {
         )}
       </Box>
 
-      {location.locationImages.length && (
+      {location.images.length && (
         <SwipeableViews
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
-          {location.locationImages.map((step) => {
+          enableMouseEvents>
+          {location.images.map((step) => {
             return (
-              <div key={step.id}>
+              <div key={step.publicId}>
                 <Box
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.id}
-                ></Box>
+                  alt={step.publicId}></Box>
               </div>
             );
           })}
@@ -102,8 +98,7 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
+              disabled={activeStep === maxSteps - 1}>
               <KeyboardArrowRight />
             </Button>
           }
@@ -112,8 +107,7 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleBack}
-              disabled={activeStep === 0}
-            >
+              disabled={activeStep === 0}>
               <KeyboardArrowLeft />
             </Button>
           }
@@ -123,8 +117,8 @@ const CarouselCard = ({ location, index }) => {
       <Link to={`/housingDetails/${index + 1}`} className="Link">
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
-            <Typography component="h3"> {location.location}</Typography>
-            <Typography component="h4"> {location.days}</Typography>
+            <Typography component="h3"> {location.title}</Typography>
+            {/* <Typography component="h4"> {location.days}</Typography> */}
             <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>

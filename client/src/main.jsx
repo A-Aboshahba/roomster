@@ -5,7 +5,7 @@ import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@emotion/react';
 import { green } from '@mui/material/colors';
 import { grey } from '@mui/material/colors';
-import store from './store/store';
+import store from './store/store.jsx';
 import { Provider } from 'react-redux';
 
 let theme = createTheme({

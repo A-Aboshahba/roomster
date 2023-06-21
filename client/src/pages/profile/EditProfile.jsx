@@ -10,116 +10,217 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import Roomster from '../../API/config';
+import { useSelector } from 'react-redux';
 
 export default function EditProfile() {
-    const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
+const {user} =useSelector((state)=>state.user);
+// console.log(user._id);
+
+async function EditData(values) {
+ 
+    await Roomster.patch(`user/${user._id}`, values);
+    // console.log(res.data);
+    window.location.reload();
+  } 
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .max(15, 'Must be 15 characters or less')
+      .required('Required'),
+    lastName: Yup.string()
+      .max(20, 'Must be 20 characters or less')
+      .required('Required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Required'),
+    password: Yup.string()
+      .required('Required')
+      .min(6, 'Must be at least 6 characters'),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      address:{
+        country: '',
+        city: ''},
+    },
+
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+        console.log(values);
+        EditData(values);
+    },
+
+    });
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-
     const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+    event.preventDefault();
     };
 
     return (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: "2ch"}}>
-                <Typography variant='h4' sx={{ m: 1 }}>Edit Profile</Typography>
-                <div>
-                    <TextField
-                        label="First Name"
-                        id="outlined-controlled"
-                        value='ali'
-                        sx={{
-                            m: "1%", width: '48%', my:1
-                        }}
-                    />
-                    <TextField
-                        label="Last Name"
-                        id="outlined-controlled"
-                        value='ali'
-                        sx={{
-                            m: "1%", width: '48%', my:1
-                        }}
-                    />
-
-                    <FormControl
-                        sx={{
-                            m: "1%", width: '98%', my:1
-                        }} variant="outlined">
-                        <InputLabel htmlFor="outlined-controlled">Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-controlled"
-                            value="llllllllllllll"
-                            type={showPassword ? 'text' : 'password'}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                    </FormControl>
-                    <FormControl sx={{
-                        m: "1%", width: '98%', my:1
-                    }}>
-                        <InputLabel htmlFor="outlined-controlled">Email</InputLabel>
-                        <OutlinedInput
-                            id="outlined-controlled"
-                            value="khalid@gmail.com"
-                            label="Email"
-                        />
-                    </FormControl>
-                    <FormControl sx={{
-                        m: "1%", width: '98%'
-                    }}>
-                        <InputLabel htmlFor="outlined-controlled">Address</InputLabel>
-                        <OutlinedInput
-                            id="outlined-controlled"
-                            value="Cairo"
-                            label="Address"
-                        />
-                    </FormControl>
-                    <TextField
-                        label="City"
-                        id="outlined-controlled"
-                        value='Cairo'
-                        sx={{
-                            m: "1%", width: '48%', my:1
-                        }}
-                    />
-                    <TextField
-                        label="State"
-                        id="outlined-controlled"
-                        value='Alex'
-                        sx={{
-                            m: "1%", width: '48%', my:1
-                        }}
-                    />
-                    <FormControl sx={{
-                        m: "1%", width: '98%', my:1
-                    }}>
-                        <InputLabel htmlFor="outlined-controlled">Contact Number</InputLabel>
-                        <OutlinedInput
-                            id="outlined-controlled"
-                            value="01021451789"
-                            label="Contact Number"
-                        />
-                    </FormControl>
-                </div>
-                <Box sx={{display:'flex', gap: '3ch', m:1}}>
-                    <Button variant="contained" color="success">
-                        Save
-                    </Button>
-                    <Button variant="outlined" color="error">
-                        Cancel
-                    </Button>
-                </Box>
-            </Box>
+    <Box
+        sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '2ch',
+        }}
+        component="form"
+      onSubmit={formik.handleSubmit}
+    >
+      <Typography variant="h4" sx={{ m: 1 }}>
+        Edit Profile
+      </Typography>
+      <div>
+        <TextField
+          name="firstName"
+          required
+          fullWidth
+          id="outlined-controlled"
+          label="First Name"
+          value={formik.values.firstName}
+          onChange={formik.handleChange}
+          error={
+            formik.touched.firstName && Boolean(formik.errors.firstName)
+          }
+          sx={{
+            m: '1%',
+            width: '48%',
+            my: 1,
+          }}
+        />
+        <TextField
+            label="Last Name"
+            id="outlined-controlled"
+            required
+            fullWidth
+            name="lastName"
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            error={
+            formik.touched.lastName && Boolean(formik.errors.lastName)
+            }
+            sx={{
+            m: '1%',
+            width: '48%',
+            my: 1,
+            }}
+        />
+        <FormControl
+            sx={{
+            m: '1%',
+            width: '98%',
+            my: 1,
+            }}
+            variant="outlined"
+        >
+            <InputLabel htmlFor="outlined-controlled">Password</InputLabel>
+            <OutlinedInput
+            id="outlined-controlled"
+            label="Password"
+            required
+            fullWidth
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={
+                formik.touched.password && Boolean(formik.errors.password)
+            }
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+                <InputAdornment position="end">
+                <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+                </InputAdornment>
+            }
+            />
+        </FormControl>
+        <FormControl
+            sx={{ m: '1%', width: '98%', my: 1 }}
+            variant="outlined"
+        >
+            <InputLabel htmlFor="outlined-controlled">Email</InputLabel>
+            <OutlinedInput
+            id="outlined-controlled"
+            required
+            fullWidth
+            label="Email Address"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            />
+        </FormControl>
+        <FormControl
+            sx={{
+            m: '1%',
+            width: '48%',
+            my: 1,
+            }}
+            variant="outlined"
+        >
+            <InputLabel htmlFor="outlined-controlled">Country</InputLabel>
+            <OutlinedInput
+            id="outlined-controlled"
+            required
+            fullWidth
+            label="Country"
+            name="address.country"
+            value={formik.values.address?.country || ''}
+            onChange={formik.handleChange}
+            
+            />
+        </FormControl>
+        <FormControl
+            sx={{
+            m: '1%',
+            width: '48%',
+            my: 1,
+            }}
+            variant="outlined"
+        >
+            <InputLabel htmlFor="outlined-controlled">City</InputLabel>
+            <OutlinedInput
+            id="outlined-controlled"
+            required
+            fullWidth
+            label="City"
+            name="address.city"
+            autoComplete="city"
+            value={formik.values.address?.city || ''}
+            onChange={formik.handleChange}
+        
+            />
+        </FormControl>
+        <FormControlLabel
+            control={<Checkbox
+            checked={formik.values.allowExtraEmails}
+            onChange={formik.handleChange}
+            name="allowExtraEmails"
+            color="primary"
+            />}
+            label="I want to receive updates about promotions, new products, and other marketing materials."
+            sx={{
+            m: "1%", width: '98%', my:1
+            }}
+        />
+        <Button type="submit" variant="contained" sx={{ m: 1 }}>Save Changes</Button>
+        </div>
+    </Box>
     );
 }

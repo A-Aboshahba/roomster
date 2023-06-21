@@ -49,13 +49,11 @@ const CarouselCard = ({ location, index }) => {
       sx={{
         flexGrow: 1,
         position: "relative",
-      }}
-    >
+      }}>
       <Box
         sx={fixedIcon}
         style={{ cursor: "pointer" }}
-        onClick={() => setIcon(!icon)}
-      >
+        onClick={() => setIcon(!icon)}>
         {wishListPage ? (
           <AiTwotoneDelete
             size={30}
@@ -80,8 +78,8 @@ const CarouselCard = ({ location, index }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
+
+          enableMouseEvents>
           {location.images.map((step) => {
             return (
               <div key={step.publicId}>
@@ -89,8 +87,8 @@ const CarouselCard = ({ location, index }) => {
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.publicId}
-                ></Box>
+
+                  alt={step.publicId}></Box>
               </div>
             );
           })}
@@ -108,8 +106,7 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
+              disabled={activeStep === maxSteps - 1}>
               <KeyboardArrowRight />
             </Button>
           }
@@ -118,8 +115,7 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleBack}
-              disabled={activeStep === 0}
-            >
+              disabled={activeStep === 0}>
               <KeyboardArrowLeft />
             </Button>
           }
@@ -130,6 +126,9 @@ const CarouselCard = ({ location, index }) => {
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
             <Typography component="h3"> {location.title}</Typography>
+
+            {/* <Typography component="h4"> {location.days}</Typography> */}
+
             <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>

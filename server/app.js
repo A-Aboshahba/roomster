@@ -3,6 +3,7 @@ require("./models/apartmentModel");
 require("./models/reviewModel");
 require("./models/reservationModel");
 const express = require("express");
+const cors = require("cors");
 // const multer = require("multer");
 require("dotenv").config();
 const morgan = require("morgan");
@@ -26,6 +27,13 @@ server.use(express.json());
 server.use(morgan("common"));
 
 
+server.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  })
+);
+
 server.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -33,6 +41,7 @@ server.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
+
 
 //####__server_and_db_initialization__########################################
 mongoose

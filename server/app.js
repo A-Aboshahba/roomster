@@ -12,7 +12,6 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
-const cors = require('cors');
 const server = express();
 //############################################################################
 
@@ -27,12 +26,7 @@ server.use(express.json());
 server.use(morgan("common"));
 
 
-server.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  })
-);
+
 
 server.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');

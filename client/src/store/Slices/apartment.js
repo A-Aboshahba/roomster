@@ -5,6 +5,8 @@ const INITIAL_STATE = {
   status: "idle",
   singleApartment: {},
   apartments: [],
+  reviews: [],
+  totalReviews: 0,
   // favourites: [],
   // rented: [],
   error: null,
@@ -19,6 +21,21 @@ export const getApartments = createAsyncThunk(
       );
       // console.log("slice", response.data.data);
       return response.data.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const getApartmentReviews = createAsyncThunk(
+  "apartments/getApartmentReviews",
+  async ({ page = 1, apartmentId }, thunkAPI) => {
+    try {
+      const response = await Roomster.get(
+        `reviews/apartment/${apartmentId}?page=${page}`
+      );
+      console.log(" reviewslice", response.data);
+      return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
@@ -97,6 +114,22 @@ const apartmentsSlice = createSlice({
         code: action.payload.response.data.error.code,
       };
     });
+    builder.addCase(getApartmentReviews.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.reviews = [...action.payload.data];
+      state.totalReviews = action.payload.totalRate;
+    });
+    builder.addCase(getApartmentReviews.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(getApartmentReviews.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = {
+        message: action.payload.response.data.error.message,
+        code: action.payload.response.data.error.code,
+      };
+    });
+
     builder.addCase(getSingleApartment.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.singleApartment = { ...action.payload };
@@ -115,6 +148,9 @@ const apartmentsSlice = createSlice({
 });
 
 export const getApartmentsState = (state) => state.apartments.apartments;
+export const getApartmentReviwsState = (state) => state.apartments.reviews;
+export const getApartmentTotalReviwsState = (state) =>
+  state.apartments.totalReviews;
 export const getSingleApartmentState = (state) =>
   state.apartments.singleApartment;
 // export const getUserStatus = (state) => state.auth.status;

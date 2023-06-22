@@ -18,7 +18,9 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSingleApartment,
+  getApartmentReviews,
   getSingleApartmentState,
+  getApartmentReviwsState,
 } from "../../store/Slices/apartment";
 
 export default function HousingDetails() {
@@ -29,6 +31,7 @@ export default function HousingDetails() {
   const singleApartment = useSelector(getSingleApartmentState);
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
+    dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
   }, [dispatch]);
   return (
     <>
@@ -37,14 +40,16 @@ export default function HousingDetails() {
           flexGrow: 1,
           position: "relative",
           marginTop: "6rem",
-        }}>
+        }}
+      >
         <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
           <Typography variant="h5" color="initial">
             {singleApartment.title}
           </Typography>
           <Box
             style={{ cursor: "pointer" }}
-            onClick={() => setSwitchIcon(!switchIcon)}>
+            onClick={() => setSwitchIcon(!switchIcon)}
+          >
             {switchIcon ? (
               <AiFillHeart size={30} color="#fff" fill="#b12929" />
             ) : (
@@ -59,7 +64,8 @@ export default function HousingDetails() {
           sx={{
             height: 500,
             overflow: "hidden",
-          }}>
+          }}
+        >
           <Grid item xs={12} md={6}>
             <img
               style={{
@@ -73,7 +79,8 @@ export default function HousingDetails() {
           <Grid
             item
             xs={6}
-            sx={{ display: { xs: "none", md: "block" }, height: 500 }}>
+            sx={{ display: { xs: "none", md: "block" }, height: 500 }}
+          >
             <Grid container spacing={2} component="div" sx={{ height: 500 }}>
               <Grid item xs={6}>
                 <img
@@ -138,7 +145,8 @@ export default function HousingDetails() {
           alignItems: "flex-start",
           justifyContent: "space-between",
         }}
-        spacing={3}>
+        spacing={3}
+      >
         <Grid item md={7}>
           <Box sx={{ mb: 1 }}>
             <Avatar
@@ -196,21 +204,24 @@ export default function HousingDetails() {
             <Box sx={{ display: "flex", gap: "2rem" }}>
               <Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <HouseboatIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Bay view
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <HouseboatIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Beach access - beach front
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <WifiIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Wifi
@@ -219,21 +230,24 @@ export default function HousingDetails() {
               </Box>
               <Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <PersonalVideoIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     the television
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <DirectionsCarIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Free parking in the buildings
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <AcUnitIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     air conditioner
@@ -254,7 +268,8 @@ export default function HousingDetails() {
               padding: "10px",
               width: "fit-content",
               margin: "auto",
-            }}>
+            }}
+          >
             <PickerDate />
             <Typography variant="body1" color="initial" sx={{ mb: 4 }}>
               total price : 100$

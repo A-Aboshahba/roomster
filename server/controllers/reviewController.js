@@ -44,13 +44,20 @@ exports.getApartmentReviews = (request, response, next) => {
   apiFeature
     .paginate()
     .mongooseQuery.then((docs) => {
+      let totalReveiws = 0;
       if (!docs) {
         let error = new Error("there're no reviews  to show");
         error.statusCode = 404;
         throw error;
       }
-
-      response.status(200).json({ data: docs, page: apiFeature.page });
+      docs.forEach((review) => {
+        totalReveiws += review.rate;
+      });
+      response.status(200).json({
+        data: docs,
+        page: apiFeature.page,
+        totalRate: (totalReveiws / docs.length).toFixed(2),
+      });
     })
     .catch((err) => next(err));
 };

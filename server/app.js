@@ -16,6 +16,13 @@ const server = express();
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
+
+let port = 8080;
+//############################################################################
+server.use(express.json());
+server.use(morgan("common"));
+
+
 server.use(
   cors({
     origin: "*",

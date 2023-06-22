@@ -15,7 +15,8 @@ function Homepage() {
   useEffect(() => {
     dispatch(getApartments({ page: 1 }));
     // console.log(apartments);
-  }, []);
+  }, [dispatch]);
+
   return (
     <>
       <FilterAndSearch />

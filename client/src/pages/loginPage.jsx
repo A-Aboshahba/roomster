@@ -15,9 +15,16 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Roomster from '../API/config';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from '../store/Slices/userSlice';
+import jwt_decode from 'jwt-decode';
+import { setToast } from '../store/Slices/toastSlice';
 
 function SignInSide() {
-const navigate= useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Required'),
@@ -31,10 +38,17 @@ const navigate= useNavigate();
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const { data } = await Roomster.post('auth/login', values);
-            localStorage.setItem("token", data.accessToken)
-            console.log(data.accessToken)
-            navigate('/');
+            try {
+                const { data } = await Roomster.post('auth/login', values);
+                dispatch(setToast({ message: 'login Successfully', type: 'success' }));
+                localStorage.setItem("token", data.accessToken)
+                const decodedToken = jwt_decode(data.accessToken);
+                const userId = decodedToken._id;
+                dispatch(fetchUser(userId));
+                navigate(-1);
+            } catch (error) {
+                dispatch(setToast({ message: 'login Failed', type: 'error' }));
+            }
         },
     });
 
@@ -105,7 +119,7 @@ const navigate= useNavigate();
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
-                            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                            <Button  type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                                 Sign In
                             </Button>
                             <Grid container>

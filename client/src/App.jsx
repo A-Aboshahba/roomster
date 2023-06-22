@@ -1,7 +1,10 @@
 import { Container } from "@mui/material";
 import Navbar from "./components/navbar.jsx";
-import "./App.css";
+import 'react-toastify/dist/ReactToastify.css';
+import "./App.css"
+
 import Routers from "./Routes/Routers.jsx";
+import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice.jsx";
@@ -28,6 +31,7 @@ function App() {
         <Routers />
       </Container>
       <Footer />
+      <ToastContainer/>
     </BrowserRouter>
   );
 }

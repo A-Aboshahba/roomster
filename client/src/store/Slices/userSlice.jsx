@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Roomster from "../../API/config";
 
-export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
-  const res = await Roomster.get(`user/${userId}`);
-  return res.data[0];
-});
+export const fetchUser = createAsyncThunk('user/fetchUser', async (userId) => {
+  const { data } = await Roomster.get(`user/${userId}`);
+  return data;
+}
+);
 export const addFavorite = createAsyncThunk(
   "user/addFavorite",
-  async ({ userId, location }, action) => {
-    const res = await Roomster.post(`user/${userId}/favourites`, {
+  async ({ userId, location }) => {
+    await Roomster.post(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
     return location;
@@ -16,8 +17,8 @@ export const addFavorite = createAsyncThunk(
 );
 export const deleteFavorite = createAsyncThunk(
   "user/deleteFavorite",
-  async ({ userId, location }, action) => {
-    const res = await Roomster.put(`user/${userId}/favourites`, {
+  async ({ userId, location } ) => {
+    await Roomster.put(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
     return location;
@@ -25,7 +26,7 @@ export const deleteFavorite = createAsyncThunk(
 );
 
 const initialState = {
-  user: {
+  /*user: {
     _id: "",
     firstName: "",
     lastName: "",
@@ -38,7 +39,8 @@ const initialState = {
     },
     favourites: [],
     rentedApartments: [],
-  },
+  },*/
+  user:null,
   loading: false,
   error: null,
 };
@@ -46,7 +48,9 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    ResetRedux: () => initialState,
+},
   extraReducers: {
     [fetchUser.pending]: (state) => {
       state.loading = true;
@@ -65,6 +69,7 @@ const userSlice = createSlice({
       console.log(state.user);
       state.user.favourites.push(action.payload);
     },
+    
     [deleteFavorite.fulfilled]: (state, action) => {
       var index = state.user.favourites.findIndex(function (item) {
         return item.id === action.payload._id;

@@ -12,20 +12,20 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
-const cors = require('cors');
 const server = express();
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
-server.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-}));
-let port =  8080;
+server.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  })
+);
+let port = 8080;
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
-
 
 server.use(
   cors({
@@ -34,14 +34,19 @@ server.use(
   })
 );
 
-server.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+server.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
-
 
 //####__server_and_db_initialization__########################################
 mongoose
@@ -54,8 +59,6 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-
-  
 //###__routes__##########################################################
 server.use("/auth", authRoute);
 server.use("/user", userRoute);

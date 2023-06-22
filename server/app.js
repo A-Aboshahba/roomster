@@ -27,12 +27,7 @@ let port = 8080;
 server.use(express.json());
 server.use(morgan("common"));
 
-server.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  })
-);
+
 
 server.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");

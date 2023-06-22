@@ -1,7 +1,9 @@
 import { Container } from "@mui/material";
 import Navbar from "./components/navbar.jsx";
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css"
 import Routers from "./Routes/Routers.jsx";
+import { ToastContainer } from 'react-toastify';
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice.jsx";
@@ -29,6 +31,7 @@ function App() {
       <Container maxWidth="xl">
         <Routers />
       </Container>
+      <ToastContainer/>
     </BrowserRouter>
   );
 }

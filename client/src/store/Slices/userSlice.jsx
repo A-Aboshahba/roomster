@@ -2,25 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Roomster from '../../API/config';
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (userId) => {
-    const res = await Roomster.get(`user/${userId}`);
-    console.log(res.data);
-    return res.data[0];
-  }
+  const { data } = await Roomster.get(`user/${userId}`);
+  return data;
+}
 );
 
 const initialState = {
-  user: {
-    _id:'',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    address: { country: '', city: '' },
-    image: {
-      url: '',
-      publicId: ''
-  },
-  },
+  user:null,
   loading: false,
   error: null,
 };
@@ -28,8 +16,15 @@ const initialState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
-  
+  reducers: {
+    // to using in login when user login in first time for getting on user's information  in redux store 
+    addUserInfo: (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+    },
+    ResetRedux: () => initialState,
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -38,21 +33,16 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
-        const { _id,firstName, lastName, email, password, address ,image} = action.payload;
-        state.user._id = _id;
-        state.user.firstName = firstName;
-        state.user.lastName = lastName;
-        state.user.email = email;
-        state.user.password = password;
-        state.user.address = address;
-        state.user.image = image;
-      
+        state.user = action.payload[0];
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
+      
   },
 });
+export const { addUserInfo,ResetRedux } = userSlice.actions;
+
 
 export default userSlice.reducer;

@@ -23,13 +23,28 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ResetRedux } from "../store/Slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import LoginIcon from '@mui/icons-material/Login';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
 
 function Navbar(props) {
+
+
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorLanguage, setAnchorLanguage] = useState(null);
+  const openLanguage = Boolean(anchorLanguage);
+  const navigate = useNavigate();
+  const dataUser = useSelector((state) => state.user.user)
   const open = Boolean(anchorEl);
+
+  const dispatch = useDispatch()
+  console.log(dataUser)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,8 +52,6 @@ function Navbar(props) {
     setAnchorEl(null);
   };
 
-  const [anchorLanguage, setAnchorLanguage] = useState(null);
-  const openLanguage = Boolean(anchorLanguage);
   const handleCloseLanguage = () => {
     setAnchorLanguage(null);
   };
@@ -52,7 +65,7 @@ function Navbar(props) {
 
   const profileComponent = (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+      <Box  sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -100,28 +113,57 @@ function Navbar(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link to="profile">
+        {dataUser !== null ? <Link to="profile">
           <MenuItem onClick={handleClose}>
             <Avatar /> Profile
           </MenuItem>
-        </Link>
-        <Divider />
-        <Link to="wishlist">
+          <Divider />
+        </Link> : ''}
+        {dataUser !== null ? <Link to="wishlist">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <ShoppingCartIcon fontSize="small" />
             </ListItemIcon>
             wishlist
           </MenuItem>
-        </Link>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-      </Menu>
-    </>
+        </Link> : ''}
+        {dataUser !== null ?
+          <MenuItem onClick={() => { handleClose(); localStorage.clear(); dispatch(ResetRedux()); navigate('/home') }}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+          : ''}
+        {dataUser === null ?
+          <MenuItem component={Link} to={'/register'} onClick={() => { handleClose() }}>
+            <ListItemIcon>
+              <ExitToAppIcon fontSize="small" />
+            </ListItemIcon>
+            Sign up
+          </MenuItem>
+          : ''}
+        {dataUser === null ?
+          <MenuItem component={Link} to={'/login'} onClick={() => { handleClose() }}>
+            <ListItemIcon>
+              <LoginIcon fontSize="small" />
+            </ListItemIcon>
+            Login
+          </MenuItem>
+          : ''}
+        {dataUser === null ?
+          <MenuItem component={Link} to={'/help'} onClick={() => { handleClose() }}>
+            <Divider />
+            <ListItemIcon>
+              <HelpOutlineOutlinedIcon fontSize="small" />
+            </ListItemIcon>
+            help
+          </MenuItem>
+          : ''}
+
+
+
+      </Menu>    </>
   );
 
   const drawer = (
@@ -147,27 +189,44 @@ function Navbar(props) {
           </Link>
         ))}
         <Divider />
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Profile" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="wishlist" />
-          </ListItemButton>
-        </ListItem>
+        {dataUser !== null ?
+          <ListItem disablePadding component={Link} to={'/profile'}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="Profile" />
+            </ListItemButton>
+          </ListItem> : ''}
+        {dataUser !== null ?
+          <ListItem disablePadding component={Link} to={'/wishlist'}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="wishlist" />
+            </ListItemButton>
+          </ListItem>
+          : ''}
         <Divider />
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="settings" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
+        {dataUser !== null ?
+          <ListItem disablePadding onClick={() => { localStorage.clear(); dispatch(ResetRedux()) }}>
           <ListItemButton sx={{ textAlign: "center" }}>
             <ListItemText primary="LogOut" />
           </ListItemButton>
-        </ListItem>
+        </ListItem>:''}
+        {dataUser === null ?
+          <ListItem disablePadding component={Link} to={'/register'} >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Sign up" />
+          </ListItemButton>
+        </ListItem>:''}
+        {dataUser === null ?
+          <ListItem disablePadding component={Link} to={'/login'} >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Login in" />
+          </ListItemButton>
+        </ListItem>:''}
+        {dataUser === null ?
+          <ListItem disablePadding component={Link} to={'/help'} >
+          <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItemText primary="Help" />
+          </ListItemButton>
+        </ListItem>:''}
       </List>
     </Box>
   );
@@ -230,7 +289,7 @@ function Navbar(props) {
                   textAlign: "center",
                 }}
               >
-          
+
               </Box>
               <Menu
                 anchorEl={anchorLanguage}

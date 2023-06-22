@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice.jsx";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
+import  Footer  from "./components/Footer/Footer.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
       <Container maxWidth="xl">
         <Routers />
       </Container>
+      <Footer/>
     </BrowserRouter>
   );
 }

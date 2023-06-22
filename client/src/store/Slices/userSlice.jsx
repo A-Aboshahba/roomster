@@ -49,7 +49,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchUser.pending]: (state, action) => {
+    [fetchUser.pending]: (state) => {
       state.loading = true;
       state.error = null;
     },

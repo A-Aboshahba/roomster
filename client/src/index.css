@@ -2,129 +2,119 @@
     width: 118px;
     height: 45px;
     border-radius: 40px;
-    -webkit-border-radius: 40px;
-    -moz-border-radius: 40px;
-    -ms-border-radius: 40px;
-    -o-border-radius: 40px;
     margin-top: 5px;
-}
-
-.center {
+  }
+  
+  .center {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-#root {
-    padding-bottom: 110px;
-}
-
-/* Position the footer at the bottom of the page */
-#footer {
-
-    position: fixed;
+  }
+  
+  body {
+    margin: 0;
+  }
+  
+  /* Position the footer at the bottom of the page */
+  #footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #4faf52;
+    background-color: #232f3e;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
     box-sizing: border-box;
     z-index: 555;
-}
-
-/* Style the Google Translate Element */
-#google_translate_element {
+    height: 55px; /* Set a fixed height for the footer */
+  }
+  
+  /* Style the Google Translate Element */
+  #google_translate_element {
     font-size: 14px;
     color: #000;
     padding: 6px;
     border: none;
-}
-
-/* Style the dropdown menu */
-.goog-te-combo {
-    font-size: 15px;
+  }
+  
+  /* Style the dropdown menu */
+  .goog-te-combo {
+    font-size: 13px;
     color: #000;
-    padding: 8px;
+    padding: 6px;
     border: none;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-}
-
-
-/* Style the translation button */
-.goog-te-banner-button {
+    border-radius: 9px;
+  }
+  
+  /* Style the translation button */
+  .goog-te-banner-button {
     font-size: 18px;
     color: #fff;
     background-color: #27ae60;
     border: none;
     padding: 6px;
-}
-
-/* Style the tooltip */
-.goog-tooltip {
+  }
+  
+  /* Style the tooltip */
+  .goog-tooltip {
     font-size: 18px;
     color: #fff;
-}
-
-/* Style the tooltip content */
-.goog-tooltip>.goog-tooltip-content {
+  }
+  
+  /* Style the tooltip content */
+  .goog-tooltip>.goog-tooltip-content {
     background-color: #4caf50;
-}
-
-/* Style the contact information links and "About Us" link */
-#contact-info a {
+  }
+  
+  /* Style the contact information links and "About Us" link */
+  #contact-info a {
     color: #fff;
     text-decoration: none;
     margin-left: 10px;
-}
-
-/* Style the Twitter link */
-#contact-info a:nth-child(3) {
+  }
+  
+  /* Style the Twitter link */
+  #contact-info a:nth-child(3) {
     margin-left: 20px;
-}
-
-/* Style the "About Us" link */
-#contact-info a:last-child {
+  }
+  
+  /* Style the "About Us" link */
+  #contact-info a:last-child {
     background-color: #fff;
     color: #2ecc71;
     border-radius: 5px;
     padding: 6px;
     margin-left: 20px;
-}
-
-/* Style the "About Us" link on hover */
-#contact-info a:last-child:hover {
+  }
+  
+  /* Style the "About Us" link on hover */
+  #contact-info a:last-child:hover {
     background-color: #4caf50;
     color: #fff;
     text-decoration: none;
-}
-
-.VIpgJd-ZVi9od-ORHb-OEVmcd {
+  }
+  
+  .VIpgJd-ZVi9od-ORHb-OEVmcd {
     visibility: hidden !important;
-}
-
-.goog-te-gadget {
+  }
+  
+  .goog-te-gadget {
     color: #FFF;
     display: flex;
     justify-content: space-around;
     width: 425px;
     align-items: center;
-}
-
-.VIpgJd-ZVi9od-l4eHX-hSRGPd,
-.VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
-.VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
-.VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
-.VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
+  }
+  
+  .VIpgJd-ZVi9od-l4eHX-hSRGPd,
+  .VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
+  .VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
+  .VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
+  .VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
     font-size: 12px;
     font-weight: bold;
     color: #FFF;
-    margin-right:50px ;
+    margin-right:50px;
     text-decoration: none;
-}
+  }

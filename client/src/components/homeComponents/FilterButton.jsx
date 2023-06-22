@@ -125,11 +125,11 @@ export default function FilterButton() {
           justifyContent: "space-between",
           borderRadius: 2,
           textTransform: "capitalize",
-          py: 1,
           color: "theme.palette.text.primary",
           textAlign: 'cnter',
           width: '100%',
-          my: { xs: 4 },
+          height: '45px',
+          
         }}
         variant="outlined"
         onClick={handleClickOpen}
@@ -158,7 +158,7 @@ export default function FilterButton() {
               width: "fit-content",
             }}
           >
-            <FormControl sx={{ mt: 2, minWidth: 120 }}>
+            <FormControl sx={{ mt: 2, minWidth: 140  }}>
               <InputLabel htmlFor="max-width">maxWidth</InputLabel>
               <Select
                 autoFocus

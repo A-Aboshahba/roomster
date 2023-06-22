@@ -46,13 +46,13 @@ async function EditData(values) {
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
+      firstName: `${user.firstName}`,
+      lastName: `${user.lastName}`,
+      email: `${user.email}`,
+      password: `${user.password}`,
       address:{
-        country: '',
-        city: ''},
+        country: `${user.address?.country}`,
+        city: `${user.address?.city}`},
     },
 
     validationSchema: validationSchema,

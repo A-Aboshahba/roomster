@@ -14,7 +14,7 @@ import UserGurd from "../Gurd/UserGurd";
 function Routers() {
   // to pass user's information  to gurd to check logined or no
   const getUserData = useSelector((state) => state.user)
-  
+  console.log(getUserData)
   return (
     <Routes>
       <Route path="Home" element={<Homepage/>} />

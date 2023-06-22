@@ -26,16 +26,16 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 // eslint-disable-next-line react/prop-types
-const CarouselCard = ({ location, index }) => {
+const CarouselCard = ({ location }) => {
   const { user } = useSelector((state) => {
     return state.user;
   });
   const [activeStep, setActiveStep] = React.useState(0);
   const favoriteList = useSelector((state) => {
-    return state.user.user.favourites;
+    return state.user?.user?.favourites;
   });
   const [isFavorite, setIsFavorite] = React.useState(
-    favoriteList.find((favorite) => favorite._id === location._id)
+    favoriteList?.find((favorite) => favorite._id === location._id)
   );
   console.log(favoriteList);
   const maxSteps = location.images.length;

@@ -26,20 +26,20 @@ export const deleteFavorite = createAsyncThunk(
 );
 
 const initialState = {
-  /*user: {
-    _id: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    address: { country: "", city: "" },
-    image: {
-      url: "",
-      publicId: "",
-    },
-    favourites: [],
-    rentedApartments: [],
-  },*/
+    // user: {
+    //   _id: "",
+    //   firstName: "",
+    //   lastName: "",
+    //   email: "",
+    //   password: "",
+    //   address: { country: "", city: "" },
+    //   image: {
+    //     url: "",
+    //     publicId: "",
+    //   },
+    //   favourites: [],
+    //   rentedApartments: [],
+    // },
   user:null,
   loading: false,
   error: null,
@@ -71,12 +71,14 @@ const userSlice = createSlice({
     },
     
     [deleteFavorite.fulfilled]: (state, action) => {
-      var index = state.user.favourites.findIndex(function (item) {
+      var index = state.user?.favourites.findIndex(function (item) {
         return item.id === action.payload._id;
       });
       state.user.favourites.splice(index, 1);
     },
   },
 });
+export const { ResetRedux } = userSlice.actions;
+
 
 export default userSlice.reducer;

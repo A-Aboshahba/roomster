@@ -35,13 +35,12 @@ exports.getAllApartments = (request, response, next) => {
     }),
     request.query
   );
-
   apiFeature
-    .paginate()
     .filter()
     .fields()
     .search()
     .sort()
+    .paginate()
     .mongooseQuery.then((docs) => {
       if (!docs) {
         let error = new Error("there're no apartments  to show");

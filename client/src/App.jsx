@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import Navbar from "./components/navbar.jsx";
-import "./App.css"
+import "./App.css";
 import Routers from "./Routes/Routers.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -10,23 +10,20 @@ import jwt_decode from "jwt-decode";
 import  Footer  from "./components/Footer/Footer.jsx";
 
 function App() {
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    console.log(`Token is : ${token}`);
+    const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwt_decode(token);
       const userId = decodedToken._id;
-      console.log(`User ID is : ${userId}`);
       dispatch(fetchUser(userId));
     }
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <BrowserRouter>
-      <Navbar  />
+      <Navbar />
       <Container maxWidth="xl">
         <Routers />
       </Container>
@@ -36,5 +33,3 @@ function App() {
 }
 
 export default App;
-
-

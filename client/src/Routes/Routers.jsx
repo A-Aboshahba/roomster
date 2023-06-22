@@ -15,7 +15,7 @@ function Routers() {
       <Route path="login" element={<SignInSide />} />
       <Route path="register" element={<Signup />} />
       <Route path="profile/" element={<Profile />} />
-      <Route path="housingDetails/:userId" element={<HousingDetails />} />
+      <Route path="housingDetails/:apartmentId" element={<HousingDetails />} />
       <Route path="Manage Housing" element={<ManageHousing />} />
       <Route path="wishlist/" element={<WishList />} />
       <Route path="My Trips/" element={<MyTrips />} />

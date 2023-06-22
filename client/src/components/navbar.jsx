@@ -1,3 +1,4 @@
+
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -41,11 +42,11 @@ function Navbar(props) {
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
   const navigate = useNavigate();
-  const dataUser = useSelector((state) => state.user.user)
+  const {user} = useSelector((state) => state.user)
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch()
-  console.log(dataUser)
+  console.log(user)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -114,13 +115,13 @@ function Navbar(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {dataUser !== null ? <Link to="profile">
+        {user._id !== '' ? <Link to="profile">
           <MenuItem onClick={handleClose}>
             <Avatar /> Profile
           </MenuItem>
           <Divider />
         </Link> : ''}
-        {dataUser !== null ? <Link to="wishlist">
+        {user._id !== ''  ? <Link to="wishlist">
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <ShoppingCartIcon fontSize="small" />
@@ -128,7 +129,7 @@ function Navbar(props) {
             wishlist
           </MenuItem>
         </Link> : ''}
-        {dataUser !== null ?
+        {user._id !==  '' ?
           <MenuItem onClick={() => { handleClose(); localStorage.clear(); dispatch(ResetRedux()); navigate('/home') }}>
             <ListItemIcon>
               <Logout fontSize="small" />
@@ -136,7 +137,7 @@ function Navbar(props) {
             Logout
           </MenuItem>
           : ''}
-        {dataUser === null ?
+        {user._id  === ''  ?
           <MenuItem component={Link} to={'/register'} onClick={() => { handleClose() }}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
@@ -144,7 +145,7 @@ function Navbar(props) {
             Sign up
           </MenuItem>
           : ''}
-        {dataUser === null ?
+        {user._id  === '' ?
           <MenuItem component={Link} to={'/login'} onClick={() => { handleClose() }}>
             <ListItemIcon>
               <LoginIcon fontSize="small" />
@@ -152,7 +153,7 @@ function Navbar(props) {
             Login
           </MenuItem>
           : ''}
-        {dataUser === null ?
+        {user._id  === '' ?
           <MenuItem component={Link} to={'/help'} onClick={() => { handleClose() }}>
             <Divider />
             <ListItemIcon>
@@ -190,13 +191,13 @@ function Navbar(props) {
           </Link>
         ))}
         <Divider />
-        {dataUser !== null ?
+        {user._id  !== ''?
           <ListItem disablePadding component={Link} to={'/profile'}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Profile" />
             </ListItemButton>
           </ListItem> : ''}
-        {dataUser !== null ?
+        {user._id  !== ''?
           <ListItem disablePadding component={Link} to={'/wishlist'}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="wishlist" />
@@ -204,25 +205,25 @@ function Navbar(props) {
           </ListItem>
           : ''}
         <Divider />
-        {dataUser !== null ?
+        {user._id  !== '' ?
           <ListItem disablePadding onClick={() => { localStorage.clear(); dispatch(ResetRedux()) }}>
           <ListItemButton sx={{ textAlign: "center" }}>
             <ListItemText primary="LogOut" />
           </ListItemButton>
         </ListItem>:''}
-        {dataUser === null ?
+        {user._id  !== ''?
           <ListItem disablePadding component={Link} to={'/register'} >
           <ListItemButton sx={{ textAlign: "center" }}>
             <ListItemText primary="Sign up" />
           </ListItemButton>
         </ListItem>:''}
-        {dataUser === null ?
+        {user._id  !== ''?
           <ListItem disablePadding component={Link} to={'/login'} >
           <ListItemButton sx={{ textAlign: "center" }}>
             <ListItemText primary="Login in" />
           </ListItemButton>
         </ListItem>:''}
-        {dataUser === null ?
+        {user._id  !== '' ?
           <ListItem disablePadding component={Link} to={'/help'} >
           <ListItemButton sx={{ textAlign: "center" }}>
             <ListItemText primary="Help" />

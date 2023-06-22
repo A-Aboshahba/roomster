@@ -39,7 +39,7 @@ const CarouselCard = ({ location }) => {
   const [isFavorite, setIsFavorite] = React.useState(
     favoriteList?.find((favorite) => favorite._id === location._id)
   );
-  console.log(favoriteList);
+  // console.log(favoriteList);
   const maxSteps = location.images.length;
   //? to check for we in wish list page
   const wishListPage = window.location.pathname === "/wishlist";

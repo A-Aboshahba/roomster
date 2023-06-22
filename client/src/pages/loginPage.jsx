@@ -15,17 +15,15 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Roomster from '../API/config';
 import { useNavigate } from 'react-router';
+import jwt_decode from "jwt-decode";
 import { useDispatch } from 'react-redux';
-import { fetchUser } from '../store/Slices/userSlice';
-import jwt_decode from 'jwt-decode';
+import { addInfo } from '../store/Slices/userSlice';
 import { setToast } from '../store/Slices/toastSlice';
 
+
 function SignInSide() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch()
-
-
-
+const navigate= useNavigate();
+const dispatch=useDispatch();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Required'),
         password: Yup.string().required('Required'),
@@ -38,19 +36,19 @@ function SignInSide() {
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            try {
+            try{
                 const { data } = await Roomster.post('auth/login', values);
-                dispatch(setToast({ message: 'login Successfully', type: 'success' }));
                 localStorage.setItem("token", data.accessToken)
-                const decodedToken = jwt_decode(data.accessToken);
-                const userId = decodedToken._id;
-                dispatch(fetchUser(userId));
-                navigate(-1);
-            } catch (error) {
-                dispatch(setToast({ message: 'login Failed', type: 'error' }));
-            }
-        },
-    });
+                console.log(data.accessToken)  
+                const decodedToken = jwt_decode(data.accessToken);  
+                dispatch(addInfo(decodedToken));
+                dispatch(setToast({message:'Login Successfully',type:'success'}))
+                navigate('/');
+            }catch(err){
+                console.log(err);
+                dispatch(setToast({message:'Login Failed',type:'error'}))
+            }  
+}});
 
     return (
         <ThemeProvider theme={createTheme()}>
@@ -119,7 +117,7 @@ function SignInSide() {
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
-                            <Button  type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                                 Sign In
                             </Button>
                             <Grid container>

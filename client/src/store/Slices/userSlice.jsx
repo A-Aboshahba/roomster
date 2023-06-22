@@ -2,13 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Roomster from "../../API/config";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
-  const res = await Roomster.get(`user/${userId}`);
-  return res.data[0];
+  const {data} = await Roomster.get(`user/${userId}`);
+  console.log(data);
+  return data[0];
 });
+
 export const addFavorite = createAsyncThunk(
   "user/addFavorite",
-  async ({ userId, location }, action) => {
-    const res = await Roomster.post(`user/${userId}/favourites`, {
+  async ({ userId, location }) => {
+    await Roomster.post(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
     return location;
@@ -16,8 +18,8 @@ export const addFavorite = createAsyncThunk(
 );
 export const deleteFavorite = createAsyncThunk(
   "user/deleteFavorite",
-  async ({ userId, location }, action) => {
-    const res = await Roomster.put(`user/${userId}/favourites`, {
+  async ({ userId, location } ) => {
+    await Roomster.put(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
     return location;
@@ -46,7 +48,13 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    addInfo:(state, action) => {
+      state.loading = false;
+      state.user = { ...action.payload }},
+
+     ResetRedux: () => initialState,
+  }, 
   extraReducers: {
     [fetchUser.pending]: (state) => {
       state.loading = true;
@@ -65,13 +73,15 @@ const userSlice = createSlice({
       console.log(state.user);
       state.user.favourites.push(action.payload);
     },
+    
     [deleteFavorite.fulfilled]: (state, action) => {
       var index = state.user.favourites.findIndex(function (item) {
-        return item.id === action.payload._id;
+        return item._id === action.payload._id;
       });
       state.user.favourites.splice(index, 1);
     },
   },
 });
 
+export const { addInfo, ResetRedux } = userSlice.actions;
 export default userSlice.reducer;

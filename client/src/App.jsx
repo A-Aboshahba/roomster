@@ -8,10 +8,12 @@ import { fetchUser } from "./store/Slices/userSlice.jsx";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import Footer from "./components/Footer/Footer.jsx";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -28,6 +30,7 @@ function App() {
         <Routers />
       </Container>
       <Footer />
+      <ToastContainer/>
     </BrowserRouter>
   );
 }

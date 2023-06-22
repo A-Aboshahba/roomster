@@ -15,10 +15,15 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Roomster from '../API/config';
 import { useNavigate } from 'react-router';
+import jwt_decode from "jwt-decode";
+import { useDispatch } from 'react-redux';
+import { addInfo } from '../store/Slices/userSlice';
+import { setToast } from '../store/Slices/toastSlice';
+
 
 function SignInSide() {
 const navigate= useNavigate();
-
+const dispatch=useDispatch();
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Required'),
         password: Yup.string().required('Required'),
@@ -31,12 +36,19 @@ const navigate= useNavigate();
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const { data } = await Roomster.post('auth/login', values);
-            localStorage.setItem("token", data.accessToken)
-            console.log(data.accessToken)
-            navigate('/');
-        },
-    });
+            try{
+                const { data } = await Roomster.post('auth/login', values);
+                localStorage.setItem("token", data.accessToken)
+                console.log(data.accessToken)  
+                const decodedToken = jwt_decode(data.accessToken);  
+                dispatch(addInfo(decodedToken));
+                dispatch(setToast({message:'Login Successfully',type:'success'}))
+                navigate('/');
+            }catch(err){
+                console.log(err);
+                dispatch(setToast({message:'Login Failed',type:'error'}))
+            }  
+}});
 
     return (
         <ThemeProvider theme={createTheme()}>

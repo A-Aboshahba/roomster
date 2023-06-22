@@ -6,8 +6,8 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const { user } = useSelector((state) => state.user);
-  console.log(user._id);
+  const user  = useSelector((state) => state.user.user[0]);
+  console.log(user)
   return (
     <Grid container sx={{ my: 3 }}>
       <Grid item lg={3} xl={3} sm={4} md={3} sx={{ margin: "16px auto" }}>

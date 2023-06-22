@@ -4,8 +4,7 @@ import CarouselCard from "./CarouselCard";
 import { useState } from "react";
 
 const LocationCards = ({ cards }) => {
-  console.log("cards,", cards);
-  if (!cards.length) {
+  if (!cards?.length) {
     return null;
   }
   return (

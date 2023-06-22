@@ -78,7 +78,6 @@ const CarouselCard = ({ location, index }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-
           enableMouseEvents>
           {location.images.map((step) => {
             return (
@@ -87,7 +86,6 @@ const CarouselCard = ({ location, index }) => {
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-
                   alt={step.publicId}></Box>
               </div>
             );
@@ -122,7 +120,7 @@ const CarouselCard = ({ location, index }) => {
         />
       </Box>
 
-      <Link to={`/housingDetails/${index + 1}`} className="Link">
+      <Link to={`/housingDetails/${location._id}`} className="Link">
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
             <Typography component="h3"> {location.title}</Typography>

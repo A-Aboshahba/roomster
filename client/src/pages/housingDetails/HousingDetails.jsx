@@ -3,7 +3,7 @@ import { Button, Divider, Grid, Typography } from "@mui/material";
 import FullScreenDialog from "../../components/HousingComponent/MoreImages";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import HouseboatIcon from "@mui/icons-material/Houseboat";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -14,8 +14,22 @@ import MoreOffer from "../../components/HousingComponent/MoreOffer";
 import ReviewSection from "../../components/HousingComponent/ReviewSection";
 import HousingInfo from "../../components/HousingComponent/HousingInfo";
 import PickerDate from "../../components/HousingComponent/PickerData/PickerDate";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSingleApartment,
+  getSingleApartmentState,
+} from "../../store/Slices/apartment";
+
 export default function HousingDetails() {
+  // const navigate = useNavigate()
+  const params = useParams();
+  const dispatch = useDispatch();
   const [switchIcon, setSwitchIcon] = useState(false);
+  const singleApartment = useSelector(getSingleApartmentState);
+  useEffect(() => {
+    dispatch(getSingleApartment({ id: params.apartmentId }));
+  }, [dispatch]);
   return (
     <>
       <Box
@@ -23,16 +37,14 @@ export default function HousingDetails() {
           flexGrow: 1,
           position: "relative",
           marginTop: "6rem",
-        }}
-      >
+        }}>
         <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
           <Typography variant="h5" color="initial">
-            Nice Home On Cairo
+            {singleApartment.title}
           </Typography>
           <Box
             style={{ cursor: "pointer" }}
-            onClick={() => setSwitchIcon(!switchIcon)}
-          >
+            onClick={() => setSwitchIcon(!switchIcon)}>
             {switchIcon ? (
               <AiFillHeart size={30} color="#fff" fill="#b12929" />
             ) : (
@@ -47,23 +59,21 @@ export default function HousingDetails() {
           sx={{
             height: 500,
             overflow: "hidden",
-          }}
-        >
+          }}>
           <Grid item xs={12} md={6}>
             <img
               style={{
                 width: "100%",
                 height: "100%",
               }}
-              src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+              src={singleApartment.images ? singleApartment.images[0].url : ""}
               alt=""
             />
           </Grid>
           <Grid
             item
             xs={6}
-            sx={{ display: { xs: "none", md: "block" }, height: 500 }}
-          >
+            sx={{ display: { xs: "none", md: "block" }, height: 500 }}>
             <Grid container spacing={2} component="div" sx={{ height: 500 }}>
               <Grid item xs={6}>
                 <img
@@ -71,7 +81,9 @@ export default function HousingDetails() {
                     width: "100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[1].url : ""
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -80,7 +92,9 @@ export default function HousingDetails() {
                     width: "100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[2].url : ""
+                  }
                   alt=""
                 />
               </Grid>
@@ -90,7 +104,9 @@ export default function HousingDetails() {
                     width: " 100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[3].url : ""
+                  }
                   alt=""
                 />
               </Grid>
@@ -100,7 +116,9 @@ export default function HousingDetails() {
                     width: " 100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[4].url : ""
+                  }
                   alt=""
                 />
               </Grid>
@@ -120,8 +138,7 @@ export default function HousingDetails() {
           alignItems: "flex-start",
           justifyContent: "space-between",
         }}
-        spacing={3}
-      >
+        spacing={3}>
         <Grid item md={7}>
           <Box sx={{ mb: 1 }}>
             <Avatar
@@ -179,24 +196,21 @@ export default function HousingDetails() {
             <Box sx={{ display: "flex", gap: "2rem" }}>
               <Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <HouseboatIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Bay view
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <HouseboatIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Beach access - beach front
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <WifiIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Wifi
@@ -205,24 +219,21 @@ export default function HousingDetails() {
               </Box>
               <Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <PersonalVideoIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     the television
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <DirectionsCarIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     Free parking in the buildings
                   </Typography>
                 </Box>
                 <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
                   <AcUnitIcon fontSize="medium" />
                   <Typography variant="body1" color="initial">
                     air conditioner
@@ -243,8 +254,7 @@ export default function HousingDetails() {
               padding: "10px",
               width: "fit-content",
               margin: "auto",
-            }}
-          >
+            }}>
             <PickerDate />
             <Typography variant="body1" color="initial" sx={{ mb: 4 }}>
               total price : 100$

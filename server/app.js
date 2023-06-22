@@ -17,11 +17,10 @@ const server = express();
 
 // Enable CORS and allow PATCH method for any origin
 
-let port = 8080;
+let port = process.env.PORT || 8080;
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
-
 
 server.use(
   cors({
@@ -29,12 +28,9 @@ server.use(
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
-let port = 8080;
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
-
-
 
 server.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -55,8 +51,8 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("DB Connected ");
-    server.listen(8080, () => {
-      console.log(`server is listening at port: 8080`);
+    server.listen(port, () => {
+      console.log(`server is listening at port: ${port}`);
     });
   })
   .catch((error) => console.log(error));

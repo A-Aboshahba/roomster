@@ -81,7 +81,6 @@ const CarouselCard = ({ location, index }) => {
               dispatch(
                 deleteFavorite({ userId: user._id, location: location })
               );
-              e.target.closest(".carouselCard").parentNode.remove();
             }}
           />
         ) : isFavorite ? (

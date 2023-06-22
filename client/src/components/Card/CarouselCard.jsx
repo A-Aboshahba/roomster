@@ -25,8 +25,10 @@ import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
+import { useNavigate } from "react-router";
 // eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location, index }) => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => {
     return state.user;
   });
@@ -91,7 +93,17 @@ const CarouselCard = ({ location, index }) => {
             onClick={(e) => disLike()}
           />
         ) : (
-          <FaRegHeart size={24} color="#fff" onClick={(e) => Like()} />
+          <FaRegHeart
+            size={24}
+            color="#fff"
+            onClick={(e) => {
+              if (user._id === "") {
+                navigate("/login");
+              } else {
+                Like();
+              }
+            }}
+          />
         )}
       </Box>
 
@@ -100,7 +112,6 @@ const CarouselCard = ({ location, index }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-
           enableMouseEvents
         >
           {location.images.map((step) => {
@@ -110,7 +121,6 @@ const CarouselCard = ({ location, index }) => {
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-
                   alt={step.publicId}
                 ></Box>
               </div>

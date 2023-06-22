@@ -5,8 +5,7 @@ function WishList() {
   const { user } = useSelector((state) => {
     return state.user;
   });
-  console.log(user);
-  useEffect(() => {}, [user.favourites]);
+  console.log("User Data From Wish List ", user);
   return (
     <>
       <LocationCards cards={user?.favourites} />;

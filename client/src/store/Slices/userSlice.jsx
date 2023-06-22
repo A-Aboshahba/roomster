@@ -3,7 +3,6 @@ import Roomster from "../../API/config";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   const res = await Roomster.get(`user/${userId}`);
-  console.log(res.data);
   return res.data[0];
 });
 export const addFavorite = createAsyncThunk(
@@ -67,9 +66,10 @@ const userSlice = createSlice({
       state.user.favourites.push(action.payload);
     },
     [deleteFavorite.fulfilled]: (state, action) => {
-      state.user.favourites = state.user.favourites.filter(
-        (obj) => obj.id !== action.payload._id
-      );
+      var index = state.user.favourites.findIndex(function (item) {
+        return item.id === action.payload._id;
+      });
+      state.user.favourites.splice(index, 1);
     },
   },
 });

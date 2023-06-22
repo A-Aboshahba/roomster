@@ -3,6 +3,7 @@ require("./models/apartmentModel");
 require("./models/reviewModel");
 require("./models/reservationModel");
 const express = require("express");
+const cors = require("cors");
 // const multer = require("multer");
 require("dotenv").config();
 const morgan = require("morgan");
@@ -11,26 +12,37 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
-const cors = require('cors');
 const server = express();
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
-server.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-}));
-let port =  8080;
+
+let port = process.env.PORT || 8080;
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
 
+server.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  })
+);
+//############################################################################
+server.use(express.json());
+server.use(morgan("common"));
 
-server.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+server.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
@@ -39,14 +51,12 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("DB Connected ");
-    server.listen(8080, () => {
-      console.log(`server is listening at port: 8080`);
+    server.listen(port, () => {
+      console.log(`server is listening at port: ${port}`);
     });
   })
   .catch((error) => console.log(error));
 
-
-  
 //###__routes__##########################################################
 server.use("/auth", authRoute);
 server.use("/user", userRoute);

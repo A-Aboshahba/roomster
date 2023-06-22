@@ -55,7 +55,7 @@ const formik = useFormik({
 
     return (
         <ThemeProvider theme={createTheme()}>
-            <Container component="main" maxWidth="xs" >
+            <Container component="main" maxWidth="xs" margin="10px" >
                 <CssBaseline />
                 <Box
                     sx={{
@@ -184,11 +184,7 @@ const formik = useFormik({
                                     error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                                     helperText={formik.touched.confirmPassword && formik.errors.confirmPassword} />
                             </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox name="allowExtraEmails" color="primary" value={formik.values.allowExtraEmails} onChange={formik.handleChange} />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email." />
-                            </Grid>
+                           
                         </Grid>
                         <Button
                             type="submit"

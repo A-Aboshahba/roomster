@@ -6,14 +6,14 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   console.log(res.data);
   return res.data[0];
 });
-export const toggleFavorite = createAsyncThunk(
-  "user/toggleFavorite",
-  async (args, action) => {
-    // const res = await Roomster.get(`user/${userId}`);
-    // console.log(res.data);
-    // return res.data[0];
-  }
-);
+// export const toggleFavorite = createAsyncThunk(
+//   "user/toggleFavorite",
+//   async (args, action) => {
+//     // const res = await Roomster.get(`user/${userId}`);
+//     // console.log(res.data);
+//     // return res.data[0];
+//   }
+// );
 
 const initialState = {
   user: {
@@ -39,7 +39,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchUser.pending]: (state, action) => {
+    [fetchUser.pending]: (state) => {
       state.loading = true;
       state.error = null;
     },

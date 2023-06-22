@@ -26,6 +26,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
+import image from '../assets/41KUZDZwSeL.png'
 
 function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -127,8 +128,8 @@ function Navbar(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        <img
-          src="https://m.media-amazon.com/images/I/41KUZDZwSeL.png"
+      <img
+          src={image}
           className="logo"
         />
       </Typography>
@@ -193,7 +194,7 @@ function Navbar(props) {
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
             <img
-              src="https://m.media-amazon.com/images/I/41KUZDZwSeL.png"
+              src={image}
               className="logo"
             />
           </Typography>

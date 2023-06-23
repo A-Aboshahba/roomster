@@ -1,17 +1,12 @@
-import { Navigate } from "react-router"
-import { PropTypes } from 'prop-types';
-function UserGurd(props) {
-        if (props.getUserData.user !== null) {
-            return props.children
-        }
-        else {
-            return <Navigate to='/login' />
-        }
-    }
-    
-        UserGurd.propTypes = {
-            children: PropTypes,
-            getUserData: PropTypes
-        }
+import { Navigate } from "react-router";
+function UserGuard(props) {
+  const token = localStorage.getItem("token");
+  if (token) {
+    // eslint-disable-next-line react/prop-types
+    return props.children;
+  } else {
+    return <Navigate to="/login" />;
+  }
+}
 
-export default UserGurd
+export default UserGuard;

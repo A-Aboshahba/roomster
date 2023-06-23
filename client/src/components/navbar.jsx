@@ -1,4 +1,3 @@
-
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -27,26 +26,23 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ResetRedux } from "../store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import LoginIcon from '@mui/icons-material/Login';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import LoginIcon from "@mui/icons-material/Login";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
-import image from '../assets/41KUZDZwSeL.png'
+import image from "../assets/41KUZDZwSeL.png";
 
 function Navbar(props) {
-
-
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
   const navigate = useNavigate();
-  const {user} = useSelector((state) => state.user)
+  const { user } = useSelector((state) => state.user);
   const open = Boolean(anchorEl);
 
-  const dispatch = useDispatch()
-  console.log(user)
+  const dispatch = useDispatch();
+  // console.log(user)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -67,15 +63,14 @@ function Navbar(props) {
 
   const profileComponent = (
     <>
-      <Box  sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="large"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
+            aria-expanded={open ? "true" : undefined}>
             <Avatar sx={{ width: 32, height: 32 }}></Avatar>
           </IconButton>
         </Tooltip>
@@ -113,68 +108,99 @@ function Navbar(props) {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
-        {user._id !== '' ? <Link to="profile">
-          <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-          </MenuItem>
-          <Divider />
-        </Link> : ''}
-        {user._id !== ''  ? <Link to="wishlist">
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <ShoppingCartIcon fontSize="small" />
-            </ListItemIcon>
-            wishlist
-          </MenuItem>
-        </Link> : ''}
-        {user._id !==  '' ?
-          <MenuItem onClick={() => { handleClose(); localStorage.clear(); dispatch(ResetRedux()); navigate('/home') }}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        {user._id !== "" ? (
+          <Link to="profile">
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Profile
+            </MenuItem>
+            <Divider />
+          </Link>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <Link to="wishlist">
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <ShoppingCartIcon fontSize="small" />
+              </ListItemIcon>
+              wishlist
+            </MenuItem>
+          </Link>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              localStorage.clear();
+              dispatch(ResetRedux());
+              navigate("/home");
+            }}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
             Logout
           </MenuItem>
-          : ''}
-        {user._id  === ''  ?
-          <MenuItem component={Link} to={'/register'} onClick={() => { handleClose() }}>
+        ) : (
+          ""
+        )}
+        {user._id === "" ? (
+          <MenuItem
+            component={Link}
+            to={"/register"}
+            onClick={() => {
+              handleClose();
+            }}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>
             Sign up
           </MenuItem>
-          : ''}
-        {user._id  === '' ?
-          <MenuItem component={Link} to={'/login'} onClick={() => { handleClose() }}>
+        ) : (
+          ""
+        )}
+        {user._id === "" ? (
+          <MenuItem
+            component={Link}
+            to={"/login"}
+            onClick={() => {
+              handleClose();
+            }}>
             <ListItemIcon>
               <LoginIcon fontSize="small" />
             </ListItemIcon>
             Login
           </MenuItem>
-          : ''}
-        {user._id  === '' ?
-          <MenuItem component={Link} to={'/help'} onClick={() => { handleClose() }}>
+        ) : (
+          ""
+        )}
+        {user._id === "" ? (
+          <MenuItem
+            component={Link}
+            to={"/help"}
+            onClick={() => {
+              handleClose();
+            }}>
             <Divider />
             <ListItemIcon>
               <HelpOutlineOutlinedIcon fontSize="small" />
             </ListItemIcon>
             help
           </MenuItem>
-          : ''}
-
-
-
-      </Menu>    </>
+        ) : (
+          ""
+        )}
+      </Menu>{" "}
+    </>
   );
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-      <img
-          src={image}
-          className="logo"
-        />
+        <img src={image} className="logo" />
       </Typography>
       <Divider />
       <List>
@@ -183,52 +209,73 @@ function Navbar(props) {
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => console.log("first")}
-                sx={{ textAlign: "center" }}
-              >
+                sx={{ textAlign: "center" }}>
                 <ListItemText primary={item} />
               </ListItemButton>
             </ListItem>
           </Link>
         ))}
         <Divider />
-        {user._id  !== ''?
-          <ListItem disablePadding component={Link} to={'/profile'}>
+        {user._id !== "" ? (
+          <ListItem disablePadding component={Link} to={"/profile"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Profile" />
             </ListItemButton>
-          </ListItem> : ''}
-        {user._id  !== ''?
-          <ListItem disablePadding component={Link} to={'/wishlist'}>
+          </ListItem>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <ListItem disablePadding component={Link} to={"/wishlist"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="wishlist" />
             </ListItemButton>
           </ListItem>
-          : ''}
+        ) : (
+          ""
+        )}
         <Divider />
-        {user._id  !== '' ?
-          <ListItem disablePadding onClick={() => { localStorage.clear(); dispatch(ResetRedux()) }}>
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="LogOut" />
-          </ListItemButton>
-        </ListItem>:''}
-        {user._id  !== ''?
-          <ListItem disablePadding component={Link} to={'/register'} >
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Sign up" />
-          </ListItemButton>
-        </ListItem>:''}
-        {user._id  !== ''?
-          <ListItem disablePadding component={Link} to={'/login'} >
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Login in" />
-          </ListItemButton>
-        </ListItem>:''}
-        {user._id  !== '' ?
-          <ListItem disablePadding component={Link} to={'/help'} >
-          <ListItemButton sx={{ textAlign: "center" }}>
-            <ListItemText primary="Help" />
-          </ListItemButton>
-        </ListItem>:''}
+        {user._id !== "" ? (
+          <ListItem
+            disablePadding
+            onClick={() => {
+              localStorage.clear();
+              dispatch(ResetRedux());
+            }}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="LogOut" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <ListItem disablePadding component={Link} to={"/register"}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="Sign up" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <ListItem disablePadding component={Link} to={"/login"}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="Login in" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          ""
+        )}
+        {user._id !== "" ? (
+          <ListItem disablePadding component={Link} to={"/help"}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="Help" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          ""
+        )}
       </List>
     </Box>
   );
@@ -244,25 +291,19 @@ function Navbar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
+            sx={{ mr: 2, display: { sm: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            <img
-              src={image}
-              className="logo"
-            />
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+            <img src={image} className="logo" />
           </Typography>
 
           <Box
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            className="center"
-          >
+            className="center">
             {navItems.map((item) => (
               <Link to={item} key={item}>
                 <Button component="div" size="large" sx={{ color: "#000" }}>
@@ -289,10 +330,7 @@ function Navbar(props) {
                   display: "flex",
                   alignItems: "center",
                   textAlign: "center",
-                }}
-              >
-
-              </Box>
+                }}></Box>
               <Menu
                 anchorEl={anchorLanguage}
                 id="language-menu"
@@ -326,8 +364,7 @@ function Navbar(props) {
                   },
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
                 <MenuItem onClick={handleClose}>English</MenuItem>
                 <MenuItem onClick={handleClose}>Arabic</MenuItem>
               </Menu>
@@ -355,8 +392,7 @@ function Navbar(props) {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Box>

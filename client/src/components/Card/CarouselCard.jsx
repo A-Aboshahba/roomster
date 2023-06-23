@@ -72,8 +72,7 @@ const CarouselCard = ({ location }) => {
       sx={{
         flexGrow: 1,
         position: "relative",
-      }}
-    >
+      }}>
       <Box sx={fixedIcon} style={{ cursor: "pointer" }}>
         {wishListPage ? (
           <AiTwotoneDelete
@@ -112,8 +111,7 @@ const CarouselCard = ({ location }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
+          enableMouseEvents>
           {location.images.map((step) => {
             return (
               <div key={step.publicId}>
@@ -121,8 +119,7 @@ const CarouselCard = ({ location }) => {
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.publicId}
-                ></Box>
+                  alt={step.publicId}></Box>
               </div>
             );
           })}
@@ -140,8 +137,7 @@ const CarouselCard = ({ location }) => {
               size="small"
               sx={carouselDot}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
+              disabled={activeStep === maxSteps - 1}>
               <KeyboardArrowRight />
             </Button>
           }
@@ -150,8 +146,7 @@ const CarouselCard = ({ location }) => {
               size="small"
               sx={carouselDot}
               onClick={handleBack}
-              disabled={activeStep === 0}
-            >
+              disabled={activeStep === 0}>
               <KeyboardArrowLeft />
             </Button>
           }

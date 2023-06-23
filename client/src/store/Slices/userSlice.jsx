@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Roomster from "../../API/config";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
-  const {data} = await Roomster.get(`user/${userId}`);
-  console.log(data);
+  const { data } = await Roomster.get(`user/${userId}`);
+  console.log("user from user slice", data);
   return data[0];
 });
 
@@ -18,7 +18,7 @@ export const addFavorite = createAsyncThunk(
 );
 export const deleteFavorite = createAsyncThunk(
   "user/deleteFavorite",
-  async ({ userId, location } ) => {
+  async ({ userId, location }) => {
     await Roomster.put(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
@@ -49,12 +49,13 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addInfo:(state, action) => {
+    addInfo: (state, action) => {
       state.loading = false;
-      state.user = { ...action.payload }},
+      state.user = { ...action.payload };
+    },
 
-     ResetRedux: () => initialState,
-  }, 
+    ResetRedux: () => initialState,
+  },
   extraReducers: {
     [fetchUser.pending]: (state) => {
       state.loading = true;
@@ -62,6 +63,7 @@ const userSlice = createSlice({
     },
     [fetchUser.fulfilled]: (state, action) => {
       state.loading = false;
+      console.log("from fetch user external reducer", { ...action.payload });
       state.user = { ...action.payload };
     },
     [fetchUser.rejected]: (state, action) => {
@@ -73,7 +75,7 @@ const userSlice = createSlice({
       console.log(state.user);
       state.user.favourites.push(action.payload);
     },
-    
+
     [deleteFavorite.fulfilled]: (state, action) => {
       var index = state.user.favourites.findIndex(function (item) {
         return item._id === action.payload._id;

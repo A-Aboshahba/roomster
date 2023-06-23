@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Roomster from "../../API/config";
+import { toastMessage } from "../../utils/toasfiy";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   const { data } = await Roomster.get(`user/${userId}`);
@@ -19,7 +20,7 @@ export const addFavorite = createAsyncThunk(
 export const deleteFavorite = createAsyncThunk(
   "user/deleteFavorite",
   async ({ userId, location }) => {
-    await Roomster.put(`user/${userId}/favourites`, {
+    const res = await Roomster.put(`user/${userId}/favourites`, {
       apartmentId: location._id,
     });
     return location;
@@ -80,7 +81,9 @@ const userSlice = createSlice({
       var index = state.user.favourites.findIndex(function (item) {
         return item._id === action.payload._id;
       });
+      console.log(action);
       state.user.favourites.splice(index, 1);
+      toastMessage("success", "Delete Successfully 👏");
     },
   },
 });

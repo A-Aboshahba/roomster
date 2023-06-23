@@ -18,7 +18,6 @@ import { useNavigate } from "react-router";
 import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { addInfo, fetchUser } from "../store/Slices/userSlice";
-import { setToast } from "../store/Slices/toastSlice";
 
 function SignInSide() {
   const navigate = useNavigate();
@@ -43,11 +42,9 @@ function SignInSide() {
         console.log("decoded token", decodedToken._id);
         // dispatch(addInfo(decodedToken));
         dispatch(fetchUser(decodedToken._id));
-        dispatch(setToast({ message: "Login Successfully", type: "success" }));
         navigate("/");
       } catch (err) {
         console.log(err);
-        dispatch(setToast({ message: "Login Failed", type: "error" }));
       }
     },
   });
@@ -79,7 +76,8 @@ function SignInSide() {
           md={5}
           component={Paper}
           elevation={6}
-          sx={{ mt: 5 }}>
+          sx={{ mt: 5 }}
+        >
           <Box
             sx={{
               my: 8,
@@ -87,7 +85,8 @@ function SignInSide() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -98,7 +97,8 @@ function SignInSide() {
               component="form"
               noValidate
               onSubmit={formik.handleSubmit}
-              sx={{ mt: 1 }}>
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -137,7 +137,8 @@ function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}>
+                sx={{ mt: 3, mb: 2 }}
+              >
                 Sign In
               </Button>
               <Grid container>

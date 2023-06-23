@@ -19,15 +19,13 @@ import { useSelector } from 'react-redux';
 export default function EditProfile() {
   const [showPassword, setShowPassword] = React.useState(false);
 
-const {user} =useSelector((state)=>state.user);
-// console.log(user._id);
+  const user = useSelector((state) => state.user.user);
 
-async function EditData(values) {
- 
+  async function EditData(values) {
+
     await Roomster.patch(`user/${user._id}`, values);
-    // console.log(res.data);
     window.location.reload();
-  } 
+  }
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -50,31 +48,32 @@ async function EditData(values) {
       lastName: `${user.lastName}`,
       email: `${user.email}`,
       password: `${user.password}`,
-      address:{
+      address: {
         country: `${user.address?.country}`,
-        city: `${user.address?.city}`},
+        city: `${user.address?.city}`
+      },
     },
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-        console.log(values);
-        EditData(values);
+      console.log(values);
+      EditData(values);
     },
 
-    });
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleMouseDownPassword = (event) => {
+  });
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
-    };
+  };
 
-    return (
+  return (
     <Box
-        sx={{
+      sx={{
         display: 'flex',
         flexWrap: 'wrap',
         gap: '2ch',
-        }}
-        component="form"
+      }}
+      component="form"
       onSubmit={formik.handleSubmit}
     >
       <Typography variant="h4" sx={{ m: 1 }}>
@@ -99,32 +98,32 @@ async function EditData(values) {
           }}
         />
         <TextField
-            label="Last Name"
-            id="outlined-controlled"
-            required
-            fullWidth
-            name="lastName"
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            error={
+          label="Last Name"
+          id="outlined-controlled"
+          required
+          fullWidth
+          name="lastName"
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+          error={
             formik.touched.lastName && Boolean(formik.errors.lastName)
-            }
-            sx={{
+          }
+          sx={{
             m: '1%',
             width: '48%',
             my: 1,
-            }}
+          }}
         />
         <FormControl
-            sx={{
+          sx={{
             m: '1%',
             width: '98%',
             my: 1,
-            }}
-            variant="outlined"
+          }}
+          variant="outlined"
         >
-            <InputLabel htmlFor="outlined-controlled">Password</InputLabel>
-            <OutlinedInput
+          <InputLabel htmlFor="outlined-controlled">Password</InputLabel>
+          <OutlinedInput
             id="outlined-controlled"
             label="Password"
             required
@@ -133,29 +132,29 @@ async function EditData(values) {
             value={formik.values.password}
             onChange={formik.handleChange}
             error={
-                formik.touched.password && Boolean(formik.errors.password)
+              formik.touched.password && Boolean(formik.errors.password)
             }
             type={showPassword ? 'text' : 'password'}
             endAdornment={
-                <InputAdornment position="end">
+              <InputAdornment position="end">
                 <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
                 >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
-                </InputAdornment>
+              </InputAdornment>
             }
-            />
+          />
         </FormControl>
         <FormControl
-            sx={{ m: '1%', width: '98%', my: 1 }}
-            variant="outlined"
+          sx={{ m: '1%', width: '98%', my: 1 }}
+          variant="outlined"
         >
-            <InputLabel htmlFor="outlined-controlled">Email</InputLabel>
-            <OutlinedInput
+          <InputLabel htmlFor="outlined-controlled">Email</InputLabel>
+          <OutlinedInput
             id="outlined-controlled"
             required
             fullWidth
@@ -164,18 +163,18 @@ async function EditData(values) {
             value={formik.values.email}
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
-            />
+          />
         </FormControl>
         <FormControl
-            sx={{
+          sx={{
             m: '1%',
             width: '48%',
             my: 1,
-            }}
-            variant="outlined"
+          }}
+          variant="outlined"
         >
-            <InputLabel htmlFor="outlined-controlled">Country</InputLabel>
-            <OutlinedInput
+          <InputLabel htmlFor="outlined-controlled">Country</InputLabel>
+          <OutlinedInput
             id="outlined-controlled"
             required
             fullWidth
@@ -183,19 +182,19 @@ async function EditData(values) {
             name="address.country"
             value={formik.values.address?.country || ''}
             onChange={formik.handleChange}
-            
-            />
+
+          />
         </FormControl>
         <FormControl
-            sx={{
+          sx={{
             m: '1%',
             width: '48%',
             my: 1,
-            }}
-            variant="outlined"
+          }}
+          variant="outlined"
         >
-            <InputLabel htmlFor="outlined-controlled">City</InputLabel>
-            <OutlinedInput
+          <InputLabel htmlFor="outlined-controlled">City</InputLabel>
+          <OutlinedInput
             id="outlined-controlled"
             required
             fullWidth
@@ -204,23 +203,23 @@ async function EditData(values) {
             autoComplete="city"
             value={formik.values.address?.city || ''}
             onChange={formik.handleChange}
-        
-            />
+
+          />
         </FormControl>
         <FormControlLabel
-            control={<Checkbox
+          control={<Checkbox
             checked={formik.values.allowExtraEmails}
             onChange={formik.handleChange}
             name="allowExtraEmails"
             color="primary"
-            />}
-            label="I want to receive updates about promotions, new products, and other marketing materials."
-            sx={{
-            m: "1%", width: '98%', my:1
-            }}
+          />}
+          label="I want to receive updates about promotions, new products, and other marketing materials."
+          sx={{
+            m: "1%", width: '98%', my: 1
+          }}
         />
         <Button type="submit" variant="contained" sx={{ m: 1 }}>Save Changes</Button>
-        </div>
+      </div>
     </Box>
-    );
+  );
 }

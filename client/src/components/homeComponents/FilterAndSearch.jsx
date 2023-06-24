@@ -10,7 +10,6 @@ import FilterButton from "./FilterButton";
 const FilterAndSearch = () => {
     const [value, setValue] = React.useState(0);
     const isSmallScreen = useMediaQuery("(max-width:600px)");
-    console.log(isSmallScreen);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

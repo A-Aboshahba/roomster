@@ -81,6 +81,7 @@ const model = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    published: { type: Boolean, default: false },
     title: String,
     description: String,
     apartmentSpecification: apartmentSpecification,

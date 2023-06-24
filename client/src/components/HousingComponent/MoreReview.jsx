@@ -11,6 +11,13 @@ import WaterIcon from "@mui/icons-material/Water";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import CottageIcon from "@mui/icons-material/Cottage";
 import CardReview from "./CardReview";
+import { useSelector } from "react-redux";
+
+import {
+  getApartmentTotalReviwsState,
+  getApartmentReviwsState,
+} from "../../store/Slices/apartment";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,15 +32,23 @@ const style = {
 };
 
 export default function MoreReview() {
+  const totalReviews = useSelector(getApartmentTotalReviwsState);
+  const reviews = useSelector(getApartmentReviwsState);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Button variant="outlined" color="success" onClick={handleOpen}>
-        Show More...
-      </Button>
+      {totalReviews === "NaN" ? (
+        <></>
+      ) : (
+        <Button variant="outlined" color="success" onClick={handleOpen}>
+          Show More...
+        </Button>
+      )}
+
       <Modal
         keepMounted
         open={open}
@@ -51,10 +66,10 @@ export default function MoreReview() {
             All Reviews
           </Typography>
           {/*//! here we will mapping on item coming from db */}
-          {[..."x".repeat(10)].map((item, index) => {
+          {reviews.map((item, index) => {
             return (
               <Fragment key={index}>
-                <CardReview />
+                <CardReview item={item} key={item._id} />
                 <Divider />
               </Fragment>
             );

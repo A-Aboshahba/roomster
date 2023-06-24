@@ -3,7 +3,7 @@ import { Button, Divider, Grid, Typography } from "@mui/material";
 import FullScreenDialog from "../../components/HousingComponent/MoreImages";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import HouseboatIcon from "@mui/icons-material/Houseboat";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -14,8 +14,25 @@ import MoreOffer from "../../components/HousingComponent/MoreOffer";
 import ReviewSection from "../../components/HousingComponent/ReviewSection";
 import HousingInfo from "../../components/HousingComponent/HousingInfo";
 import PickerDate from "../../components/HousingComponent/PickerData/PickerDate";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSingleApartment,
+  getApartmentReviews,
+  getSingleApartmentState,
+  getApartmentReviwsState,
+} from "../../store/Slices/apartment";
+
 export default function HousingDetails() {
+  // const navigate = useNavigate()
+  const params = useParams();
+  const dispatch = useDispatch();
   const [switchIcon, setSwitchIcon] = useState(false);
+  const singleApartment = useSelector(getSingleApartmentState);
+  useEffect(() => {
+    dispatch(getSingleApartment({ id: params.apartmentId }));
+    dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
+  }, [dispatch]);
   return (
     <>
       <Box
@@ -27,7 +44,7 @@ export default function HousingDetails() {
       >
         <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
           <Typography variant="h5" color="initial">
-            Nice Home On Cairo
+            {singleApartment.title}
           </Typography>
           <Box
             style={{ cursor: "pointer" }}
@@ -55,7 +72,7 @@ export default function HousingDetails() {
                 width: "100%",
                 height: "100%",
               }}
-              src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+              src={singleApartment.images ? singleApartment.images[0].url : ""}
               alt=""
             />
           </Grid>
@@ -71,7 +88,9 @@ export default function HousingDetails() {
                     width: "100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[1].url : ""
+                  }
                 />
               </Grid>
               <Grid item xs={6}>
@@ -80,7 +99,9 @@ export default function HousingDetails() {
                     width: "100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[2].url : ""
+                  }
                   alt=""
                 />
               </Grid>
@@ -90,7 +111,9 @@ export default function HousingDetails() {
                     width: " 100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[3].url : ""
+                  }
                   alt=""
                 />
               </Grid>
@@ -100,7 +123,9 @@ export default function HousingDetails() {
                     width: " 100%",
                     height: "100%",
                   }}
-                  src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={
+                    singleApartment.images ? singleApartment.images[4].url : ""
+                  }
                   alt=""
                 />
               </Grid>

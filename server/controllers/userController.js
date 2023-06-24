@@ -1,26 +1,52 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("Users");
+const ApiFeature = require("../utils/ApiFeature");
+const Reservation = mongoose.model("Reservations");
 const ObjectId = require("mongoose").Types.ObjectId;
-
+const CryptoJS = require("crypto-js");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 module.exports.getAllUsers = (request, response, next) => {
-  User.find()
-    .then((data) => {
+  const apiFeature = new ApiFeature(
+    User.find()
+      .populate({
+        path: "favourites",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      })
+      .populate({
+        path: "rentedApartments",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      }),
+    request.query
+  );
+  apiFeature
+    .paginate()
+    .search()
+    .sort()
+    .mongooseQuery.then((data) => {
       if (!data) {
         let error = new Error("there're no users to show");
         error.statusCode = 404;
         throw error;
       }
-      response.status(200).json(data);
+      response.status(200).json({ data: data, page: apiFeature.page });
     })
     .catch((error) => next(error));
 };
 
 module.exports.getSingleUser = (request, response, next) => {
   User.findOne({ _id: request.params.id })
+    .find()
+    .populate({
+      path: "favourites",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    })
+    .populate({
+      path: "rentedApartments",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    })
     .then((data) => {
       if (!data) {
         let error = new Error("there're no user to show");
@@ -33,6 +59,12 @@ module.exports.getSingleUser = (request, response, next) => {
 };
 
 module.exports.updateSingleUser = (request, response, next) => {
+  if (request.body.password) {
+    request.body.password = CryptoJS.AES.encrypt(
+      request.body.password,
+      process.env.PASS_SEC
+    ).toString();
+  }
   User.updateOne({ _id: request.params.id }, request.body)
     .then((data) => {
       if (data.matchedCount == 0) {
@@ -61,8 +93,17 @@ module.exports.deleteSingleUser = (request, response, next) => {
     .catch((error) => next(error));
 };
 module.exports.getFavourites = (request, response, next) => {
-  User.findOne({ _id: request.params.id }, { favourites: 1 })
-    .then((data) => {
+  const apiFeature = new ApiFeature(
+    User.find({ _id: request.params.id }, { favourites: 1 }).populate({
+      path: "favourites",
+      // select: { fullName: 1, email: 1, _id: 0 },
+    }),
+    request.query
+  );
+
+  apiFeature
+    .paginate()
+    .mongooseQuery.then((data) => {
       if (!data) {
         let error = new Error("there're no user to show");
         error.statusCode = 404;
@@ -193,4 +234,41 @@ exports.deleteProfileImage = (request, response, next) => {
         .catch((err) => next(err));
     })
     .catch((err) => next(err));
+};
+
+module.exports.getUserReservations = (request, response, next) => {
+  Reservation.find({ userId: request.params.id })
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+module.exports.getAllReservations = (request, response, next) => {
+  Reservation.find({})
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
+};
+module.exports.getSingleReservations = (request, response, next) => {
+  Reservation.find({ _id: request.params.id })
+    .then((data) => {
+      if (!data) {
+        let error = new Error("there're no reservations to show");
+        error.statusCode = 404;
+        throw error;
+      }
+      response.status(200).json(data);
+    })
+    .catch((error) => next(error));
 };

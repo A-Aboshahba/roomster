@@ -8,6 +8,8 @@ module.exports.deleteSingleUser = param("id")
 
 module.exports.updateSingleUser = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+  body("isAdmin").isEmpty().withMessage("cant update this propety"),
+  body("favourites").isEmpty().withMessage("cant update this propety"),
   body("firstName")
     .notEmpty()
     .withMessage("firstName cant be blank")
@@ -72,4 +74,11 @@ module.exports.addProfileImage = [
 ];
 module.exports.deleteProfileImage = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.getUserReservations = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.getSingleReservations = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+  body("userId").isMongoId().withMessage("user id isn't objectId"),
 ];

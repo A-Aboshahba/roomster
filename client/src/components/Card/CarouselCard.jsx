@@ -23,15 +23,27 @@ import {
 import "./CarouselCard.css";
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
+import { useNavigate } from "react-router";
 // eslint-disable-next-line react/prop-types
-const CarouselCard = ({ location, index }) => {
+const CarouselCard = ({ location }) => {
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => {
+    return state.user;
+  });
   const [activeStep, setActiveStep] = React.useState(0);
-  const [icon, setIcon] = React.useState(false);
-  const maxSteps = location.locationImages.length;
+  const favoriteList = useSelector((state) => {
+    return state.user?.user?.favourites;
+  });
+  const [isFavorite, setIsFavorite] = React.useState(
+    favoriteList?.find((favorite) => favorite._id === location._id)
+  );
+  // console.log(favoriteList);
+  const maxSteps = location.images.length;
   //? to check for we in wish list page
   const wishListPage = window.location.pathname === "/wishlist";
-
+  const dispatch = useDispatch();
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
   };
@@ -43,48 +55,71 @@ const CarouselCard = ({ location, index }) => {
   const handleStepChange = (step) => {
     setActiveStep(step); // handle swipe change
   };
+
+  const Like = () => {
+    // dispatch(addFavorite({ userId: user._id, locationId: location._id }));
+    dispatch(addFavorite({ userId: user._id, location: location }));
+    setIsFavorite((prev) => !prev);
+  };
+  const disLike = () => {
+    // dispatch(deleteFavorite({ userId: user._id, locationId: location._id }));
+    dispatch(deleteFavorite({ userId: user._id, location: location }));
+    setIsFavorite((prev) => !prev);
+  };
   return (
     <Box
       className="carouselCard"
       sx={{
         flexGrow: 1,
         position: "relative",
-      }}
-    >
-      <Box
-        sx={fixedIcon}
-        style={{ cursor: "pointer" }}
-        onClick={() => setIcon(!icon)}
-      >
+      }}>
+      <Box sx={fixedIcon} style={{ cursor: "pointer" }}>
         {wishListPage ? (
           <AiTwotoneDelete
             size={30}
             fill="#8e0707"
-            onClick={(e) => e.target.closest(".carouselCard").remove()}
+            onClick={(e) => {
+              dispatch(
+                deleteFavorite({ userId: user._id, location: location })
+              );
+            }}
           />
-        ) : icon ? (
-          <AiFillHeart size={24} color="#fff" fill="#b12929" />
+        ) : isFavorite ? (
+          <AiFillHeart
+            size={24}
+            color="#fff"
+            fill="#b12929"
+            onClick={(e) => disLike()}
+          />
         ) : (
-          <FaRegHeart size={24} color="#fff" />
+          <FaRegHeart
+            size={24}
+            color="#fff"
+            onClick={(e) => {
+              if (user._id === "") {
+                navigate("/login");
+              } else {
+                Like();
+              }
+            }}
+          />
         )}
       </Box>
 
-      {location.locationImages.length && (
+      {location.images.length && (
         <SwipeableViews
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
-          {location.locationImages.map((step) => {
+          enableMouseEvents>
+          {location.images.map((step) => {
             return (
-              <div key={step.id}>
+              <div key={step.publicId}>
                 <Box
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.id}
-                ></Box>
+                  alt={step.publicId}></Box>
               </div>
             );
           })}
@@ -102,8 +137,7 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
+              disabled={activeStep === maxSteps - 1}>
               <KeyboardArrowRight />
             </Button>
           }
@@ -112,19 +146,20 @@ const CarouselCard = ({ location, index }) => {
               size="small"
               sx={carouselDot}
               onClick={handleBack}
-              disabled={activeStep === 0}
-            >
+              disabled={activeStep === 0}>
               <KeyboardArrowLeft />
             </Button>
           }
         />
       </Box>
 
-      <Link to={`/housingDetails/${index + 1}`} className="Link">
+      <Link to={`/housingDetails/${location._id}`} className="Link">
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2 }}>
-            <Typography component="h3"> {location.location}</Typography>
-            <Typography component="h4"> {location.days}</Typography>
+            <Typography component="h3"> {location.title}</Typography>
+
+            {/* <Typography component="h4"> {location.days}</Typography> */}
+
             <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>
@@ -136,7 +171,6 @@ const CarouselCard = ({ location, index }) => {
                 </>
               ) : (
                 <>
-                  <Typography component="h5"> {location.rating}</Typography>
                   <AiFillStar size={18} />
                 </>
               )}

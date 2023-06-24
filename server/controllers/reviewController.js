@@ -1,85 +1,65 @@
 const mongoose = require("mongoose");
+const ApiFeature = require("../utils/ApiFeature");
 const Review = mongoose.model("Reviews");
+const Users = mongoose.model("Users");
 
 exports.getAllReviews = (request, response, next) => {
-  const { page = 1, limit = 10 } = request.query;
+  const apiFeature = new ApiFeature(
+    Review.find({})
+      .populate({
+        path: "userId",
+        // model: Users,
+        // as: "user",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      })
+      .populate({ path: "apartmentId" }),
+    request.query
+  );
 
-  const skip = (page - 1) * limit;
-  let totalCount;
-  Review.countDocuments().then((count) => {
-    totalCount = count;
-  });
-  Review.find({})
-    .populate({
-      path: "userId",
-      select: { fullName: 1, email: 1, _id: 0 },
-    })
-    .skip(skip)
-    .limit(parseInt(limit))
-
-    .then((docs) => {
+  apiFeature
+    .paginate()
+    .mongooseQuery.then((docs) => {
       if (!docs) {
         let error = new Error("there're no reviews  to show");
         error.statusCode = 404;
         throw error;
       }
-      let totalCount;
-      Review.countDocuments()
-        .then((count) => {
-          totalCount = count;
-          console.log(totalCount);
-          response.status(200).json({
-            reviews: docs,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(totalCount / limit),
-            totalReviews: totalCount,
-          });
-        })
-        .catch((err) => next(err));
+
+      response.status(200).json({ data: docs, page: apiFeature.page });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 exports.getApartmentReviews = (request, response, next) => {
-  const { page = 1, limit = 10 } = request.query;
+  const apiFeature = new ApiFeature(
+    Review.find({ apartmentId: request.params.id })
+      .populate({
+        path: "userId",
+        // select: { fullName: 1, email: 1, _id: 0 },
+      })
+      .populate({ path: "apartmentId" }),
+    request.query
+  );
 
-  const skip = (page - 1) * limit;
-  let totalCount;
-  Review.countDocuments().then((count) => {
-    totalCount = count;
-  });
-  Review.find({ apartmentId: request.params.id })
-    .populate({
-      path: "userId",
-      select: { fullName: 1, email: 1, _id: 0 },
-    })
-    .skip(skip)
-    .limit(parseInt(limit))
-    .then((docs) => {
+  apiFeature
+    .paginate()
+    .mongooseQuery.then((docs) => {
+      let totalReveiws = 0;
       if (!docs) {
         let error = new Error("there're no reviews  to show");
         error.statusCode = 404;
         throw error;
       }
-      let totalCount;
-      Review.countDocuments()
-        .then((count) => {
-          totalCount = count;
-          console.log(totalCount);
-          response.status(200).json({
-            reviews: docs,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(totalCount / limit),
-            totalReviews: totalCount,
-          });
-        })
-        .catch((err) => next(err));
+      docs.forEach((review) => {
+        totalReveiws += review.rate;
+      });
+      response.status(200).json({
+        data: docs,
+        page: apiFeature.page,
+        totalRate: (totalReveiws / docs.length).toFixed(2),
+      });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 exports.addNewReview = (request, response, next) => {
   new Review(request.body)

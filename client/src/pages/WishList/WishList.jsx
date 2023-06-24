@@ -1,13 +1,15 @@
-import React from "react";
+import { useEffect } from "react";
 import LocationCards from "../../components/Card/LocationCard";
-import { wishList } from "../../data/allData.jsx";
-
+import { useSelector } from "react-redux";
 function WishList() {
+  const user = useSelector((state) => {
+    return state.user.user;
+  });
+  console.log("User Data From Wish List ", user);
   return (
     <>
-      <LocationCards cards={wishList} />;
+      <LocationCards cards={user?.favourites} />;
     </>
   );
 }
-
 export default WishList;

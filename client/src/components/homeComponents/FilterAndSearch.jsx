@@ -1,45 +1,48 @@
-import React from "react";
-import Tabs, { tabsClasses } from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-
-// react icons
-import { locationsTab } from "../../data/allData";
-import { Grid, useMediaQuery } from "@mui/material";
+import React, { useEffect } from "react";
+import { Grid, TextField } from "@mui/material";
 import FilterButton from "./FilterButton";
+import { useDispatch} from "react-redux";
+import { getApartments } from "../../store/Slices/apartment";
 
 const FilterAndSearch = () => {
-    const [value, setValue] = React.useState(0);
-    const isSmallScreen = useMediaQuery("(max-width:600px)");
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    return (
-        <Grid container spacing={1} sx={{mb:3}} className="center">
-            <Grid item xs={12} md={10} lg={11}>
-
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        variant="scrollable"
-                        scrollButtons={true}
-                        
-                        sx={{
-                            [`& .${tabsClasses.scrollButtons}`]: {
-                                "&.Mui-disabled": { opacity: 0.3 },
-                            },
-                        }}
-                    >
-                        {locationsTab.map((tab) => {
-                            return <Tab wrapped={true} key={tab.id} icon={tab.icon} label={tab.label} />;
-                        })}
-                    </Tabs>
-            </Grid>
-            <Grid item xs={12}  md={2} lg={1}>
-                <FilterButton />
-            </Grid>
+  const [searchQuery, setSearchQuery] = React.useState("");
+  console.log(searchQuery);
+  const dispatch = useDispatch();
+  
+    useEffect(() => {
+      dispatch(getApartments({ page: 1, keyword: `&keyword=${searchQuery}` }));
+    }, [dispatch, searchQuery]);
+  
+  return (
+    <Grid
+      container
+      spacing={1}
+      alignItems="center"
+      sx={{ height: "60px", marginBottom: "60px" }}
+      className="center"
+    >
+      <Grid item xs={9} md={10} lg={11}>
+        <form >
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Search Apartments"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              border: "1px solid #ddd",
+              borderRadius: 3,
+            }}
+          />
+        </form>
+      </Grid>
+      <Grid item xs={3} md={2} lg={1}>
+        <Grid container justifyContent="center">
+          <FilterButton />
         </Grid>
-    );
+      </Grid> 
+    </Grid>
+  );
 };
 
 export default FilterAndSearch;

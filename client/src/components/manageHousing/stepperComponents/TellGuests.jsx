@@ -85,85 +85,85 @@ let apartments = [
 
 const stanOutAmenities = [
   {
-    key: 1,
+    key: 8,
     attr: "hasPool",
     icon: <FontAwesomeIcon icon={faWaterLadder} />,
     title: "Pool"
   },
   {
-    key: 2,
+    key: 9,
     attr: "hasHotTub",
     icon: <FontAwesomeIcon icon={faHotTubPerson} />,
     title: "Hot tube"
   },
   {
-    key: 3,
+    key: 10,
     attr: "hasPatio",
     icon: <FontAwesomeIcon icon={faPrescriptionBottle} />,
     title: "Patio"
   },
   {
-    key: 4,
+    key: 11,
     attr: "hasBBQgrill",
     icon: <FontAwesomeIcon icon={faBurger} />,
     title: "BBQ grill"
   },
   {
-    key: 5,
+    key: 12,
     attr: "hasOutdoorDiningArea",
     icon: <FontAwesomeIcon icon={faUtensils} />,
     title: "Outdoor dining area"
   },
   {
-    key: 6,
+    key: 13,
     attr: "hasFirePit",
     icon: <FontAwesomeIcon icon={faFireBurner} />,
     title: "Fire Pit"
   },
   {
-    key: 7,
+    key: 14,
     attr: "hasPoolTable",
     icon: <FontAwesomeIcon icon={faTable} />,
     title: "Pool table"
   },
   {
-    key: 8,
+    key: 15,
     attr: "hasIndoorFirePlace",
     icon: <FontAwesomeIcon icon={faHouseFire} />,
     title: "Indoor fireplace"
   },
   {
-    key: 9,
+    key: 16,
     attr: "hasPiano",
     icon: <FontAwesomeIcon icon={faMusic} />,
     title: "Piano"
   },
   {
-    key: 10,
+    key: 17,
     attr: "hasExerciseEquipment",
     icon: <FontAwesomeIcon icon={faDumbbell} />,
     title: "Exercise equipment"
   },
   {
-    key: 11,
+    key: 18,
     attr: "hasLakeAccess",
     icon: <FontAwesomeIcon icon={faWater} />,
     title: "Lake access"
   },
   {
-    key: 12,
+    key: 19,
     attr: "hasBeachAccess",
     icon: <FontAwesomeIcon icon={faUmbrellaBeach} />,
     title: "Beach access"
   },
   {
-    key: 13,
+    key: 20,
     attr: "hasSkiInSkiOut",
     icon: <FontAwesomeIcon icon={faPersonSkiingNordic} />,
     title: "Ski-in/Ski-out"
   },
   {
-    key: 14,
+    key: 21,
     attr: "hasOutdoorShower",
     icon: <FontAwesomeIcon icon={faShower} />,
     title: "Outdoor shower"
@@ -172,25 +172,25 @@ const stanOutAmenities = [
 
 const safetyItems = [
   {
-    key: 1,
+    key: 22,
     attr: "hasSmokeAlarm",
     icon: <FontAwesomeIcon icon={faBanSmoking} />,
     title: "Smoke alarm"
   },
   {
-    key: 2,
+    key: 23,
     attr: "hasFirstAidKit",
     icon: <FontAwesomeIcon icon={faKitMedical} />,
     title: "First aid kit"
   },
   {
-    key: 3,
+    key: 24,
     attr: "hasFireExtinguisher",
     icon: <FontAwesomeIcon icon={faFireExtinguisher} />,
     title: "Fire extinguisher"
   },
   {
-    key: 4,
+    key: 25,
     attr: "hasCarbonMonoxideAlarm",
     icon: <FontAwesomeIcon icon={faUniversalAccess} />,
     title: "Carbon monoxide alarm"
@@ -200,9 +200,7 @@ const safetyItems = [
 
 
 const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
-  const [selectedItemId, setSelectedItemId] = useState();
-  const [selectedItemId2, setSelectedItemId2] = useState();
-  const [selectedItemId3, setSelectedItemId3] = useState();
+  const [selectedItemId, setSelectedItemId] = useState([]);
 
 
 
@@ -210,20 +208,21 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
     setIsChoosed(false);
   }, []);
 
-  function handleClick1(id, attr) {
-    setSelectedItemId(id)
-    setCollectedData({ ...collectedData, apartAdvantages: { ...collectedData.apartAdvantages, [attr]: true } })
-  }
-  function handleClick2(id, attr) {
-    setSelectedItemId2(id)
-    setCollectedData({ ...collectedData, apartAdvantages: { ...collectedData.apartAdvantages, [attr]: true } })
-  }
-  function handleClick3(id, attr) {
-    setSelectedItemId3(id)
-    setCollectedData({ ...collectedData, apartAdvantages: { ...collectedData.apartAdvantages, [attr]: true } })
-  }
+  function handleClick(id, attr) {
+    if (collectedData.apartmentSpecification.hasOwnProperty(attr)) {
+      const newArray = selectedItemId.filter((element) => element !== id);
+      setSelectedItemId(newArray);
+      setCollectedData((prevData) => {
+        const updatedApartmentSpec = { ...prevData.apartmentSpecification };
+        delete updatedApartmentSpec[attr];
+        return { ...prevData, apartmentSpecification: updatedApartmentSpec };
+      })
+    } else {
+      setCollectedData({ ...collectedData, apartmentSpecification: { ...collectedData.apartmentSpecification, [attr]: true } })
+      setSelectedItemId([...selectedItemId, id]);
 
-
+    }
+  }
 
   return (
     <Box>
@@ -231,8 +230,8 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid maxWidth={800} container sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
         {apartments.map((apart, i) => (
           <CustomBox item key={i}
-            className={selectedItemId == apart.key ? 'selected' : ''}
-            onClick={() => handleClick1(apart.key, apart.attr)}
+            className={selectedItemId.includes(apart.key) ? 'selected' : ''}
+            onClick={() => handleClick(apart.key, apart.attr)}
           >
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
@@ -243,8 +242,8 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid maxWidth={800} container sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
         {stanOutAmenities.map((apart, i) => (
           <CustomBox item key={i}
-            className={selectedItemId2 == apart.key ? 'selected' : ''}
-            onClick={() => handleClick2(apart.key, apart.attr)}
+            className={selectedItemId.includes(apart.key) ? 'selected' : ''}
+            onClick={() => handleClick(apart.key, apart.attr)}
           >
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
@@ -256,8 +255,8 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid maxWidth={800} container sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
         {safetyItems.map((apart, i) => (
           <CustomBox item key={i}
-            className={selectedItemId3 == apart.key ? 'selected' : ''}
-            onClick={() => handleClick3(apart.key, apart.attr)}
+            className={selectedItemId.includes(apart.key) ? 'selected' : ''}
+            onClick={() => handleClick(apart.key, apart.attr)}
           >
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>

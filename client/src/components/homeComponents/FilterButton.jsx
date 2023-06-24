@@ -332,7 +332,7 @@ export default function FilterButton() {
             <Grid sx={{ display: 'flex', }}>
               <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
               {[1, 2, 3, 4, 5, 6].map((room, id) => (
-                <CustomGrid item
+                <CustomGrid item key={id}
                   className={wholeObj.noOfRooms == room ? 'selected' : ''}
                   onClick={() => handleRoomClick(room)}
                 >
@@ -344,7 +344,7 @@ export default function FilterButton() {
             <Grid sx={{ display: 'flex', }}>
               <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
               {[1, 2, 3, 4, 5, 6].map((room, id) => (
-                <CustomGrid item
+                <CustomGrid item key={id}
                   className={wholeObj.noOfKitchens == room ? 'selected' : ''}
                   onClick={() => handleKitchenClick(room)}
                 >
@@ -356,7 +356,7 @@ export default function FilterButton() {
             <Grid sx={{ display: 'flex', }}>
               <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
               {[1, 2, 3, 4, 5, 6].map((room, id) => (
-                <CustomGrid item
+                <CustomGrid item key={id}
                   className={wholeObj.noOfBalcony == room ? 'selected' : ''}
                   onClick={() => handleBalconyClick(room)}
                 >

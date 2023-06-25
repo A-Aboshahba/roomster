@@ -55,7 +55,7 @@
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
   margin: 4px 0;
-  transform: translateX(-219px);
+  transform: translateX(155px);
   font-size: 14px;
 }
 
@@ -116,7 +116,7 @@
   color: transparent !important;
   display: flex;
   justify-content: space-around;
-  width: 425px;
+  width: 0;
   align-items: center;
 }
 

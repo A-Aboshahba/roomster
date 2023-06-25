@@ -14,8 +14,9 @@ function Footer() {
   }, [])
   return (
     <div id="footer">
-      <div id="google_translate_element"></div>
-      <select onChange={(event)=>{dispatch(selectCurrenct(event.target.value))}} id="currency-select">
+      <div className="betweenItem">
+        <div id="google_translate_element"></div>
+        <select onChange={(event) => { dispatch(selectCurrenct(event.target.value)) }} id="currency-select">
           <option value="USD">USD</option>
           <option value="AED">AED</option>
           <option value="AFN">AFN</option>
@@ -178,10 +179,11 @@ function Footer() {
           <option value="XPF">ZMW</option>
           <option value="XPF">ZWL</option>
         </select>
+      </div>
       <div id="contact-info">
         <a href="mailto:info@example.com">Romster@gmail.com</a>
         <a href="tel:+1234567890">123-456-7890</a>
-      
+
       </div>
     </div>
   );

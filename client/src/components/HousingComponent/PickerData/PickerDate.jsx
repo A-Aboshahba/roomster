@@ -8,7 +8,7 @@ import "./PickerDate.css";
 import { Button, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import CurrencySign from "../../../utils/CurrencySign";
-const PickerDate = ({ reservationsArr = [] ,price=1}) => {
+const PickerDate = ({ reservationsArr = [], price = 1 }) => {
 
   const SignySelector = useSelector((state) => state.currency.selected);
   const currencySelector = useSelector((state) => state.currency.currency);
@@ -17,8 +17,8 @@ const PickerDate = ({ reservationsArr = [] ,price=1}) => {
     ...reservationsArr.map(date => {
       return { from: new Date(date.startDate), to: new Date(date.endDate) }
     }),
-    { from: new Date(2022, 1, 1), to: new Date().setDate(new Date().getDate() - 1) }و
-     ];
+    { from: new Date(2022, 1, 1), to: new Date().setDate(new Date().getDate() - 1) },
+  ];
   const [range, setRange] = useState();
 
   let footer = (
@@ -57,7 +57,7 @@ const PickerDate = ({ reservationsArr = [] ,price=1}) => {
             </Button>
           </Stack>
           <Typography variant="body1" color="initial" sx={{ mt: 4 }}>
-            {"total price : " + diffDays*price*currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}
+            {"total price : " + diffDays * price * currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}
           </Typography>
         </>
       );

@@ -75,6 +75,7 @@ const userSlice = createSlice({
     [addFavorite.fulfilled]: (state, action) => {
       console.log(state.user);
       state.user.favourites.push(action.payload);
+      toastMessage("success", "Added Successfully 👏");
     },
 
     [deleteFavorite.fulfilled]: (state, action) => {

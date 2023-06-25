@@ -10,6 +10,8 @@ import {
   getApartmentTotalReviwsState,
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
+import AddReview from "./addReview";
+import { Box } from "@mui/system";
 
 function ReviewSection() {
   const apartmentReviews = useSelector(getApartmentReviwsState);
@@ -45,6 +47,8 @@ function ReviewSection() {
             </Grid>
           </Grid>
           <MoreReview />
+          <Box component="span" sx={{ margin: "0 1rem" }}></Box>
+          <AddReview />
         </>
       )}
     </>

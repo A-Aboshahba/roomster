@@ -19,23 +19,37 @@ import TellGuests from "./../../components/manageHousing/stepperComponents/TellG
 import AppartmentCard from "../../components/manageHousing/stepperComponents/AppartmentCard.jsx";
 import { useState } from "react";
 import FileUpload from "../../components/manageHousing/stepperComponents/FileUpload/FileUpload.jsx";
+import { useSelector } from "react-redux";
+import Roomster from "../../API/config.jsx";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const steps = ["", "", "", "", "", "", "", "", "", "", "", ""];
 
 export default function ManageHousing() {
+  const location = useLocation();
+  const [apartment, setApartment] = useState(null);
+  useEffect(() => {
+    if (location.state) {
+      const { apartment } = location.state;
+      setApartment(apartment);
+    }
+  }, []);
+  console.log("update apartment ", apartment);
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isChoosed, setIsChoosed] = useState(true);
+  const { user } = useSelector((state) => state.user);
+  const [addedApartment, setAddedApartment] = useState(null);
   // const [createApartment, setCreateApartment] = useState(false);
-
   const [collectedData, setCollectedData] = useState({
     type: "",
     location: {
-      country: "",
+      country: { code: "", label: "", phone: "" },
       city: "",
       street: "",
       building: "",
-      floor: "",
+      floorNo: "",
       description: "",
     },
     apartmentSpecification: {
@@ -50,7 +64,6 @@ export default function ManageHousing() {
     cancelPolicy: [],
     rules: [],
   });
-
   const demo = [
     {
       component: <Comp1 setIsChoosed={setIsChoosed} />,
@@ -63,6 +76,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -74,6 +88,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -85,6 +100,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -95,6 +111,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -106,6 +123,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -117,6 +135,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -127,6 +146,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -137,6 +157,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -147,6 +168,7 @@ export default function ManageHousing() {
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -156,7 +178,9 @@ export default function ManageHousing() {
         <FileUpload
           setIsChoosed={setIsChoosed}
           collectedData={collectedData}
+          addedApartment={addedApartment}
           setCollectedData={setCollectedData}
+          apartment={apartment}
         />
       ),
     },
@@ -171,9 +195,66 @@ export default function ManageHousing() {
     return skipped.has(step);
   };
 
-  const handleNext = (steps) => {
-    if (steps + 1 == 10) {
+  const handleNext = async () => {
+    console.log(activeStep);
+    if (activeStep + 1 == 10) {
+      if (apartment) {
+        console.log(
+          "lets update apartment",
+          apartment,
+          "jjjjjjj",
+          collectedData
+        );
+        try {
+          // console.log("data", {
+          //   ...collectedData,
+          //   userId: user._id,
+          //   location: {
+          //     ...collectedData.location,
+          //     country: collectedData.location.country.label,
+          //   },
+          // });
+
+          const response = await Roomster.patch(`apartments/${apartment._id}`, {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log("lets add apartment", collectedData);
+        try {
+          console.log("data", {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          const response = await Roomster.post("apartments", {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          console.log(response);
+          console.log(response.data._id);
+          setAddedApartment(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -241,11 +322,11 @@ export default function ManageHousing() {
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               {activeStep === steps.length - 1 ? (
-                <Button onClick={handleFinish}>Finish</Button>
+                <Link to={"/Manage Housing"}>
+                  <Button onClick={handleFinish}>Finish</Button>
+                </Link>
               ) : (
-                <Button
-                  onClick={() => handleNext(steps.length)}
-                  disabled={isChoosed}>
+                <Button onClick={() => handleNext()} disabled={isChoosed}>
                   Next
                 </Button>
               )}

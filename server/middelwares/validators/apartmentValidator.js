@@ -20,7 +20,8 @@ exports.postValidationArr = [
     .withMessage("noOfKitchens isn't number "),
   body("apartmentSpecification.hasWifi")
     .isBoolean()
-    .withMessage("hasWifi isn't boolean "),
+    .withMessage("hasWifi isn't boolean ")
+    .optional(),
   body("apartmentSpecification.hasTv")
     .isBoolean()
     .withMessage("hasTv isn't boolean ")

@@ -8,7 +8,7 @@ import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
 import UserGuard from "../Gurd/UserGurd";
-
+import UserApartments from "../pages/userApartments/UserApartments";
 function Routers() {
   return (
     <Routes>
@@ -33,6 +33,14 @@ function Routers() {
       />
       <Route
         path="Manage Housing"
+        element={
+          <UserGuard>
+            <UserApartments />
+          </UserGuard>
+        }
+      />
+      <Route
+        path="apartment/modify"
         element={
           <UserGuard>
             <ManageHousing />

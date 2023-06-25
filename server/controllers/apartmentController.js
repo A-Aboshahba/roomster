@@ -239,7 +239,10 @@ exports.addSingleImage = (request, response, next) => {
       }
       response
         .status(201)
-        .json({ message: "image added to apartment successfully" });
+        .json({
+          message: "image added to apartment successfully",
+          imageId: publicId,
+        });
     })
     .catch((err) => next(err));
 };

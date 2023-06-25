@@ -18,6 +18,9 @@ export const footerLayout = {
   alignItems: "center",
 };
 
+export const buttonPadding = {
+  px: { xs: "120px", sm: "75px", md: "30px", lg: "50px" },
+};
 export const flexCenter = {
   display: "flex",
   justifyContent: "center",

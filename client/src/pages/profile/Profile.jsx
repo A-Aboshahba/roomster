@@ -6,8 +6,8 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const user  = useSelector((state) => state.user.user);
-  console.log(user)
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   return (
     <Grid container sx={{ my: 3 }}>
       <Grid item lg={3} xl={3} sm={4} md={3} sx={{ margin: "16px auto" }}>
@@ -28,7 +28,11 @@ const Profile = () => {
               width: { lg: 200, md: 150, sm: 100, xs: 100 },
             }}
             alt="img"
-            src={user.image.url}
+            src={
+              user?.image?.url === ""
+                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+                : user?.image?.url
+            }
           />
         </Box>
         <Grid container spacing={2} mt={3}>

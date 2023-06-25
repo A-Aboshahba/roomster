@@ -23,16 +23,17 @@ import {
   getApartmentReviwsState,
 } from "../../store/Slices/apartment";
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
+import { createAllIcons } from "../../utils/createIcons";
 export default function HousingDetails() {
   const params = useParams();
   console.log(params.apartmentId);
   const dispatch = useDispatch();
   const singleApartment = useSelector(getSingleApartmentState);
-
+  let counter = 0;
   const user = useSelector((state) => {
     return state.user?.user;
   });
-  console.log("user", user.favourites);
+  const allIcons = createAllIcons(singleApartment.apartmentSpecification);
   const [isFavorite, setIsFavorite] = useState(
     user.favourites?.find((favorite) => {
       return favorite._id == params.apartmentId;
@@ -41,7 +42,6 @@ export default function HousingDetails() {
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
-    console.count(isFavorite);
   }, [dispatch, isFavorite]);
   const Like = () => {
     dispatch(
@@ -183,8 +183,8 @@ export default function HousingDetails() {
           <Box sx={{ mb: 1 }}>
             <Avatar
               sx={{ width: 70, height: 70 }}
-              alt="Remy Sharp"
-              src="https://a0.muscache.com/im/pictures/user/96db5a52-52db-42d4-a8bf-fe4d9cb7901d.jpg?im_w=240"
+              alt={singleApartment?.userId?.fullName}
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
             />
             <Box>
               <Typography variant="h4" color="initial">
@@ -209,61 +209,32 @@ export default function HousingDetails() {
             <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
               What this home has to offer
             </Typography>
-            <Box sx={{ display: "flex", gap: "2rem" }}>
-              <Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <HouseboatIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    Bay view
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <HouseboatIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    Beach access - beach front
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <WifiIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    Wifi
-                  </Typography>
-                </Box>
-              </Box>
-              <Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <PersonalVideoIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    the television
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <DirectionsCarIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    Free parking in the buildings
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
-                >
-                  <AcUnitIcon fontSize="medium" />
-                  <Typography variant="body1" color="initial">
-                    air conditioner
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-            <MoreOffer />
+            <Grid container spacing={2} sx={{ paddingLeft: "18px" }}>
+              {allIcons[0] != undefined &&
+                allIcons.map(
+                  (item) =>
+                    item.isFound &&
+                    counter < 6 && (
+                      <Grid item key={item.key} xs={12} sm={6}>
+                        <span style={{ display: "none" }}>{counter++}</span>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            mb: 3,
+                          }}
+                        >
+                          {item.icon}
+                          <Typography variant="body1" color="initial">
+                            {item.title}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    )
+                )}
+            </Grid>
+            <MoreOffer allIcons={allIcons} />
           </Box>
           <Divider />
           <ReviewSection />

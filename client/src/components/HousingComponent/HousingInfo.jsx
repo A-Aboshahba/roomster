@@ -3,7 +3,6 @@ import { Box } from "@mui/system";
 import React from "react";
 
 function HousingInfo({ title, body = null }) {
-  console.log(typeof body, body);
   return (
     <>
       <Box sx={{ mt: 2, mb: 1 }}>

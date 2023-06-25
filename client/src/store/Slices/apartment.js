@@ -20,10 +20,8 @@ export const getApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      // console.log("slice", response.data.data);
       return response.data.data;
     } catch (err) {
-      comsole.log(err);
       return thunkAPI.rejectWithValue(err);
     }
   }
@@ -36,7 +34,7 @@ export const getApartmentReviews = createAsyncThunk(
       const response = await Roomster.get(
         `reviews/apartment/${apartmentId}?page=${page}`
       );
-      console.log(" reviewslice", response.data);
+
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -50,7 +48,6 @@ export const loadMoreApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      // console.log("slice", response.data.data);
       return response.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -62,7 +59,6 @@ export const getSingleApartment = createAsyncThunk(
   async ({ id }, thunkAPI) => {
     try {
       const response = await Roomster.get(`apartments/${id}`);
-      console.log("get single apartment", response.data);
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -72,7 +68,6 @@ export const getSingleApartment = createAsyncThunk(
 export const addReview = createAsyncThunk(
   "apartments/addReview",
   async (data, thunkAPI) => {
-    console.log(thunkAPI.getState());
     const { apartments, user } = thunkAPI.getState();
     try {
       data.apartmentId = apartments.singleApartment._id;
@@ -151,7 +146,6 @@ const apartmentsSlice = createSlice({
     },
     //? add review
     [addReview.fulfilled]: (state, action) => {
-      console.log(action.payload);
       toastMessage("success", "Added Successfully");
       state.reviews.push(action.payload);
     },

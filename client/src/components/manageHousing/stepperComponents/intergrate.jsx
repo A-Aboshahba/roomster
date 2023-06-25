@@ -144,7 +144,7 @@ function Comp2({ collectedData, setCollectedData, setIsChoosed }) {
             onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, building: e.target.value } }) }}
 
           >
-            <TextField fullWidth label="Building Number" id="Building" />
+            <TextField fullWidth label="Building Number" id="Building" type='number' />
           </Box>
           <Box
             sx={{

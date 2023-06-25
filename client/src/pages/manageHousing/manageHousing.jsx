@@ -23,147 +23,119 @@ import FileUpload from "../../components/manageHousing/stepperComponents/FileUpl
 const steps = ["", "", "", "", "", "", "", "", "", "", "", ""];
 
 export default function ManageHousing() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
-  const [isChoosed, setIsChoosed] = useState(true);
-  // const [createApartment, setCreateApartment] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set());
+    const [isChoosed, setIsChoosed] = useState(true);
+  
+    const [collectedData, setCollectedData] = useState({
+        type: "",
+        location: {
+            country: { code: "", label: "", phone: "" },
+            city: "",
+            street: "",
+            building: "",
+            floor: "",
+            description: "",
+        },
+        apartmentSpecification: {
+            noOfRooms: 0,
+            noOfBalcony: 0,
+            noOfBeds: 0,
+            noOfKitchens: 0,
+        },
+        title: '',
+        description: '',
+        price: '',
+        cancelPolicy: [],
+        rules: [],
+    });
 
-  const [collectedData, setCollectedData] = useState({
-    type: "",
-    location: {
-      country: "",
-      city: "",
-      street: "",
-      building: "",
-      floor: "",
-      description: "",
-    },
-    apartmentSpecification: {
-      noOfRooms: 0,
-      noOfBalcony: 0,
-      noOfBeds: 0,
-      noOfKitchens: 0,
-    },
-    title: "",
-    description: "",
-    price: "",
-    cancelPolicy: [],
-    rules: [],
-  });
+    const demo = [
+        {
+            component: <Comp1 setIsChoosed={setIsChoosed}/>
+        },
+        {
+            label: "Which of these best describes your place?",
+            component: <ChooseAppartment
+                isChoosed={isChoosed} setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData} />
+        },
+        {
+            desc: "Your address is only shared with guests after they’ve made a reservation.",
+            label: "Where is your place located?",
+            component: <Comp2
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Give us some basic information about your apartment",
+            desc: "More details will be added later but these are the main ones..",
+            component: <Comp3
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "What type of place will guests have?",
+            component: <TellGuests
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now let's choose an apartment title",
+            desc: "Short titles are more effective, don't worry, you can change it later.",
+            component: <Comp4
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
 
-  const demo = [
-    {
-      component: <Comp1 setIsChoosed={setIsChoosed} />,
-    },
-    {
-      label: "Which of these best describes your place?",
-      component: (
-        <ChooseAppartment
-          isChoosed={isChoosed}
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      desc: "Your address is only shared with guests after they’ve made a reservation.",
-      label: "Where is your place located?",
-      component: (
-        <Comp2
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Give us some basic information about your apartment",
-      desc: "More details will be added later but these are the main ones..",
-      component: (
-        <Comp3
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "What type of place will guests have?",
-      component: (
-        <TellGuests
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now let's choose an apartment title",
-      desc: "Short titles are more effective, don't worry, you can change it later.",
-      component: (
-        <Comp4
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now write a description of the apartment",
-      desc: "Tell us what makes your apartment stand out from the rest.",
-      component: (
-        <Comp5
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now write the Price of the apartment",
-      component: (
-        <PriceComponent
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now write the Policies of the apartment",
-      component: (
-        <Policy
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now write the Rules of the apartment",
-      component: (
-        <Rules
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      label: "Now upload the images of your apartment",
-      component: (
-        <FileUpload
-          setIsChoosed={setIsChoosed}
-          collectedData={collectedData}
-          setCollectedData={setCollectedData}
-        />
-      ),
-    },
-    {
-      component: <Comp6 />,
-    },
-  ];
+            />
+        },
+        {
+            label: "Now write a description of the apartment",
+            desc: "Tell us what makes your apartment stand out from the rest.",
+            component: <Comp5
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now write the Price of the apartment",
+            component: <PriceComponent
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now write the Policies of the apartment",
+            component: <Policy
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now write the Rules of the apartment",
+            component: <Rules
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now upload the images of your apartment",
+            component: <FileUpload
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            component: <Comp6 />
+        },
+    ];
+
+
+
+
 
   console.log(collectedData);
 

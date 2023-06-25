@@ -103,7 +103,7 @@ function ChooseAppartment({collectedData, setCollectedData, setIsChoosed}) {
     function handleClick(id) {
         setIsClicked(!clicked)
         setSelectedItemId(id)
-        setCollectedData({...collectedData, choosePlace : id})
+        setCollectedData({...collectedData, type : id})
         setIsChoosed(false)
     }
 

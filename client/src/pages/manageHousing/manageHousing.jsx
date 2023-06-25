@@ -2,14 +2,15 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Comp1, Comp2, Comp3, Comp4, Comp5, Comp6 } from '../../components/manageHousing/stepperComponents/intergrate.jsx';
+import { Comp1, Comp2, Comp3, Comp4, Comp5, Comp6, Policy, PriceComponent, Rules } from '../../components/manageHousing/stepperComponents/intergrate.jsx';
 import { Grid } from '@mui/material';
 import ChooseAppartment from './../../components/manageHousing/stepperComponents/ChooseAppartment';
 import TellGuests from './../../components/manageHousing/stepperComponents/TellGuests';
 import AppartmentCard from '../../components/manageHousing/stepperComponents/AppartmentCard.jsx';
 import { useState } from 'react';
+import FileUpload from '../../components/manageHousing/stepperComponents/FileUpload/FileUpload.jsx';
 
-const steps = ['', '', '', '', '', '', '', ''];
+const steps = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
 
 
@@ -17,33 +18,32 @@ const steps = ['', '', '', '', '', '', '', ''];
 
 
 export default function ManageHousing() {
-    const [activeStep, setActiveStep] = useState(5);
+    const [activeStep, setActiveStep] = useState(11);
     const [skipped, setSkipped] = useState(new Set());
     const [isChoosed, setIsChoosed] = useState(true);
+    // const [createApartment, setCreateApartment] = useState(false);
 
     const [collectedData, setCollectedData] = useState({
-        choosePlace: "",
-        placeLocation: {
+        type: "",
+        location: {
             country: "",
             city: "",
-            streetName: "",
-            buildingNumber: "",
-
+            street: "",
+            building: "",
+            floor: "",
+            description: "",
         },
-        apartmentInformation: {
-            guests: 0,
-            bedrooms: 0,
-            bathrooms: 0,
-            kitchens: 0,
+        apartmentSpecification: {
+            noOfRooms: 0,
+            noOfBalcony: 0,
+            noOfBeds: 0,
+            noOfKitchens: 0,
         },
-        apartAdvantages: {
-            one: "",
-            two: "",
-            three: "",
-        },
-        apartTitle: '',
-        apartDescription: '',
-
+        title: '',
+        description: '',
+        price: '',
+        cancelPolicy: [],
+        rules: [],
     });
 
     const demo = [
@@ -97,6 +97,34 @@ export default function ManageHousing() {
             />
         },
         {
+            label: "Now write the Price of the apartment",
+            component: <PriceComponent
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now write the Policies of the apartment",
+            component: <Policy
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now write the Rules of the apartment",
+            component: <Rules
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
+            label: "Now upload the images of your apartment",
+            component: <FileUpload
+                setIsChoosed={setIsChoosed}
+                collectedData={collectedData} setCollectedData={setCollectedData}
+            />
+        },
+        {
             component: <Comp6 />
         },
     ];
@@ -107,7 +135,10 @@ export default function ManageHousing() {
         return skipped.has(step);
     };
 
-    const handleNext = () => {
+    const handleNext = (steps) => {
+        if(steps +1 == 10){
+            
+        }
         let newSkipped = skipped;
         if (isStepSkipped(activeStep)) {
             newSkipped = new Set(newSkipped.values());
@@ -116,6 +147,7 @@ export default function ManageHousing() {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
             setSkipped(newSkipped);
             setIsChoosed(true)
+            
         }
     };
 
@@ -166,7 +198,7 @@ export default function ManageHousing() {
                                     Finish
                                 </Button>
                             ) : (
-                                <Button onClick={handleNext} disabled={isChoosed}>
+                                <Button onClick={()=>handleNext(steps.length)} disabled={isChoosed}>
                                     Next
                                 </Button>
                             )}

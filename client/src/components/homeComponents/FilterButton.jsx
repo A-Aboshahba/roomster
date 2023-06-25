@@ -81,10 +81,11 @@ export default function FilterButton() {
   const [wholeObj, setWholeObj] = useState({
     minPrice: "",
     maxPrice: "",
-    selectedPropertyTypeItemId: '',
+    type: '',
     noOfRooms: '',
     noOfKitchens: '',
     noOfBalcony: '',
+    noOfBeds: '',
   });
 
 
@@ -94,12 +95,13 @@ export default function FilterButton() {
     .filter(([key, value]) => value !== '' && value !== null && value !== undefined)
     .map(([key, value]) => {
       if (key === 'minPrice') {
-        return `${encodeURIComponent(key)}[lt]=${encodeURIComponent(value)}`;
+        return `price[lt]=${encodeURIComponent(value)}`;
       } else if (key === 'maxPrice') {
-        return `${encodeURIComponent(key)}[gt]=${encodeURIComponent(value)}`;
-
+        return `price[gt]=${encodeURIComponent(value)}`;
+      } else if (key === 'type') {
+        return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
       }
-      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+      return `apartmentSpecification.${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
     })
     .join('&');
 
@@ -112,35 +114,39 @@ export default function FilterButton() {
   };
 
   console.log(wholeObj)
-  function handlePropertyTypeClick(id) {
+  function handlePropertyTypeClick(id, title) {
     setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, selectedPropertyTypeItemId: id })
+    setWholeObj({ ...wholeObj, type: title })
   }
 
-  function handleRoomClick(id) {
+  function handleRoomClick(ele) {
     setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfRooms: id })
+    setWholeObj({ ...wholeObj, noOfRooms: ele })
 
   }
-  function handleBalconyClick(id) {
+  function handleBalconyClick(ele) {
     setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfBalcony: id })
+    setWholeObj({ ...wholeObj, noOfBalcony: ele })
   }
-  function handleKitchenClick(id) {
+  function handleKitchenClick(ele) {
     setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfKitchens: id })
+    setWholeObj({ ...wholeObj, noOfKitchens: ele })
+  }
+  function handleBedsClick(ele) {
+    setIsClicked(!clicked)
+    setWholeObj({ ...wholeObj, noOfBeds: ele})
   }
 
   let apartments = [
     {
       key: 1,
       icon: <HomeIcon />,
-      title: "Home"
+      title: "home"
     },
     {
       key: 2,
       icon: <NightShelterOutlinedIcon />,
-      title: "Room"
+      title: "room"
     },
     {
       key: 3,
@@ -165,7 +171,7 @@ export default function FilterButton() {
     {
       key: 7,
       icon: <EventSeatIcon />,
-      title: "Bed and breakfast"
+      title: "bed and breakfast"
     },
     {
       key: 8,
@@ -364,6 +370,18 @@ export default function FilterButton() {
                 </CustomGrid>
               ))}
             </Grid>
+            <DialogContentText>number of Beds</DialogContentText>
+            <Grid sx={{ display: 'flex', }}>
+              <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
+              {[1, 2, 3, 4, 5, 6].map((room, id) => (
+                <CustomGrid item key={id}
+                  className={wholeObj.noOfBeds == room ? 'selected' : ''}
+                  onClick={() => handleBedsClick(room)}
+                >
+                  {room}
+                </CustomGrid>
+              ))}
+            </Grid>
           </Grid>
         </DialogContent>
 
@@ -377,8 +395,8 @@ export default function FilterButton() {
           <Grid container sx={{ display: 'flex', gap: 2 }}>
             {apartments.map((apart, i) => (
               <CustomG item key={i}
-                className={wholeObj.selectedPropertyTypeItemId == apart.key ? 'selected' : ''}
-                onClick={() => handlePropertyTypeClick(apart.key)}
+                className={wholeObj.type == apart.title ? 'selected' : ''}
+                onClick={() => handlePropertyTypeClick(apart.key, apart.title)}
               >
                 <Box sx={{ fontSize: 3 }} >{apart.icon}</Box>
                 <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>

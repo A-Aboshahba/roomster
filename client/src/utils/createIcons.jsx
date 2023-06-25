@@ -1,6 +1,3 @@
-import { Box, Grid } from "@mui/material";
-import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
@@ -30,30 +27,7 @@ import {
   faWaterLadder,
   faUniversalAccess,
 } from "@fortawesome/free-solid-svg-icons";
-import { styled } from "@mui/system";
-
-const CustomBox = styled(Grid)({
-  // Your default styles here
-  width: "30%",
-  height: 85,
-  border: "2px solid #ddd",
-  margin: "1%",
-  cursor: "pointer",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: "12px",
-
-  "&:hover": {
-    borderColor: "#000",
-  },
-  "&.selected": {
-    borderColor: "#000",
-  },
-});
-
-let apartments = [
+const icons = [
   {
     key: 1,
     attr: "hasWifi",
@@ -96,9 +70,6 @@ let apartments = [
     icon: <FontAwesomeIcon icon={faNetworkWired} />,
     title: "Dedicated workspace",
   },
-];
-
-const stanOutAmenities = [
   {
     key: 8,
     attr: "hasPool",
@@ -183,9 +154,6 @@ const stanOutAmenities = [
     icon: <FontAwesomeIcon icon={faShower} />,
     title: "Outdoor shower",
   },
-];
-
-const safetyItems = [
   {
     key: 22,
     attr: "hasSmokeAlarm",
@@ -211,93 +179,11 @@ const safetyItems = [
     title: "Carbon monoxide alarm",
   },
 ];
-
-const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
-  const [selectedItemId, setSelectedItemId] = useState([]);
-
-  React.useEffect(() => {
-    setIsChoosed(false);
-  }, []);
-
-  function handleClick(id, attr) {
-    if (collectedData.apartmentSpecification.hasOwnProperty(attr)) {
-      const newArray = selectedItemId.filter((element) => element !== id);
-      setSelectedItemId(newArray);
-      setCollectedData((prevData) => {
-        const updatedApartmentSpec = { ...prevData.apartmentSpecification };
-        delete updatedApartmentSpec[attr];
-        return { ...prevData, apartmentSpecification: updatedApartmentSpec };
-      });
-    } else {
-      setCollectedData({
-        ...collectedData,
-        apartmentSpecification: {
-          ...collectedData.apartmentSpecification,
-          [attr]: true,
-        },
-      });
-      setSelectedItemId([...selectedItemId, id]);
+export const createAllIcons = (data) => {
+  return icons.map((item) => {
+    if (data) {
+      item.isFound = data[`${item?.attr}`];
+      return item;
     }
-  }
-
-  return (
-    <Box>
-      <Typography>Tell your guests what tour place has to offer</Typography>
-      <Grid
-        maxWidth={800}
-        container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
-        {apartments.map((apart, i) => (
-          <CustomBox
-            item
-            key={i}
-            className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
-            <Box>{apart.icon}</Box>
-            <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
-          </CustomBox>
-        ))}
-      </Grid>
-      <Typography>Do you have any standout amenities</Typography>
-      <Grid
-        maxWidth={800}
-        container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
-        {stanOutAmenities.map((apart, i) => (
-          <CustomBox
-            item
-            key={i}
-            className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
-            <Box>{apart.icon}</Box>
-            <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
-          </CustomBox>
-        ))}
-      </Grid>
-      <Typography>Do you have any of these safety items</Typography>
-      <Grid
-        maxWidth={800}
-        container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
-        {safetyItems.map((apart, i) => (
-          <CustomBox
-            item
-            key={i}
-            className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
-            <Box>{apart.icon}</Box>
-            <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
-          </CustomBox>
-        ))}
-      </Grid>
-    </Box>
-  );
+  });
 };
-
-export default TellGuests;

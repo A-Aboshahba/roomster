@@ -4,7 +4,6 @@ import { toastMessage } from "../../utils/toasfiy";
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   const { data } = await Roomster.get(`user/${userId}`);
-  console.log("user from user slice", data);
   return data[0];
 });
 
@@ -64,7 +63,6 @@ const userSlice = createSlice({
     },
     [fetchUser.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log("from fetch user external reducer", { ...action.payload });
       state.user = { ...action.payload };
     },
     [fetchUser.rejected]: (state, action) => {
@@ -73,7 +71,6 @@ const userSlice = createSlice({
     },
 
     [addFavorite.fulfilled]: (state, action) => {
-      console.log(state.user);
       state.user.favourites.push(action.payload);
       toastMessage("success", "Added Successfully 👏");
     },
@@ -82,7 +79,6 @@ const userSlice = createSlice({
       var index = state.user.favourites.findIndex(function (item) {
         return item._id === action.payload._id;
       });
-      console.log(action);
       state.user.favourites.splice(index, 1);
       toastMessage("success", "Delete Successfully 👏");
     },

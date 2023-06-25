@@ -19,122 +19,175 @@ import TellGuests from "./../../components/manageHousing/stepperComponents/TellG
 import AppartmentCard from "../../components/manageHousing/stepperComponents/AppartmentCard.jsx";
 import { useState } from "react";
 import FileUpload from "../../components/manageHousing/stepperComponents/FileUpload/FileUpload.jsx";
+import { useSelector } from "react-redux";
+import Roomster from "../../API/config.jsx";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const steps = ["", "", "", "", "", "", "", "", "", "", "", ""];
 
 export default function ManageHousing() {
-    const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set());
-    const [isChoosed, setIsChoosed] = useState(true);
-  
-    const [collectedData, setCollectedData] = useState({
-        type: "",
-        location: {
-            country: { code: "", label: "", phone: "" },
-            city: "",
-            street: "",
-            building: "",
-            floor: "",
-            description: "",
-        },
-        apartmentSpecification: {
-            noOfRooms: 0,
-            noOfBalcony: 0,
-            noOfBeds: 0,
-            noOfKitchens: 0,
-        },
-        title: '',
-        description: '',
-        price: '',
-        cancelPolicy: [],
-        rules: [],
-    });
-
-    const demo = [
-        {
-            component: <Comp1 setIsChoosed={setIsChoosed}/>
-        },
-        {
-            label: "Which of these best describes your place?",
-            component: <ChooseAppartment
-                isChoosed={isChoosed} setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData} />
-        },
-        {
-            desc: "Your address is only shared with guests after they’ve made a reservation.",
-            label: "Where is your place located?",
-            component: <Comp2
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Give us some basic information about your apartment",
-            desc: "More details will be added later but these are the main ones..",
-            component: <Comp3
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "What type of place will guests have?",
-            component: <TellGuests
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Now let's choose an apartment title",
-            desc: "Short titles are more effective, don't worry, you can change it later.",
-            component: <Comp4
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-
-            />
-        },
-        {
-            label: "Now write a description of the apartment",
-            desc: "Tell us what makes your apartment stand out from the rest.",
-            component: <Comp5
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Now write the Price of the apartment",
-            component: <PriceComponent
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Now write the Policies of the apartment",
-            component: <Policy
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Now write the Rules of the apartment",
-            component: <Rules
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            label: "Now upload the images of your apartment",
-            component: <FileUpload
-                setIsChoosed={setIsChoosed}
-                collectedData={collectedData} setCollectedData={setCollectedData}
-            />
-        },
-        {
-            component: <Comp6 />
-        },
-    ];
-
-
-
+  const location = useLocation();
+  const [apartment, setApartment] = useState(null);
+  useEffect(() => {
+    if (location.state) {
+      const { apartment } = location.state;
+      setApartment(apartment);
+    }
+  }, []);
+  console.log("update apartment ", apartment);
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
+  const [isChoosed, setIsChoosed] = useState(true);
+  const { user } = useSelector((state) => state.user);
+  const [addedApartment, setAddedApartment] = useState(null);
+  // const [createApartment, setCreateApartment] = useState(false);
+  const [collectedData, setCollectedData] = useState({
+    type: "",
+    location: {
+      country: { code: "", label: "", phone: "" },
+      city: "",
+      street: "",
+      building: "",
+      floorNo: "",
+      description: "",
+    },
+    apartmentSpecification: {
+      noOfRooms: 0,
+      noOfBalcony: 0,
+      noOfBeds: 0,
+      noOfKitchens: 0,
+    },
+    title: "",
+    description: "",
+    price: "",
+    cancelPolicy: [],
+    rules: [],
+  });
+  const demo = [
+    {
+      component: <Comp1 setIsChoosed={setIsChoosed} />,
+    },
+    {
+      label: "Which of these best describes your place?",
+      component: (
+        <ChooseAppartment
+          isChoosed={isChoosed}
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      desc: "Your address is only shared with guests after they’ve made a reservation.",
+      label: "Where is your place located?",
+      component: (
+        <Comp2
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Give us some basic information about your apartment",
+      desc: "More details will be added later but these are the main ones..",
+      component: (
+        <Comp3
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "What type of place will guests have?",
+      component: (
+        <TellGuests
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now let's choose an apartment title",
+      desc: "Short titles are more effective, don't worry, you can change it later.",
+      component: (
+        <Comp4
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now write a description of the apartment",
+      desc: "Tell us what makes your apartment stand out from the rest.",
+      component: (
+        <Comp5
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now write the Price of the apartment",
+      component: (
+        <PriceComponent
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now write the Policies of the apartment",
+      component: (
+        <Policy
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now write the Rules of the apartment",
+      component: (
+        <Rules
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      label: "Now upload the images of your apartment",
+      component: (
+        <FileUpload
+          setIsChoosed={setIsChoosed}
+          collectedData={collectedData}
+          addedApartment={addedApartment}
+          setCollectedData={setCollectedData}
+          apartment={apartment}
+        />
+      ),
+    },
+    {
+      component: <Comp6 />,
+    },
+  ];
 
 
   console.log(collectedData);
@@ -143,9 +196,66 @@ export default function ManageHousing() {
     return skipped.has(step);
   };
 
-  const handleNext = (steps) => {
-    if (steps + 1 == 10) {
+  const handleNext = async () => {
+    console.log(activeStep);
+    if (activeStep + 1 == 10) {
+      if (apartment) {
+        console.log(
+          "lets update apartment",
+          apartment,
+          "jjjjjjj",
+          collectedData
+        );
+        try {
+          // console.log("data", {
+          //   ...collectedData,
+          //   userId: user._id,
+          //   location: {
+          //     ...collectedData.location,
+          //     country: collectedData.location.country.label,
+          //   },
+          // });
+
+          const response = await Roomster.patch(`apartments/${apartment._id}`, {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log("lets add apartment", collectedData);
+        try {
+          console.log("data", {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          const response = await Roomster.post("apartments", {
+            ...collectedData,
+            userId: user._id,
+            location: {
+              ...collectedData.location,
+              country: collectedData.location.country.label,
+            },
+          });
+          console.log(response);
+          console.log(response.data._id);
+          setAddedApartment(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -213,11 +323,11 @@ export default function ManageHousing() {
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               {activeStep === steps.length - 1 ? (
-                <Button onClick={handleFinish}>Finish</Button>
+                <Link to={"/Manage Housing"}>
+                  <Button onClick={handleFinish}>Finish</Button>
+                </Link>
               ) : (
-                <Button
-                  onClick={() => handleNext(steps.length)}
-                  disabled={isChoosed}>
+                <Button onClick={() => handleNext()} disabled={isChoosed}>
                   Next
                 </Button>
               )}

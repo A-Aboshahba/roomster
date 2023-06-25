@@ -38,7 +38,7 @@ module.exports.getAllUsers = (request, response, next) => {
 };
 
 module.exports.getSingleUser = (request, response, next) => {
-  User.findOne({ _id: request.params.id })
+  User.findOne({ _id: request.params.id }, { password: 0, email: 0 })
     .find()
     .populate({
       path: "favourites",
@@ -287,7 +287,7 @@ module.exports.getUserApartments = (request, response, next) => {
         firstName: 1,
         lastName: 1,
         email: 1,
-        _id: 0,
+        _id: 1,
         image: 1,
       },
     }),

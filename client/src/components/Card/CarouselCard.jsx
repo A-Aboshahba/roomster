@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import MobileStepper from "@mui/material/MobileStepper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { motion } from "framer-motion";
+
 
 // mui icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -67,7 +69,8 @@ const CarouselCard = ({ location }) => {
     setIsFavorite((prev) => !prev);
   };
   return (
-    <Box
+    <motion.div  whileHover={{ scale: 1.05 }}>
+    <Box 
       className="carouselCard"
       sx={{
         flexGrow: 1,
@@ -114,8 +117,9 @@ const CarouselCard = ({ location }) => {
           enableMouseEvents>
           {location.images.map((step) => {
             return (
-              <div key={step.publicId}>
-                <Box
+              <div  key={step.publicId}>
+                <Box 
+                
                   component="img"
                   sx={carouselImage}
                   src={step.url}
@@ -179,6 +183,7 @@ const CarouselCard = ({ location }) => {
         </Box>
       </Link>
     </Box>
+    </motion.div>
   );
 };
 CarouselCard.propTypes = {

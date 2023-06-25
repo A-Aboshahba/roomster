@@ -85,4 +85,13 @@ router
     validationError,
     controller.getSingleReservations
   );
+router
+  .route("/:id/apartments")
+  .get(
+    verifyTokenAndAuthorization,
+    validator.getUserApartments,
+    validationError,
+    controller.getUserApartments
+  );
+
 module.exports = router;

@@ -135,6 +135,10 @@ exports.postValidationArr = [
     .isString()
     .withMessage("rules element is not string")
     .optional(),
+  body("published")
+    .isBoolean()
+    .withMessage("published must be boolean")
+    .optional(),
 ];
 
 exports.putValidationArr = [
@@ -304,6 +308,10 @@ exports.putValidationArr = [
   body("rules.*")
     .isString()
     .withMessage("rules element is not string")
+    .optional(),
+  body("published")
+    .isBoolean()
+    .withMessage("published must be boolean")
     .optional(),
 ];
 

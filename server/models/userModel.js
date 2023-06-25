@@ -68,6 +68,12 @@ const model = new mongoose.Schema(
         ref: "Apartments",
       },
     ],
+    // userApartments: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Apartments",
+    //   },
+    // ],
   },
   { timestamps: true }
 );

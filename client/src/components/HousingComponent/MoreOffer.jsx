@@ -24,7 +24,7 @@ const style = {
   overflow: "auto",
 };
 
-export default function MoreOffer() {
+export default function MoreOffer({ allIcons }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -50,71 +50,47 @@ export default function MoreOffer() {
           >
             What this home has to offer
           </Typography>
-          {/*//! here we will mapping on item coming from db */}
-          {[..."x".repeat(10)].map((item, index) => {
-            return (
-              <div key={index}>
-                <Typography
-                  id="keep-mounted-modal-title"
-                  sx={{ mt: 5 }}
-                  variant="h6"
-                  component="h2"
-                >
-                  Stunning views
-                </Typography>
-                <List>
-                  <ListItem button>
-                    <WaterIcon sx={{ mr: 3 }} />
-                    <ListItemText primary="Phone ringtone" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button>
-                    <BeachAccessIcon sx={{ mr: 3 }} />
-                    <ListItemText primary="Beach view" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button>
-                    <CottageIcon sx={{ mr: 3 }} />
-                    <ListItemText primary="Beach view" />
-                  </ListItem>
-                </List>
-              </div>
-            );
-          })}
+          <List>
+            {allIcons[0] != undefined &&
+              allIcons.map(
+                (item) =>
+                  item.isFound && (
+                    <div key={item.key} style={{ marginBottom: "1rem" }}>
+                      <ListItem button>
+                        {item.icon}
+                        <ListItemText primary={item.title} />
+                      </ListItem>
+                      <Divider />
+                    </div>
+                  )
+              )}
+          </List>
           <Typography
             id="keep-mounted-modal-title"
             sx={{ mt: 5 }}
             variant="h6"
             component="h2"
           >
-            Unlisted
+            What this home has not to offer
           </Typography>
           <List>
-            <ListItem button>
-              <WaterIcon sx={{ mr: 3 }} />
+            {allIcons[0] != undefined &&
+              allIcons.map(
+                (item) =>
+                  !item.isFound && (
+                    <div key={item.key} style={{ marginBottom: "1rem" }}>
+                      <ListItem button>
+                        {item.icon}
 
-              <ListItemText
-                primary="Phone ringtone"
-                sx={{ textDecoration: "line-through" }}
-              />
-            </ListItem>
-            <Divider />
-            <ListItem button>
-              <BeachAccessIcon sx={{ mr: 3 }} />
-
-              <ListItemText
-                primary="Beach view"
-                sx={{ textDecoration: "line-through" }}
-              />
-            </ListItem>
-            <Divider />
-            <ListItem button>
-              <CottageIcon sx={{ mr: 3 }} />
-              <ListItemText
-                primary="Beach view"
-                sx={{ textDecoration: "line-through" }}
-              />
-            </ListItem>
+                        <ListItemText
+                          primary={item.title}
+                          sx={{ textDecoration: "line-through" }}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </div>
+                  )
+              )}
           </List>
         </Box>
       </Modal>

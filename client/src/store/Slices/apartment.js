@@ -22,6 +22,7 @@ export const getApartments = createAsyncThunk(
       // console.log("slice", response.data.data);
       return response.data.data;
     } catch (err) {
+      comsole.log(err);
       return thunkAPI.rejectWithValue(err);
     }
   }

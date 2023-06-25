@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Autocomplete, Box, Divider, Grid, IconButton, TextField, TextareaAutosize, Typography } from '@mui/material';
-import  { useState } from 'react'
+import React, { useState } from 'react';
 import { countries } from './countries.jsx';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { MdRemoveCircleOutline } from 'react-icons/md';
@@ -10,7 +10,11 @@ import image2 from "../../../assets/bfc0bc89-58cb-4525-a26e-7b23b750ee00.webp"
 
 
 
-function Comp1() {
+function Comp1({ setIsChoosed }) {
+
+  React.useEffect(() => {
+    setIsChoosed(false);
+  }, []);
   return (
     <Box display="flex" justifyContent="center">
       <Grid container spacing={8} style={{ overflow: 'hidden' }}>
@@ -59,166 +63,189 @@ function Comp1() {
 }
 
 
-function Comp2() {
+function Comp2({ collectedData, setCollectedData, setIsChoosed }) {
+
+
+  React.useEffect(() => {
+    const isFormFilled = Object.values(collectedData.location).every((value) => value !== '');
+    setIsChoosed(!isFormFilled);
+  }, [collectedData.location]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+
   return (
     <Grid container display="flex" justifyContent="center" >
-      <Grid item xs={12} sm={12} md={12}>
-        <Autocomplete
-          id="country-select-demo"
-          options={countries}
-          autoHighlight
-          getOptionLabel={(option) => option.label}
-          renderOption={(props, option) => (
-            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-              <img
-                loading="lazy"
-                width="20"
-                src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                alt=""
+      <form onSubmit={handleSubmit}>
+        <Grid item xs={12} sm={12} md={12}>
+          <Autocomplete
+            id="country-select-demo"
+            options={countries}
+            value={collectedData.location.country}
+            onChange={(e, value) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, country: value } }) }}
+            autoHighlight
+            getOptionLabel={(option) => option.label}
+            renderOption={(props, option) => (
+              <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                <img
+                  loading="lazy"
+                  width="20"
+                  src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                  alt=""
+                />
+                {option.label} ({option.code}) +{option.phone}
+              </Box>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Choose a country"
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: 'new-password',
+                }}
               />
-              {option.label} ({option.code}) +{option.phone}
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Choose a country"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: 'new-password',
-              }}
-            />
-          )}
-        />
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-          }}
-          style={{ marginTop: 10 }}
-        >
-          <TextField fullWidth label="Enter The City" id="City" />
-        </Box>
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-          }}
-          style={{ marginTop: 10 }}
-        >
-          <TextField fullWidth label="Street Name" id="Street" />
-        </Box>
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-          }}
-          style={{ marginTop: 10 }}
-        >
-          <TextField fullWidth label="Building Number" id="Building" />
-        </Box>
-      </Grid>
+            )}
+          />
+          <Box
+            sx={{
+              width: 506,
+              maxWidth: '100%',
+            }}
+            style={{ marginTop: 10 }}
+            value={collectedData.location.city}
+            onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, city: e.target.value } }) }}
+
+          >
+            <TextField fullWidth label="Enter The City" id="City" />
+          </Box>
+          <Box
+            sx={{
+              width: 506,
+              maxWidth: '100%',
+            }}
+            style={{ marginTop: 10 }}
+            value={collectedData.location.city}
+            onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, street: e.target.value } }) }}
+
+          >
+            <TextField fullWidth label="Street Name" id="Street" />
+          </Box>
+          <Box
+            sx={{
+              width: 506,
+              maxWidth: '100%',
+            }}
+            style={{ marginTop: 10 }}
+            value={collectedData.location.city}
+            onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, building: e.target.value } }) }}
+
+          >
+            <TextField fullWidth label="Building Number" id="Building" type='number' />
+          </Box>
+          <Box
+            sx={{
+              width: 506,
+              maxWidth: '100%',
+            }}
+            style={{ marginTop: 10 }}
+            value={collectedData.location.city}
+            onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, floor: e.target.value } }) }}
+
+          >
+            <TextField fullWidth label="Floor Number" id="floor" type='number' />
+          </Box>
+          <Box
+            sx={{
+              width: 506,
+              maxWidth: '100%',
+            }}
+            style={{ marginTop: 10 }}
+            value={collectedData.location.city}
+            onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, description: e.target.value } }) }}
+
+          >
+            <TextField fullWidth label="Description" id="description" />
+          </Box>
+        </Grid>
+      </form>
     </Grid>
   );
 }
 
 
-function Comp3() {
-  const [count1, setCount1] = useState(0);
-  const [count2, setCount2] = useState(0);
-  const [count3, setCount3] = useState(0);
-  const [count4, setCount4] = useState(0);
+function Comp3({ setCollectedData, setIsChoosed }) {
 
-  const updateCount = (value, box) => {
-    if (box === 1 && count1 + value >= 0) {
-      setCount1(count1 + value);
-    } else if (box === 2 && count2 + value >= 0) {
-      setCount2(count2 + value);
-    }
-    else if (box === 3 && count3 + value >= 0) {
-      setCount3(count3 + value);
-    } else if (box === 4 && count4 + value >= 0) {
-      setCount4(count4 + value);
+  const [counts, setCounts] = useState([0, 0, 0, 0]);
+  const sections = ["rooms", "balconies", "beds", "kitchens"];
+  const sectionsObj = ["noOfRooms", "noOfBalcony", "noOfBeds", "noOfKitchens"];
+
+
+
+  React.useEffect(() => {
+    setIsChoosed(false);
+  }, []);
+
+
+  const increment = (index, property) => {
+    const newCounts = [...counts];
+    newCounts[index] += 1;
+    setCounts(newCounts);
+    setCollectedData(prevData => ({ ...prevData, apartmentSpecification: { ...prevData.apartmentSpecification, [property]: prevData.apartmentSpecification[property] + 1 } }));
+  };
+
+  const decrement = (index, property) => {
+    if (counts[index] > 0) {
+      const newCounts = [...counts];
+      newCounts[index] -= 1;
+      setCounts(newCounts);
+      setCollectedData(prevData => ({ ...prevData, apartmentSpecification: { ...prevData.apartmentSpecification, [property]: prevData.apartmentSpecification[property] - 1 } }));
     }
   };
 
   return (
     <Grid container display="flex" justifyContent="center" direction='column' alignItems='center'>
-      <Grid container display="flex" justifyContent="space-between" direction='row' alignItems='center'  style={{ marginBottom: 13, marginTop: 30 }}>
-        <Typography style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 25 }} variant="h5">Guests</Typography>
-        <Box display="flex" flexDirection="row" alignItems="center">
-          <IconButton color="primary" onClick={() => updateCount(1, 1)}>
-            <AiOutlinePlusCircle />
-          </IconButton>
-          <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'serifs', marginRight: 1, marginLeft: 1 }}>{count1}</span>
-          <IconButton color="secondary" onClick={() => updateCount(-1, 1)}>
-            <MdRemoveCircleOutline />
-          </IconButton>
-        </Box>
-      </Grid>
-        <Divider sx={{width:{md:"100%", sm:'100%', xs:'100%'}}}/>
-
-      <Grid container display="flex" justifyContent="space-between" direction='row' alignItems='center'  style={{ marginBottom: 13 }} >
-        <Typography variant="h5" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 25 }}>Bedrooms</Typography>
-        <Box display="flex" flexDirection="row" alignItems="center">
-          <IconButton color="primary" onClick={() => updateCount(1, 2)}>
-            <AiOutlinePlusCircle />
-          </IconButton>
-          <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'serifs', marginRight: 1, marginLeft: 1 }}>{count2}</span>
-          <IconButton color="secondary" onClick={() => updateCount(-1, 2)}>
-            <MdRemoveCircleOutline />
-          </IconButton>
-        </Box>
-
-      </Grid>
-      <Divider sx={{width:{md:"100%", sm:'100%', xs:'100%'}}} />
-      <Grid container display="flex" justifyContent="space-between" direction='row' alignItems='center'  style={{ marginBottom: 13 }}>
-        <Typography variant="h5" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 25 }}>Bathrooms</Typography>
-        <Box display="flex" flexDirection="row" alignItems="center">
-          <IconButton color="primary" onClick={() => updateCount(1, 3)}>
-            <AiOutlinePlusCircle />
-          </IconButton>
-          <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'serifs', marginRight: 1, marginLeft: 1 }}>{count3}</span>
-          <IconButton color="secondary" onClick={() => updateCount(-1, 3)}>
-            <MdRemoveCircleOutline />
-          </IconButton>
-        </Box>
-      </Grid>
-      <Divider sx={{width:{md:"100%", sm:'100%', xs:'100%'}}} />
-      <Grid container display="flex" justifyContent="space-between" direction='row' alignItems='center'  >
-        <Typography variant="h5" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 25 }} >Kitchens</Typography>
-        <Box display="flex" flexDirection="row" alignItems="center">
-          <IconButton color="primary" onClick={() => updateCount(1, 4)}>
-            <AiOutlinePlusCircle />
-          </IconButton>
-          <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'serifs', marginRight: 1, marginLeft: 1 }}>{count4}</span>
-          <IconButton color="secondary" onClick={() => updateCount(-1, 4)}>
-            <MdRemoveCircleOutline />
-          </IconButton>
-        </Box>
-      </Grid>
+      {counts.map((count, index) => (
+        <Grid key={index} container display="flex" justifyContent="space-between" direction='row' alignItems='center'  >
+          <Typography variant="h5" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: 25 }} >{sections[index]}</Typography>
+          <Box display="flex" flexDirection="row" alignItems="center">
+            <IconButton color="primary" onClick={() => increment(index, sectionsObj[index])}>
+              <AiOutlinePlusCircle />
+            </IconButton>
+            <span style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'serifs', marginRight: 1, marginLeft: 1 }}>{count}</span>
+            <IconButton color="danger" onClick={() => decrement(index, sectionsObj[index])} >
+              <MdRemoveCircleOutline />
+            </IconButton>
+          </Box>
+          <Divider sx={{ width: { md: "100%", sm: '100%', xs: '100%' } }} />
+        </Grid>
+      ))}
 
     </Grid>
   );
 }
 
 
-function Comp4() {
+function Comp4({ collectedData, setCollectedData, setIsChoosed }) {
   const [text, setText] = useState('');
+
 
   const handleChange = (event) => {
     setText(event.target.value);
+    setCollectedData({ ...collectedData, title: text });
+    setIsChoosed(!(text.trim().length >= 4));
   };
   return (
     <Grid container display="flex" justifyContent="center">
       <Grid item xs={12} sm={12} md={12}>
         <Box width="100%" textAlign="center">
-
           <TextareaAutosize
             aria-label="minimum height"
             rows={6}
-            placeholder="Enter your title here"
+            placeholder="Enter your title here (It must be at least 5 characters)"
             value={text}
             onChange={handleChange}
             style={{ height: '300px', width: '100%', fontSize: 20, borderWidth: 2, borderColor: 'green' }}
@@ -230,11 +257,13 @@ function Comp4() {
 }
 
 
-function Comp5() {
+function Comp5({ collectedData, setCollectedData, setIsChoosed }) {
   const [text, setText] = useState('');
 
   const handleChange = (event) => {
     setText(event.target.value);
+    setCollectedData({ ...collectedData, description: text });
+    setIsChoosed(!(text.trim().length >= 19));
   };
   return (
     <Grid container display="flex" justifyContent="center">
@@ -243,7 +272,7 @@ function Comp5() {
           <TextareaAutosize
             aria-label="minimum height"
             rows={6}
-            placeholder="Enter your apartment description here"
+            placeholder="Enter your apartment description here (It must be at least 20 characters)"
             value={text}
             onChange={handleChange}
             style={{ height: '300px', width: '100%', fontSize: 20, borderWidth: 2, borderColor: 'green' }}
@@ -252,6 +281,100 @@ function Comp5() {
       </Grid>
     </Grid>
   );
+}
+
+function Policy({ collectedData, setCollectedData, setIsChoosed }) {
+  const [text, setText] = useState('');
+
+  const policyArray = text.split(",")
+
+
+
+  const handleChange = (event) => {
+    setText(event.target.value);
+    setCollectedData({ ...collectedData, cancelPolicy: policyArray });
+    setIsChoosed(!(text.trim().length >= 4));
+  };
+
+
+  React.useEffect(() => {
+    setIsChoosed(false);
+  }, []);
+  return (
+    <Grid container display="flex" justifyContent="center">
+      <Grid item xs={12} sm={12} md={12}>
+        <Box width="100%" textAlign="center">
+          <TextareaAutosize
+            aria-label="minimum height"
+            rows={6}
+            placeholder="Enter your Policies here separated by ','"
+            value={text}
+            onChange={handleChange}
+            style={{ height: '300px', width: '100%', fontSize: 20, borderWidth: 2, borderColor: 'green' }}
+          />
+        </Box>
+      </Grid>
+    </Grid>
+  )
+}
+
+function Rules({ collectedData, setCollectedData, setIsChoosed }) {
+  const [text, setText] = useState('');
+
+  React.useEffect(() => {
+    setIsChoosed(false);
+  }, []);
+
+  const policyArray = text.split(",")
+
+  const handleChange = (event) => {
+    setText(event.target.value);
+    setCollectedData({ ...collectedData, rules: policyArray });
+    setIsChoosed(!(text.trim().length >= 4));
+  };
+  return (
+    <Grid container display="flex" justifyContent="center">
+      <Grid item xs={12} sm={12} md={12}>
+        <Box width="100%" textAlign="center">
+          <TextareaAutosize
+            aria-label="minimum height"
+            rows={6}
+            placeholder="Enter your Rules here separated by ','"
+            value={text}
+            onChange={handleChange}
+            style={{ height: '300px', width: '100%', fontSize: 20, borderWidth: 2, borderColor: 'green' }}
+          />
+        </Box>
+      </Grid>
+    </Grid>
+  )
+}
+
+function PriceComponent({ collectedData, setCollectedData, setIsChoosed }) {
+  const [text, setText] = useState(0);
+
+  React.useEffect(() => {
+    setIsChoosed(false);
+  }, []);
+
+  const handleChange = (event) => {
+    setText(event.target.value);
+    setCollectedData({ ...collectedData, price: text });
+    setIsChoosed(!(text.trim().length >= 4));
+  };
+  return (
+    <Grid container display="flex" justifyContent="center">
+      <Grid item xs={12} sm={12} md={12}>
+        <Box width="100%" textAlign="center">
+          <TextField
+            fullWidth label="price" id="price" type="number"
+            value={text}
+            onChange={handleChange}
+          />
+        </Box>
+      </Grid>
+    </Grid>
+  )
 }
 
 
@@ -278,4 +401,4 @@ function Comp6() {
 
 
 
-export { Comp1, Comp2, Comp3, Comp4, Comp5, Comp6 };
+export { Comp1, Comp2, Comp3, Comp4, Comp5, Policy, Rules, PriceComponent, Comp6 };

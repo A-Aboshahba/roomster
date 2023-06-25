@@ -3,6 +3,6 @@ import { toast } from "react-toastify";
 export const toastMessage = (type, message) => {
   toast[type](message, {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 2000,
   });
 };

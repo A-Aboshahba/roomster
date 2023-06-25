@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 
 function HousingInfo({ title, body = null }) {
+  console.log(typeof body, body);
   return (
     <>
       <Box sx={{ mt: 2, mb: 1 }}>
@@ -10,19 +11,14 @@ function HousingInfo({ title, body = null }) {
           {title}
         </Typography>
         {body && (
-          <>
-            <Typography variant="p" color="initial" sx={{ width: "50%" }}>
-              {body}
-            </Typography>
-          </>
+          <Typography variant="p" color="initial" sx={{ width: "50%" }}>
+            {body}
+          </Typography>
         )}
       </Box>
       <Divider />
     </>
   );
 }
-// HousingInfo.propTypes = {
-//   title: PropTypes.string,
-//   body: PropTypes.string,
-// };
+
 export default HousingInfo;

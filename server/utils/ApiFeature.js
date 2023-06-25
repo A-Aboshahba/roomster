@@ -20,7 +20,7 @@ module.exports = class ApiFeature {
   filter() {
     console.log("filter");
     let filterObj = { ...this.queryString };
-    let excludedQuery = ["page", "sort", "fields", "keyword"];
+    let excludedQuery = ["page", "sort", "fields", "keyword", "limit"];
     excludedQuery.forEach((q) => {
       delete filterObj[q];
     });

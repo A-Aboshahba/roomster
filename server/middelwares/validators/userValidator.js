@@ -78,6 +78,10 @@ module.exports.deleteProfileImage = [
 module.exports.getUserReservations = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
 ];
+
+module.exports.getUserApartments = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
 module.exports.getSingleReservations = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
   body("userId").isMongoId().withMessage("user id isn't objectId"),

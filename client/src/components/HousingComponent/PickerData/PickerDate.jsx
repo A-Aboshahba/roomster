@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
-
 import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -18,8 +17,8 @@ const PickerDate = ({ reservationsArr = [] ,price=1}) => {
     ...reservationsArr.map(date => {
       return { from: new Date(date.startDate), to: new Date(date.endDate) }
     }),
-    { from: new Date(2022, 1, 1), to: new Date().setDate(new Date().getDate() - 1) }
-  ];
+    { from: new Date(2022, 1, 1), to: new Date().setDate(new Date().getDate() - 1) }و
+     ];
   const [range, setRange] = useState();
 
   let footer = (
@@ -27,6 +26,7 @@ const PickerDate = ({ reservationsArr = [] ,price=1}) => {
       Please pick the first day.
     </Typography>
   );
+
   if (range?.from) {
     if (!range.to) {
       footer = (

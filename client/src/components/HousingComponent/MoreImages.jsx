@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function FullScreenDialog() {
+export default function FullScreenDialog({ images }) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -54,7 +54,7 @@ export default function FullScreenDialog() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <PhotoList />
+        <PhotoList images={images} />
       </Dialog>
     </div>
   );

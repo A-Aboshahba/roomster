@@ -22,20 +22,45 @@ import {
   getSingleApartmentState,
   getApartmentReviwsState,
 } from "../../store/Slices/apartment";
-
+import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 export default function HousingDetails() {
   const params = useParams();
+  console.log(params.apartmentId);
   const dispatch = useDispatch();
-  const [switchIcon, setSwitchIcon] = useState(false);
   const singleApartment = useSelector(getSingleApartmentState);
-  console.count("called from here ???");
 
-  console.log("hereeeee", singleApartment);
+  const user = useSelector((state) => {
+    return state.user?.user;
+  });
+  console.log("user", user.favourites);
+  const [isFavorite, setIsFavorite] = useState(
+    user.favourites?.find((favorite) => {
+      return favorite._id == params.apartmentId;
+    })
+  );
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
-  }, [dispatch]);
-  console.log([singleApartment.apartmentSpecification]);
+    console.count(isFavorite);
+  }, [dispatch, isFavorite]);
+  const Like = () => {
+    dispatch(
+      addFavorite({
+        userId: user._id,
+        location: singleApartment,
+      })
+    );
+    setIsFavorite((prev) => !prev);
+  };
+  const disLike = () => {
+    dispatch(
+      deleteFavorite({
+        userId: user._id,
+        location: singleApartment,
+      })
+    );
+    setIsFavorite((prev) => !prev);
+  };
   return (
     <>
       <Box
@@ -49,14 +74,18 @@ export default function HousingDetails() {
           <Typography variant="h5" color="initial">
             {singleApartment.title}
           </Typography>
-          <Box
-            style={{ cursor: "pointer" }}
-            onClick={() => setSwitchIcon(!switchIcon)}
-          >
-            {switchIcon ? (
-              <AiFillHeart size={30} color="#fff" fill="#b12929" />
+          <Box style={{ cursor: "pointer" }}>
+            {isFavorite ? (
+              <AiFillHeart
+                size={30}
+                color="#fff"
+                fill="#b12929"
+                onClick={() => {
+                  disLike();
+                }}
+              />
             ) : (
-              <FaRegHeart size={30} color="#000" />
+              <FaRegHeart size={30} color="#000" onClick={() => Like()} />
             )}
           </Box>
         </Box>
@@ -159,10 +188,13 @@ export default function HousingDetails() {
             />
             <Box>
               <Typography variant="h4" color="initial">
-                Entire villa hosted by Mehmet Muhammet
+                Entire villa hosted by {singleApartment?.userId?.fullName}
               </Typography>
               <Typography variant="p" color="initial">
-                8 guests4 bedrooms4 beds3 baths
+                Balcony ({singleApartment.apartmentSpecification?.noOfBalcony})-
+                Beds ({singleApartment.apartmentSpecification?.noOfBeds})-
+                Kitchens ({singleApartment.apartmentSpecification?.noOfKitchens}
+                ) - Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
               </Typography>
             </Box>
           </Box>

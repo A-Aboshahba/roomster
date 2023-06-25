@@ -78,7 +78,6 @@ const UserApartments = () => {
           {apartments &&
             apartments.map((apartment) => (
               <Grid key={apartment._id} item xs={12} sm={4} md={4} lg={3}>
-                <div>{apartment._id}</div>
                 <AppartmentCard
                   apartment={apartment}
                   deleteApartment={deleteApartment}

@@ -35,7 +35,6 @@ export default function ManageHousing() {
       setApartment(apartment);
     }
   }, []);
-  console.log("update apartment ", apartment);
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [isChoosed, setIsChoosed] = useState(true);
@@ -189,23 +188,13 @@ export default function ManageHousing() {
     },
   ];
 
-
-  console.log(collectedData);
-
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
 
   const handleNext = async () => {
-    console.log(activeStep);
     if (activeStep + 1 == 10) {
       if (apartment) {
-        console.log(
-          "lets update apartment",
-          apartment,
-          "jjjjjjj",
-          collectedData
-        );
         try {
           // console.log("data", {
           //   ...collectedData,
@@ -224,21 +213,11 @@ export default function ManageHousing() {
               country: collectedData.location.country.label,
             },
           });
-          console.log(response);
         } catch (error) {
           console.log(error);
         }
       } else {
-        console.log("lets add apartment", collectedData);
         try {
-          console.log("data", {
-            ...collectedData,
-            userId: user._id,
-            location: {
-              ...collectedData.location,
-              country: collectedData.location.country.label,
-            },
-          });
           const response = await Roomster.post("apartments", {
             ...collectedData,
             userId: user._id,
@@ -247,8 +226,6 @@ export default function ManageHousing() {
               country: collectedData.location.country.label,
             },
           });
-          console.log(response);
-          console.log(response.data._id);
           setAddedApartment(response.data);
         } catch (error) {
           console.log(error);

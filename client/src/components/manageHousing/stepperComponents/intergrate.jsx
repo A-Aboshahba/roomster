@@ -206,6 +206,7 @@ function Comp2({ collectedData, setCollectedData, setIsChoosed, apartment }) {
               id="City"
               value={collectedData.location.city}
             />
+
           </Box>
           <Box
             sx={{
@@ -250,6 +251,7 @@ function Comp2({ collectedData, setCollectedData, setIsChoosed, apartment }) {
               type="number"
               value={collectedData.location.building}
             />
+
           </Box>
           <Box
             sx={{

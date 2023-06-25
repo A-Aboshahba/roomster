@@ -67,6 +67,7 @@ let apartments = [
   },
 ];
 
+
 const CustomBox = styled(Grid)({
   // Your default styles here
   width: "30%",
@@ -132,6 +133,7 @@ function ChooseAppartment({
       ))}
     </Grid>
   );
+
 }
 
 export default ChooseAppartment;

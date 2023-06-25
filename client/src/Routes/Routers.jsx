@@ -9,6 +9,9 @@ import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
 import UserGuard from "../Gurd/UserGurd";
 import UserApartments from "../pages/userApartments/UserApartments";
+
+import ConfirmationPage  from "../pages/ConfirmationPage ";
+
 function Routers() {
   return (
     <Routes>
@@ -60,6 +63,14 @@ function Routers() {
         element={
           <UserGuard>
             <MyTrips />
+          </UserGuard>
+        }
+      />
+      <Route
+        path="success"
+        element={
+          <UserGuard>
+            <ConfirmationPage  />
           </UserGuard>
         }
       />

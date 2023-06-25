@@ -238,8 +238,21 @@ exports.deleteProfileImage = (request, response, next) => {
 };
 
 module.exports.getUserReservations = (request, response, next) => {
-  Reservation.find({ userId: request.params.id })
-    .then((data) => {
+  const apiFeature = new ApiFeature(
+    Reservation.find({ userId: request.params.id }).populate({
+      path: "apartmentId",
+      select: { apartmentSpecification: 0, reservationsArr: 0 },
+    }),
+    request.query
+  );
+
+  apiFeature
+    .fields()
+    .search()
+    .filter()
+    .sort()
+    .paginate()
+    .mongooseQuery.then((data) => {
       if (!data) {
         let error = new Error("there're no reservations to show");
         error.statusCode = 404;
@@ -248,6 +261,21 @@ module.exports.getUserReservations = (request, response, next) => {
       response.status(200).json(data);
     })
     .catch((error) => next(error));
+
+  // Reservation.find({ userId: request.params.id })
+  //   .populate({
+  //     path: "apartmentId",
+  //     select: { apartmentSpecification: 0, reservationsArr: 0 },
+  //   })
+  //   .then((data) => {
+  //     if (!data) {
+  //       let error = new Error("there're no reservations to show");
+  //       error.statusCode = 404;
+  //       throw error;
+  //     }
+  //     response.status(200).json(data);
+  //   })
+  //   .catch((error) => next(error));
 };
 
 module.exports.getUserApartments = (request, response, next) => {

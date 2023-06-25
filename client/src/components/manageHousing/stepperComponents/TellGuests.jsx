@@ -8,6 +8,7 @@ import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import { styled } from "@mui/system";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBanSmoking,
@@ -31,6 +32,7 @@ import {
   faWaterLadder,
   faUniversalAccess,
 } from "@fortawesome/free-solid-svg-icons";
+
 
 const CustomBox = styled(Grid)({
   // Your default styles here
@@ -219,6 +221,7 @@ const TellGuests = ({
   setIsChoosed,
 }) => {
   const [selectedItemId, setSelectedItemId] = useState([]);
+
   React.useEffect(() => {
     setIsChoosed(false);
     if (apartment) {
@@ -317,12 +320,14 @@ const TellGuests = ({
         maxWidth={800}
         container
         sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {apartments.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
             onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>
@@ -333,12 +338,14 @@ const TellGuests = ({
         maxWidth={800}
         container
         sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {stanOutAmenities.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
             onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>
@@ -349,12 +356,14 @@ const TellGuests = ({
         maxWidth={800}
         container
         sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {safetyItems.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
             onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>

@@ -189,6 +189,7 @@ export default function ManageHousing() {
     },
   ];
 
+
   console.log(collectedData);
 
   const isStepSkipped = (step) => {

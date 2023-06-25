@@ -7,8 +7,6 @@ import Typography from "@mui/material/Typography";
 //
 //
 export default function CardReview({ item }) {
-  console.log("called");
-
   return item === undefined ? (
     <></>
   ) : (
@@ -17,9 +15,9 @@ export default function CardReview({ item }) {
         avatar={
           <Avatar
             src={
-              item.userId.image.url == ""
-                ? "https://a0.muscache.com/im/pictures/user/96db5a52-52db-42d4-a8bf-fe4d9cb7901d.jpg?im_w=240"
-                : item.userId.image.url
+              item.userId.image?.url === ""
+                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+                : item.userId.image?.url
             }
           />
         }

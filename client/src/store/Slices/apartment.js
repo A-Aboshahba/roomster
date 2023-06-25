@@ -1,5 +1,6 @@
 import Roomster from "../../API/config";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toastMessage } from "../../utils/toasfiy";
 
 const INITIAL_STATE = {
   status: "idle",
@@ -19,7 +20,6 @@ export const getApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      // console.log("slice", response.data.data);
       return response.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -34,7 +34,7 @@ export const getApartmentReviews = createAsyncThunk(
       const response = await Roomster.get(
         `reviews/apartment/${apartmentId}?page=${page}`
       );
-      console.log(" reviewslice", response.data);
+
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -48,7 +48,6 @@ export const loadMoreApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      // console.log("slice", response.data.data);
       return response.data.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -60,7 +59,21 @@ export const getSingleApartment = createAsyncThunk(
   async ({ id }, thunkAPI) => {
     try {
       const response = await Roomster.get(`apartments/${id}`);
-      console.log("get single apartment", response.data);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+export const addReview = createAsyncThunk(
+  "apartments/addReview",
+  async (data, thunkAPI) => {
+    const { apartments, user } = thunkAPI.getState();
+    try {
+      data.apartmentId = apartments.singleApartment._id;
+      data.userId = user.user._id;
+      const response = await Roomster.post(`reviews`, data);
+      response.data.userId = { ...user.user };
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
@@ -68,82 +81,74 @@ export const getSingleApartment = createAsyncThunk(
   }
 );
 
-// export const toggleFavourite = createAsyncThunk(
-//   "apartments/toggleFavourite",
-//   async ({ apartmentId }, thunkAPI) => {
-//     try {
-//       const response = await Roomster.get(
-//         `apartments/all?page=${page}${filterString}${keyword}`
-//       );
-//       return response.data;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue(err);
-//     }
-//   }
-// );
 const apartmentsSlice = createSlice({
   name: "apartments",
   initialState: INITIAL_STATE,
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getApartments.fulfilled, (state, action) => {
+  extraReducers: {
+    [getApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
       state.apartments = [...action.payload];
-    });
-    builder.addCase(getApartments.pending, (state) => {
+    },
+    [getApartments.pending]: (state) => {
       state.status = "loading";
-    });
-    builder.addCase(getApartments.rejected, (state, action) => {
+    },
+    [getApartments.rejected]: (state, action) => {
       state.status = "failed";
       state.error = {
         message: action.payload.response.data.error.message,
         code: action.payload.response.data.error.code,
       };
-    });
-    builder.addCase(loadMoreApartments.fulfilled, (state, action) => {
+    },
+    [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
       state.apartments.Push(...action.payload);
-    });
-    builder.addCase(loadMoreApartments.pending, (state) => {
+    },
+    [loadMoreApartments.pending]: (state) => {
       state.status = "loading";
-    });
-    builder.addCase(loadMoreApartments.rejected, (state, action) => {
+    },
+    [loadMoreApartments.rejected]: (state, action) => {
       state.status = "failed";
       state.error = {
         message: action.payload.response.data.error.message,
         code: action.payload.response.data.error.code,
       };
-    });
-    builder.addCase(getApartmentReviews.fulfilled, (state, action) => {
+    },
+    [getApartmentReviews.fulfilled]: (state, action) => {
       state.status = "succeeded";
       state.reviews = [...action.payload.data];
       state.totalReviews = action.payload.totalRate;
-    });
-    builder.addCase(getApartmentReviews.pending, (state) => {
+    },
+    [getApartmentReviews.pending]: (state) => {
       state.status = "loading";
-    });
-    builder.addCase(getApartmentReviews.rejected, (state, action) => {
+    },
+    [getApartmentReviews.rejected]: (state, action) => {
       state.status = "failed";
       state.error = {
         message: action.payload.response.data.error.message,
         code: action.payload.response.data.error.code,
       };
-    });
+    },
 
-    builder.addCase(getSingleApartment.fulfilled, (state, action) => {
+    [getSingleApartment.fulfilled]: (state, action) => {
       state.status = "succeeded";
       state.singleApartment = { ...action.payload };
-    });
-    builder.addCase(getSingleApartment.pending, (state) => {
+    },
+    [getSingleApartment.pending]: (state) => {
       state.status = "loading";
-    });
-    builder.addCase(getSingleApartment.rejected, (state, action) => {
+    },
+    [getSingleApartment.rejected]: (state, action) => {
       state.status = "failed";
       state.error = {
         message: action.payload.response.data.error.message,
         code: action.payload.response.data.error.code,
       };
-    });
+    },
+    //? add review
+    [addReview.fulfilled]: (state, action) => {
+      toastMessage("success", "Added Successfully");
+      state.reviews.push(action.payload);
+    },
   },
 });
 
@@ -153,10 +158,4 @@ export const getApartmentTotalReviwsState = (state) =>
   state.apartments.totalReviews;
 export const getSingleApartmentState = (state) =>
   state.apartments.singleApartment;
-// export const getUserStatus = (state) => state.auth.status;
-// export const getUsererror = (state) => state.auth.error;
-// export const isLoginUser = (state) => state.auth.isLoginUser;
-
-// export const { checkLogin, logOut } = apartmentsSlice.actions;
-
 export default apartmentsSlice.reducer;

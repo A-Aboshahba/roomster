@@ -278,11 +278,8 @@ export default function HousingDetails() {
               margin: "auto",
             }}
           >
-            <PickerDate reservationsArr={singleApartment.reservationsArr} />
-            <Typography variant="body1" color="initial" sx={{ mb: 4 }}>
-              total price : 100$
-            </Typography>
-
+            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} />
+        
             <Button variant="contained" color="success" sx={{ width: "280px" }}>
               reserve
             </Button>

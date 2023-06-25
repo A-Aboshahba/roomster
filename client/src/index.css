@@ -2,6 +2,10 @@
   width: 118px;
   height: 45px;
   border-radius: 40px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
   margin-top: 5px;
 }
 
@@ -11,23 +15,24 @@
   align-items: center;
 }
 
-body {
-  margin: 0;
+#root {
+  padding-bottom: 110px;
 }
 
 /* Position the footer at the bottom of the page */
 #footer {
+
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #232f3e;
+  background-color: rgb(35, 47, 62);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
   z-index: 555;
-  height: 55px; /* Set a fixed height for the footer */
 }
 
 /* Style the Google Translate Element */
@@ -40,18 +45,26 @@ body {
 
 /* Style the dropdown menu */
 .goog-te-combo {
-  font-size: 13px;
+  font-size: 15px;
   color: #000;
-  padding: 6px;
+  padding: 8px;
   border: none;
-  border-radius: 9px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  margin: 4px 0;
+  transform: translateX(-219px);
+  font-size: 14px;
 }
+
 
 /* Style the translation button */
 .goog-te-banner-button {
   font-size: 18px;
   color: #fff;
-  background-color: #27ae60;
+  background-color: rgb(35, 47, 62);
   border: none;
   padding: 6px;
 }
@@ -63,8 +76,8 @@ body {
 }
 
 /* Style the tooltip content */
-.goog-tooltip > .goog-tooltip-content {
-  background-color: #4caf50;
+.goog-tooltip>.goog-tooltip-content {
+  background-color: rgb(35, 47, 62);
 }
 
 /* Style the contact information links and "About Us" link */
@@ -100,7 +113,7 @@ body {
 }
 
 .goog-te-gadget {
-  color: #fff;
+  color: transparent !important;
   display: flex;
   justify-content: space-around;
   width: 425px;
@@ -114,7 +127,19 @@ body {
 .VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
   font-size: 12px;
   font-weight: bold;
-  color: #fff;
-  margin-right: 50px;
-  text-decoration: none;
+  color: #FFF;
+  margin-right:50px ;
+  text-decoration: none;
+}
+#currency-select {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+.skiptranslate span   {
+display: none;
 }

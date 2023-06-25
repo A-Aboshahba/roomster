@@ -8,6 +8,7 @@ import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
 import UserGuard from "../Gurd/UserGurd";
+import Loader from "../components/Loader/Loader";
 
 function Routers() {
   return (
@@ -55,6 +56,7 @@ function Routers() {
           </UserGuard>
         }
       />
+      <Route path="/loader" element={<Loader />} />
       <Route path="*" element={<Homepage />} />
     </Routes>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import MobileStepper from "@mui/material/MobileStepper";
 import Typography from "@mui/material/Typography";
@@ -26,12 +26,16 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 import { useNavigate } from "react-router";
+import CurrencySign from "../../utils/CurrencySign.jsx";
 // eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => {
     return state.user;
   });
+  const SignySelector = useSelector((state) => state.currency.selected);
+  const currencySelector = useSelector((state) => state.currency.currency);
+
   const [activeStep, setActiveStep] = React.useState(0);
   const favoriteList = useSelector((state) => {
     return state.user?.user?.favourites;
@@ -66,6 +70,7 @@ const CarouselCard = ({ location }) => {
     dispatch(deleteFavorite({ userId: user._id, location: location }));
     setIsFavorite((prev) => !prev);
   };
+
   return (
     <Box
       className="carouselCard"
@@ -165,7 +170,8 @@ const CarouselCard = ({ location }) => {
 
             {/* <Typography component="h4"> {location.days}</Typography> */}
 
-            <Typography component="h5"> {location.price}$</Typography>
+            <Typography component="h5"> {location.price*currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}</Typography>
+
           </Box>
           <Box sx={{ mt: 2 }}>
             <Box sx={dFlex}>

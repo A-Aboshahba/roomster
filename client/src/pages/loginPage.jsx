@@ -40,7 +40,6 @@ function SignInSide() {
         console.log(data.accessToken);
         const decodedToken = jwt_decode(data.accessToken);
         console.log("decoded token", decodedToken._id);
-        // dispatch(addInfo(decodedToken));
         dispatch(fetchUser(decodedToken._id));
         navigate("/");
       } catch (err) {

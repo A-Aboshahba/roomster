@@ -24,15 +24,18 @@ import {
 } from "../../store/Slices/apartment";
 
 export default function HousingDetails() {
-  // const navigate = useNavigate()
   const params = useParams();
   const dispatch = useDispatch();
   const [switchIcon, setSwitchIcon] = useState(false);
   const singleApartment = useSelector(getSingleApartmentState);
+  console.count("called from here ???");
+
+  console.log("hereeeee", singleApartment);
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
   }, [dispatch]);
+  console.log([singleApartment.apartmentSpecification]);
   return (
     <>
       <Box
@@ -134,7 +137,7 @@ export default function HousingDetails() {
         </Grid>
         {/* to display more image for housing */}
         <Box sx={{ position: "absolute", bottom: "20px", left: "10px" }}>
-          <FullScreenDialog />
+          <FullScreenDialog images={singleApartment.images} />
         </Box>
       </Box>
       <Grid
@@ -164,38 +167,11 @@ export default function HousingDetails() {
             </Box>
           </Box>
           <Divider />
-          <HousingInfo
-            title="Description"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
-          />
-          <HousingInfo
-            title="main rolls"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
-          />
+          <HousingInfo title="Description" body={singleApartment.description} />
+          <HousingInfo title="main rolls" body={singleApartment.rules} />
           <HousingInfo
             title="cancelation policy"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
+            body={singleApartment.cancelPolicy}
           />
           <Box sx={{ mt: 2, mb: 1 }}>
             <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
@@ -270,11 +246,8 @@ export default function HousingDetails() {
               margin: "auto",
             }}
           >
-            <PickerDate />
-            <Typography variant="body1" color="initial" sx={{ mb: 4 }}>
-              total price : 100$
-            </Typography>
-
+            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} />
+        
             <Button variant="contained" color="success" sx={{ width: "280px" }}>
               reserve
             </Button>

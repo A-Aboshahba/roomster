@@ -22,17 +22,45 @@ import {
   getSingleApartmentState,
   getApartmentReviwsState,
 } from "../../store/Slices/apartment";
-
+import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 export default function HousingDetails() {
-  // const navigate = useNavigate()
   const params = useParams();
+  console.log(params.apartmentId);
   const dispatch = useDispatch();
-  const [switchIcon, setSwitchIcon] = useState(false);
   const singleApartment = useSelector(getSingleApartmentState);
+
+  const user = useSelector((state) => {
+    return state.user?.user;
+  });
+  console.log("user", user.favourites);
+  const [isFavorite, setIsFavorite] = useState(
+    user.favourites?.find((favorite) => {
+      return favorite._id == params.apartmentId;
+    })
+  );
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
-  }, [dispatch]);
+    console.count(isFavorite);
+  }, [dispatch, isFavorite]);
+  const Like = () => {
+    dispatch(
+      addFavorite({
+        userId: user._id,
+        location: singleApartment,
+      })
+    );
+    setIsFavorite((prev) => !prev);
+  };
+  const disLike = () => {
+    dispatch(
+      deleteFavorite({
+        userId: user._id,
+        location: singleApartment,
+      })
+    );
+    setIsFavorite((prev) => !prev);
+  };
   return (
     <>
       <Box
@@ -46,14 +74,18 @@ export default function HousingDetails() {
           <Typography variant="h5" color="initial">
             {singleApartment.title}
           </Typography>
-          <Box
-            style={{ cursor: "pointer" }}
-            onClick={() => setSwitchIcon(!switchIcon)}
-          >
-            {switchIcon ? (
-              <AiFillHeart size={30} color="#fff" fill="#b12929" />
+          <Box style={{ cursor: "pointer" }}>
+            {isFavorite ? (
+              <AiFillHeart
+                size={30}
+                color="#fff"
+                fill="#b12929"
+                onClick={() => {
+                  disLike();
+                }}
+              />
             ) : (
-              <FaRegHeart size={30} color="#000" />
+              <FaRegHeart size={30} color="#000" onClick={() => Like()} />
             )}
           </Box>
         </Box>
@@ -134,7 +166,7 @@ export default function HousingDetails() {
         </Grid>
         {/* to display more image for housing */}
         <Box sx={{ position: "absolute", bottom: "20px", left: "10px" }}>
-          <FullScreenDialog />
+          <FullScreenDialog images={singleApartment.images} />
         </Box>
       </Box>
       <Grid
@@ -156,46 +188,22 @@ export default function HousingDetails() {
             />
             <Box>
               <Typography variant="h4" color="initial">
-                Entire villa hosted by Mehmet Muhammet
+                Entire villa hosted by {singleApartment?.userId?.fullName}
               </Typography>
               <Typography variant="p" color="initial">
-                8 guests4 bedrooms4 beds3 baths
+                Balcony ({singleApartment.apartmentSpecification?.noOfBalcony})-
+                Beds ({singleApartment.apartmentSpecification?.noOfBeds})-
+                Kitchens ({singleApartment.apartmentSpecification?.noOfKitchens}
+                ) - Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
               </Typography>
             </Box>
           </Box>
           <Divider />
-          <HousingInfo
-            title="Description"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
-          />
-          <HousingInfo
-            title="main rolls"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
-          />
+          <HousingInfo title="Description" body={singleApartment.description} />
+          <HousingInfo title="main rolls" body={singleApartment.rules} />
           <HousingInfo
             title="cancelation policy"
-            body="
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ab
-              reiciendis iure eveniet non excepturi molestiae iste ut unde earum
-              animi labore totam architecto nulla commodi modi, vel dolore
-              libero. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Facere ab reiciendis iure eveniet non excepturi molestiae iste ut
-              unde earum animi labore totam architecto nulla commodi modi, vel
-              dolore libero."
+            body={singleApartment.cancelPolicy}
           />
           <Box sx={{ mt: 2, mb: 1 }}>
             <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
@@ -270,7 +278,7 @@ export default function HousingDetails() {
               margin: "auto",
             }}
           >
-            <PickerDate />
+            <PickerDate reservationsArr={singleApartment.reservationsArr} />
             <Typography variant="body1" color="initial" sx={{ mb: 4 }}>
               total price : 100$
             </Typography>

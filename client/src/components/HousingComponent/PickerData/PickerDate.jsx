@@ -1,24 +1,28 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
-
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import "./PickerDate.css";
 import { Button, Typography } from "@mui/material";
-const pastMonth = new Date();
-const PickerDate = () => {
-  const defaultSelected = {
-    from: pastMonth,
-    to: addDays(pastMonth, 4),
-  };
-  const [range, setRange] = useState(defaultSelected);
+const PickerDate = ({ reservationsArr = [] }) => {
+  const disabledDays = [
+    ...reservationsArr.map((date) => {
+      return { from: new Date(date.startDate), to: new Date(date.endDate) };
+    }),
+    {
+      from: new Date(2022, 1, 1),
+      to: new Date().setDate(new Date().getDate() - 1),
+    },
+  ];
+  const [range, setRange] = useState();
 
   let footer = (
     <Typography color="primary" sx={{ textAlign: "center" }}>
       Please pick the first day.
     </Typography>
   );
+
   if (range?.from) {
     if (!range.to) {
       footer = (
@@ -49,7 +53,7 @@ const PickerDate = () => {
     <DayPicker
       id="test"
       mode="range"
-      defaultMonth={pastMonth}
+      disabled={disabledDays}
       selected={range}
       footer={footer}
       onSelect={setRange}

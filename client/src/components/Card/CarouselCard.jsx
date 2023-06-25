@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import MobileStepper from "@mui/material/MobileStepper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { motion } from "framer-motion";
+
 
 // mui icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -26,16 +28,12 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 import { useNavigate } from "react-router";
-import CurrencySign from "../../utils/CurrencySign.jsx";
 // eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => {
     return state.user;
   });
-  const SignySelector = useSelector((state) => state.currency.selected);
-  const currencySelector = useSelector((state) => state.currency.currency);
-
   const [activeStep, setActiveStep] = React.useState(0);
   const favoriteList = useSelector((state) => {
     return state.user?.user?.favourites;
@@ -70,15 +68,14 @@ const CarouselCard = ({ location }) => {
     dispatch(deleteFavorite({ userId: user._id, location: location }));
     setIsFavorite((prev) => !prev);
   };
-
   return (
-    <Box
+    <motion.div  whileHover={{ scale: 1.05 }}>
+    <Box 
       className="carouselCard"
       sx={{
         flexGrow: 1,
         position: "relative",
-      }}
-    >
+      }}>
       <Box sx={fixedIcon} style={{ cursor: "pointer" }}>
         {wishListPage ? (
           <AiTwotoneDelete
@@ -117,17 +114,16 @@ const CarouselCard = ({ location }) => {
           axis={"x"}
           index={activeStep}
           onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
+          enableMouseEvents>
           {location.images.map((step) => {
             return (
-              <div key={step.publicId}>
-                <Box
+              <div  key={step.publicId}>
+                <Box 
+                
                   component="img"
                   sx={carouselImage}
                   src={step.url}
-                  alt={step.publicId}
-                ></Box>
+                  alt={step.publicId}></Box>
               </div>
             );
           })}
@@ -145,8 +141,7 @@ const CarouselCard = ({ location }) => {
               size="small"
               sx={carouselDot}
               onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
+              disabled={activeStep === maxSteps - 1}>
               <KeyboardArrowRight />
             </Button>
           }
@@ -155,8 +150,7 @@ const CarouselCard = ({ location }) => {
               size="small"
               sx={carouselDot}
               onClick={handleBack}
-              disabled={activeStep === 0}
-            >
+              disabled={activeStep === 0}>
               <KeyboardArrowLeft />
             </Button>
           }
@@ -170,8 +164,7 @@ const CarouselCard = ({ location }) => {
 
             {/* <Typography component="h4"> {location.days}</Typography> */}
 
-            <Typography component="h5"> {location.price*currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}</Typography>
-
+            <Typography component="h5"> {location.price}</Typography>
           </Box>
           <Box sx={{ mt: 2 }}>
             <Box sx={dFlex}>
@@ -190,6 +183,7 @@ const CarouselCard = ({ location }) => {
         </Box>
       </Link>
     </Box>
+    </motion.div>
   );
 };
 CarouselCard.propTypes = {

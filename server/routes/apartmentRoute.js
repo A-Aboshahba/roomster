@@ -72,7 +72,7 @@ router.post(
   "/:id/rent",
   authMiddleware.verifyTokenAndAuthorization,
   validator.rentApartment,
-  validationError,
+  validationError,//function of stripe 
   apartmentController.rentApartment
 );
 router.delete(

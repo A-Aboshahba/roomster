@@ -18,10 +18,9 @@ const steps = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
 
 export default function ManageHousing() {
-    const [activeStep, setActiveStep] = useState(2);
+    const [activeStep, setActiveStep] = useState(1);
     const [skipped, setSkipped] = useState(new Set());
     const [isChoosed, setIsChoosed] = useState(true);
-    // const [createApartment, setCreateApartment] = useState(false);
 
     const [collectedData, setCollectedData] = useState({
         type: "",

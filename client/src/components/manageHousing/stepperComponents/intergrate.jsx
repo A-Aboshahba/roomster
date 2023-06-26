@@ -120,7 +120,7 @@ function Comp2({ collectedData, setCollectedData, setIsChoosed }) {
             onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, city: e.target.value } }) }}
 
           >
-            <TextField fullWidth label="Enter The City" id="City" />
+            <TextField fullWidth label="Enter The City" id="City"  value="sdlkfsdkhfj"/>
           </Box>
           <Box
             sx={{
@@ -142,7 +142,6 @@ function Comp2({ collectedData, setCollectedData, setIsChoosed }) {
             style={{ marginTop: 10 }}
             value={collectedData.location.city}
             onChange={(e) => { setCollectedData({ ...collectedData, location: { ...collectedData.location, building: e.target.value } }) }}
-
           >
             <TextField fullWidth label="Building Number" id="Building" type='number' />
           </Box>

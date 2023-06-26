@@ -38,7 +38,7 @@ let apartments = [
         title: "boat"
     },
     {
-        key:5,
+        key: 5,
         icon: <HouseSidingIcon />,
         title: "hut"
     },
@@ -67,7 +67,7 @@ let apartments = [
         icon: <NightShelterOutlinedIcon />,
         title: "Shipping container"
     },
-    
+
 ]
 
 
@@ -96,29 +96,30 @@ const CustomBox = styled(Grid)({
 
 
 
-function ChooseAppartment({collectedData, setCollectedData, setIsChoosed}) {
+function ChooseAppartment({ collectedData, setCollectedData, setIsChoosed, isEdit, setIsEdit }) {
     const [clicked, setIsClicked] = useState(false);
-    const [selectedItemId , setSelectedItemId] = useState();
+    const [selectedItemId, setSelectedItemId] = useState();
 
+
+    console.log(isEdit)
     function handleClick(id) {
         setIsClicked(!clicked)
         setSelectedItemId(id)
-        setCollectedData({...collectedData, type : id})
+        setCollectedData({ ...collectedData, type: id })
         setIsChoosed(false)
     }
 
     return (
         <Grid container maxWidth={700}>
-            {apartments.map((apart) => (
-                <CustomBox item key={apart.key}
-                    className={selectedItemId == apart.key? 'selected' : ''}
-                    onClick={() => handleClick(apart.key)}
-                    
-                >
-                    <Box sx={{ fontSize: 3 }} >{apart.icon}</Box>
-                    <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
-                </CustomBox>
-            ))}
+                {apartments.map((apart) => (
+                    <CustomBox item key={apart.key}
+                        className={selectedItemId == apart.key ? 'selected' : ''}
+                        onClick={() => handleClick(apart.key)}
+                    >
+                        <Box sx={{ fontSize: 3 }} >{apart.icon}</Box>
+                        <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
+                    </CustomBox>
+                ))}
         </Grid>
     )
 }

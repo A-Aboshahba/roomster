@@ -6,11 +6,14 @@ module.exports = class ApiFeature {
   }
 
   paginate() {
-    let skip = (this.queryString.page - 1) * this.queryString.limit * 1;
-    this.aggregateArray.push(
-      { $skip: skip },
-      { $limit: this.queryString.limit * 1 }
-    );
+    let limit = this.queryString.limit * 1 || 12;
+
+    let page = this.queryString.page * 1 || 1;
+    if (this.queryString.page <= 0) page = 1;
+    console.log(page, limit);
+    let skip = (page - 1) * limit;
+    console.log(page, limit, skip);
+    this.aggregateArray.push({ $skip: skip }, { $limit: limit });
     return this;
   }
 

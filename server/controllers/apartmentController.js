@@ -78,131 +78,6 @@ exports.getAllApartments = (request, response, next) => {
     .catch((error) => {
       console.error(error);
     });
-
-  // const apiFeature = new ApiFeature(
-  //   Apartment.aggregate([
-  //     {
-  //       $match: {
-  //         published: true,
-  //       },
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: "reviews",
-  //         localField: "_id",
-  //         foreignField: "apartmentId",
-  //         as: "reviews",
-  //       },
-  //     },
-  //     {
-  //       $addFields: {
-  //         avgRating: {
-  //           $avg: "$reviews.rate",
-  //         },
-  //       },
-  //     },
-
-  //     {
-  //       $lookup: {
-  //         from: "users",
-  //         localField: "userId",
-  //         foreignField: "_id",
-  //         as: "user",
-  //       },
-  //     },
-  //   ]),
-  //   request.query
-  // );
-  // let page = request.query.page * 1 || 1;
-  // if (page <= 0) page = 1;
-  // let skip = (page - 1) * (request.query.limit * 1 || 5);
-
-  // { $skip: skip },
-  // { $limit: request.query.limit * 1 || 5 },
-  // const aggregateArray = [
-  //   {
-  //     $match: {
-  //       published: true,
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "reviews",
-  //       localField: "_id",
-  //       foreignField: "apartmentId",
-  //       as: "reviews",
-  //     },
-  //   },
-  //   {
-  //     $addFields: {
-  //       avgRating: {
-  //         $avg: "$reviews.rate",
-  //       },
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "users",
-  //       localField: "userId",
-  //       foreignField: "_id",
-  //       as: "user",
-  //     },
-  //   },
-  // ];
-  // const apiFeature = new ApiFeature(
-  //   Apartment.aggregate(aggregateArray),
-  //   request.query,
-  //   true,
-  //   aggregateArray
-  // );
-
-  // apiFeature
-  //   .paginate()
-  //   .filter()
-  //   .fields()
-  //   .search()
-  //   .sort()
-
-  //   .mongooseQuery.exec()
-  //   .then((docs) => {
-  //     if (!docs) {
-  //       let error = new Error("there're no apartments  to show");
-  //       error.statusCode = 404;
-  //       throw error;
-  //     }
-  //     console.log(docs.length);
-  //     response.status(200).json({ data: docs, page: apiFeature.page });
-  //   })
-  //   .catch((err) => next(err));
-
-  // .then((results) => {
-  //   response.status(200).json(results);
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
-
-  // {
-  //   // $project: {
-  //   //   _id: 1,
-  //   //   title: 1,
-  //   //   avgRating: 1,
-  //   //   published: 1,
-  //   // },
-  // },
-
-  // Apartment.find({})
-  //   .then((docs) => {
-  //     if (!docs) {
-  //       let error = new Error("there're no apartments to show");
-  //       error.statusCode = 404;
-  //       throw error;
-  //     }
-  //     response.status(200).json(docs);
-  //   })
-  //   .catch((err) => {
-  //     next(err);
-  //   });
 };
 
 // b31rp2qoowoxtv8llsen
@@ -376,12 +251,10 @@ exports.addSingleImage = (request, response, next) => {
         error.statusCode = 404;
         throw error;
       }
-      response
-        .status(201)
-        .json({
-          message: "image added to apartment successfully",
-          imageId: publicId,
-        });
+      response.status(201).json({
+        message: "image added to apartment successfully",
+        imageId: publicId,
+      });
     })
     .catch((err) => next(err));
 };

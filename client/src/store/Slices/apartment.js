@@ -20,7 +20,9 @@ export const getApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      return response.data.data;
+
+      // console.log(response);
+      return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }

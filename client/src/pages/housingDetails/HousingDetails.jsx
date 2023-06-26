@@ -20,53 +20,10 @@ import {
   getSingleApartment,
   getApartmentReviews,
   getSingleApartmentState,
-  getApartmentReviwsState,
 } from "../../store/Slices/apartment";
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 import { createAllIcons } from "../../utils/createIcons";
-import Roomster from "../../API/config";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("pk_test_51NMW2JI6wftnZOECQ1OU2KtcGuY0JcqT6zPFJCaXmE9b9vEmjGZwyjWHq9M444W41gsB1QYqP8FdReg1zyA8YT6p00kryLDqqp");
-// eslint-disable-next-line react/prop-types
-const Modal = ({ onClose, children }) => {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "20px",
-          borderRadius: "5px",
-          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)",
-        }}
-      >
-        {children}
-        <Button
-          variant="contained"
-          color="error"
-          style={{ marginTop: "10px" }}
-          onClick={onClose}
-        >
-          cancel
-        </Button>
-      </div>
-    </div>
-  );
-};
 export default function HousingDetails() {
   const params = useParams();
   console.log(params.apartmentId);
@@ -106,32 +63,8 @@ export default function HousingDetails() {
     setIsFavorite((prev) => !prev);
   };
     
-  const [clientSecret, setClientSecret] = useState(null);
-  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
 
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    Roomster.post("create-payment-intent", {
-      items: [{ price: "456456" }],
-      })
-      .then((response) => {
-        setClientSecret(response.data.clientSecret);
-      })  
-  }, []);
 
-  const handleReserveClick = () => {
-    setShowCheckoutForm(true);
-  };
-  const handleModalClose = () => {
-    setShowCheckoutForm(false);
-  };
-  const appearance = {
-    theme: "stripe",
-  };
-  const options = {
-    clientSecret,
-    appearance,
-  };
 
   return (
     <>
@@ -321,26 +254,11 @@ export default function HousingDetails() {
               margin: "auto",
             }}
           >
-            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} />
-        
-            <Button
-        variant="contained"
-        color="success"
-        sx={{ width: "280px" }}
-        onClick={handleReserveClick}
-      >
-        reserve
-      </Button>
+            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} id={singleApartment._id} />
           </Box>
         </Grid>
       </Grid>
-      {showCheckoutForm && clientSecret && (
-        <Modal onClose={handleModalClose}>
-          <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm />
-          </Elements>
-        </Modal>
-      )}
+     
     </>
   );
 }

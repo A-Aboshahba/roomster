@@ -12,28 +12,19 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
+const stripe = require("stripe")(process.env.stripe_client_secret);
 const server = express();
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
 // let port = process.env.PORT || 3030;
-let port = process.env.PORT || 3030;
-
-const stripe = require("stripe")(
-  "sk_test_51NMW2JI6wftnZOEC7f8A1xWw4rHpEytoW0qtwVwp1wDaHuQHsDbcdvpnK0p81sifmSN3IXP5XawFtEGDR7S29HEP005vv3bAXr"
-);
-const calculateOrderAmount = (items) => {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return 1200;
-};
+let port = process.env.PORT || 8080;
 
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
-
 server.use(
+
   cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -75,21 +66,24 @@ server.use("/apartments", apartmentRouter);
 server.use("/reviews", reviewRouter);
 
 //######################### Create a PaymentIntent with the order amount and currency######################################
-server.post("/create-payment-intent", async (req, res) => {
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(),
-    currency: "aed",
+
+server.post("/create-payment-intent",
+async (req, res) => {
+// Create a PaymentIntent with the order amount and currency
+const {amount,currency}=req.body;
+console.log(amount);
+const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: currency,
     automatic_payment_methods: {
-      enabled: true,
+    enabled: true,
     },
   });
-
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
-});
-
+}
+);
 //#######################################################################
 server.use((request, response, next) => {
   response.status(404).json({ message: "Page Not Found..!" });

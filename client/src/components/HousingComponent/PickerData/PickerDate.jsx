@@ -56,6 +56,7 @@ const PickerDate = ({ reservationsArr = [], price = 1, id = '' }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          zIndex:5,
         }}
       >
         <div
@@ -79,10 +80,10 @@ const PickerDate = ({ reservationsArr = [], price = 1, id = '' }) => {
       </div>
     );
   };
-  const handleReserveClick = async () => {
+  const handleReserveClick = async (totalPrice) => {
     await Roomster.post("create-payment-intent", {
-      amount: 7000, //This is Price From Date Picker
-      currency: 'aed' // This is Currncy From Date picker
+      amount: totalPrice, //This is Price From Date Picker
+      currency: 'usd' // This is Currncy From Date picker
     })
       .then((response) => {
         setClientSecret(response.data.clientSecret);
@@ -176,7 +177,7 @@ const PickerDate = ({ reservationsArr = [], price = 1, id = '' }) => {
             disabled={reservitionButtom}
             color="success"
             sx={{ width: "280px" }}
-            onClick={handleReserveClick}
+            onClick={()=>handleReserveClick(diffDays * price* 100)}
           >
             reserve
           </Button>

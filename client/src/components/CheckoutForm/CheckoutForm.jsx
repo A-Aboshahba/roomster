@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import {
   PaymentElement,
@@ -7,14 +9,18 @@ import {
 } from "@stripe/react-stripe-js";
 import './checkoutForm.css'
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
-export default function CheckoutForm() {
+// eslint-disable-next-line react/prop-types
+export default function CheckoutForm({apartmentId,price,range}) {
+  console.log(price)
+
   const stripe = useStripe();
   const elements = useElements();
-
+  const userId= useSelector(state=>state.user?.user?._id)
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-console.log(email);
+  console.log(email);
   
 
   const handleSubmit = async (e) => {
@@ -31,7 +37,7 @@ console.log(email);
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:5173/success",
+        return_url: `http://localhost:5173/success?id=${apartmentId}&total_price=${price}&from=${range.from.toISOString()}&to=${range.to.toISOString()}&userId=${userId}`,
       },
     })
 
@@ -48,11 +54,9 @@ console.log(email);
       setIsLoading(false);
       return;
     }
-  
     toast.success("Payment confirmed!", {
       position: toast.POSITION.TOP_RIGHT
     });
-  
     setIsLoading(false);
   };
 

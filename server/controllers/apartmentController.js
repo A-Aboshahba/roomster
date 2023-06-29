@@ -84,6 +84,9 @@ exports.addNewApartment = (request, response, next) => {
 };
 exports.getApartmentById = (request, response, next) => {
   Apartment.findById(request.params.id)
+    .populate({
+      path: "userId",
+    })
     .then((doc) => {
       if (!doc) {
         let error = new Error("this apartment doesn't exist");

@@ -28,7 +28,7 @@ function ReviewSection() {
           <Typography variant="h5" color="initial" sx={{ my: 4 }}>
             Rating ({apartmentReviews.length}){" "}
             {apartmentReviewsAverage === "NaN" ? "" : apartmentReviewsAverage}
-            <StarIcon sx={{ color: "#c59f06" }} />
+            <StarIcon sx={{ color: "#f2fe05" }} />
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>

@@ -32,6 +32,8 @@ const AddReview = () => {
   function handleButtonClick() {
     dispatch(addReview({ rate, description }));
     setOpen(false);
+    setRate(0);
+    setDescription("");
   }
   return (
     <>
@@ -59,6 +61,7 @@ const AddReview = () => {
             <Rating
               name="half-rating"
               defaultValue={rate}
+              value={rate}
               precision={0.5}
               onChange={(e) => {
                 setRate(e.target.value);
@@ -71,6 +74,7 @@ const AddReview = () => {
             multiline
             sx={{ width: "100%" }}
             rows={10}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
           <Box

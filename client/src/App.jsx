@@ -11,7 +11,7 @@ import { fetchUser } from "./store/Slices/userSlice.jsx";
 import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
-import Footer from './components/Footer/Footer';
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +22,6 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
-  
     }
   }, [dispatch]);
 
@@ -32,7 +31,7 @@ function App() {
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers />
       </Container>
-      <Footer/>
+      <Footer />
       <ToastContainer />
     </BrowserRouter>
   );

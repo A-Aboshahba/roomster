@@ -12,17 +12,19 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
+const stripe = require("stripe")(process.env.stripe_client_secret);
 const server = express();
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
 // let port = process.env.PORT || 3030;
 let port = process.env.PORT || 8080;
+
 //############################################################################
 server.use(express.json());
 server.use(morgan("common"));
-
 server.use(
+
   cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -57,11 +59,31 @@ mongoose
   })
   .catch((error) => console.log(error));
 
-//###__routes__##########################################################
+//#####################################################__routes__##########################################################
 server.use("/auth", authRoute);
 server.use("/user", userRoute);
 server.use("/apartments", apartmentRouter);
 server.use("/reviews", reviewRouter);
+
+//######################### Create a PaymentIntent with the order amount and currency######################################
+
+server.post("/create-payment-intent",
+async (req, res) => {
+// Create a PaymentIntent with the order amount and currency
+const {amount,currency}=req.body;
+console.log(amount);
+const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount,
+    currency: currency,
+    automatic_payment_methods: {
+    enabled: true,
+    },
+  });
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+}
+);
 //#######################################################################
 server.use((request, response, next) => {
   response.status(404).json({ message: "Page Not Found..!" });

@@ -49,7 +49,13 @@ function MyTrips() {
     <>
       {reservations && (
         <Grid container columnSpacing={2} rowSpacing={4}>
-          <MyTripsLocationCards reservations={reservations} />;
+          <MyTripsLocationCards
+            reservations={reservations}
+            getUserReservation={() => {
+              getUserReservation(1, user._id);
+            }}
+          />
+          ;
         </Grid>
       )}
     </>

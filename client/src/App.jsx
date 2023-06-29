@@ -2,7 +2,6 @@ import { Container } from "@mui/material";
 import Navbar from "./components/navbar.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-
 import Routers from "./Routes/Routers.jsx";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
@@ -15,6 +14,7 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {

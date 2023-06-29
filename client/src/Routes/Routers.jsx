@@ -8,7 +8,9 @@ import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
 import UserGuard from "../Gurd/UserGurd";
-import Loader from "../components/Loader/Loader";
+import UserApartments from "../pages/userApartments/UserApartments";
+
+import ConfirmationPage  from "../pages/ConfirmationPage ";
 
 function Routers() {
   return (
@@ -36,6 +38,14 @@ function Routers() {
         path="Manage Housing"
         element={
           <UserGuard>
+            <UserApartments />
+          </UserGuard>
+        }
+      />
+      <Route
+        path="apartment/modify"
+        element={
+          <UserGuard>
             <ManageHousing />
           </UserGuard>
         }
@@ -56,7 +66,14 @@ function Routers() {
           </UserGuard>
         }
       />
-      <Route path="/loader" element={<Loader />} />
+      <Route
+        path="success"
+        element={
+          <UserGuard>
+            <ConfirmationPage  />
+          </UserGuard>
+        }
+      />
       <Route path="*" element={<Homepage />} />
     </Routes>
   );

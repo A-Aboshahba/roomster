@@ -72,13 +72,17 @@ router.post(
   "/:id/rent",
   authMiddleware.verifyTokenAndAuthorization,
   validator.rentApartment,
-  validationError,
+  validationError,//function of stripe 
   apartmentController.rentApartment
 );
 router.delete(
   //reservation id and userId in body
   "/:id/rent",
   authMiddleware.verifyTokenAndAuthorization,
+  (request, response, next) => {
+    console.log("request bofy", request.body);
+    next();
+  },
   validator.cancelRent,
   validationError,
   apartmentController.cancelRent

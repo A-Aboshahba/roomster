@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Apartment = mongoose.model("Apartments");
 const Reservation = mongoose.model("Reservations");
-const ApiFeature = require("../utils/ApiFeature");
+const ApiFeature = require("../utils/ApiFeatureAggregate");
 const {
   addRentToArr,
   checkIfRentAvailable,
@@ -28,42 +28,56 @@ const multer = require("multer");
 exports.upload = multer({ storage: storage });
 
 exports.getAllApartments = (request, response, next) => {
-  const apiFeature = new ApiFeature(
-    Apartment.find({}).populate({
-      path: "userId",
-      // select: { fullName: 1, email: 1, _id: 0 },
-    }),
-    request.query
-  );
-  apiFeature
-    .filter()
-    .fields()
-    .search()
-    .sort()
-    .paginate()
-    .mongooseQuery.then((docs) => {
-      if (!docs) {
-        let error = new Error("there're no apartments  to show");
-        error.statusCode = 404;
-        throw error;
-      }
-
-      response.status(200).json({ data: docs, page: apiFeature.page });
+  const initialArray = [
+    {
+      $match: {
+        published: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "apartmentId",
+        as: "reviews",
+      },
+    },
+    {
+      $addFields: {
+        avgRating: {
+          $avg: "$reviews.rate",
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    { $unwind: "$user" },
+    {
+      $project: {
+        reviews: 0,
+        "user.password": 0,
+        "user.address": 0,
+        "user.favourites": 0,
+        "user.rentedApartments": 0,
+        "user.isAdmin": 0,
+      },
+    },
+  ];
+  const apiFeature = new ApiFeature(Apartment, request.query, initialArray);
+  const api = apiFeature.filter().search().sort().paginate().fields();
+  Apartment.aggregate(api.aggregateArray)
+    .then((results) => {
+      response.status(200).json(results);
     })
-    .catch((err) => next(err));
-
-  // Apartment.find({})
-  //   .then((docs) => {
-  //     if (!docs) {
-  //       let error = new Error("there're no apartments to show");
-  //       error.statusCode = 404;
-  //       throw error;
-  //     }
-  //     response.status(200).json(docs);
-  //   })
-  //   .catch((err) => {
-  //     next(err);
-  //   });
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 // b31rp2qoowoxtv8llsen
@@ -240,9 +254,10 @@ exports.addSingleImage = (request, response, next) => {
         error.statusCode = 404;
         throw error;
       }
-      response
-        .status(201)
-        .json({ message: "image added to apartment successfully" });
+      response.status(201).json({
+        message: "image added to apartment successfully",
+        imageId: publicId,
+      });
     })
     .catch((err) => next(err));
 };

@@ -7,6 +7,8 @@ import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
+import { styled } from "@mui/system";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBanSmoking,
@@ -30,7 +32,7 @@ import {
   faWaterLadder,
   faUniversalAccess,
 } from "@fortawesome/free-solid-svg-icons";
-import { styled } from "@mui/system";
+
 
 const CustomBox = styled(Grid)({
   // Your default styles here
@@ -211,13 +213,84 @@ const safetyItems = [
     title: "Carbon monoxide alarm",
   },
 ];
-
-const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
+let allThree = [...apartments, ...stanOutAmenities, ...safetyItems];
+const TellGuests = ({
+  apartment,
+  collectedData,
+  setCollectedData,
+  setIsChoosed,
+}) => {
   const [selectedItemId, setSelectedItemId] = useState([]);
 
   React.useEffect(() => {
     setIsChoosed(false);
-  }, []);
+    if (apartment) {
+      let newSpecifications = {};
+      for (const key in apartment.apartmentSpecification) {
+        if (
+          !["noOfBalcony", "noOfRooms", "noOfBeds", "noOfKitchens"].includes(
+            key
+          ) &&
+          apartment.apartmentSpecification[key] != false
+        ) {
+          newSpecifications[key] = true;
+        }
+      }
+      setCollectedData({
+        ...collectedData,
+        apartmentSpecification: {
+          ...collectedData.apartmentSpecification,
+          ...newSpecifications,
+        },
+      });
+    }
+  }, [apartment]);
+
+  React.useEffect(() => {
+    if (apartment) {
+      allThree.forEach((element) => {
+        if (collectedData.apartmentSpecification[`${element.attr}`]) {
+          setSelectedItemId((selectedItemId) => [
+            ...selectedItemId,
+            element.key,
+          ]);
+        }
+      });
+    }
+  }, [collectedData]);
+  // React.useEffect(() => {
+  //   setIsChoosed(false);
+  //   if (apartment) {
+  //     let newSpecifications = {};
+  //     for (const key in apartment.apartmentSpecification) {
+  //       if (
+  //         !["noOfBalcony", "noOfRooms", "noOfBeds", "noOfKitchens"].includes(
+  //           key
+  //         ) &&
+  //         apartment.apartmentSpecification[key] != false
+  //       ) {
+  //         // console.log(`${key}: ${apartment.apartmentSpecification[key]}`);
+  //         newSpecifications[key] = true;
+  //       }
+  //     }
+  //     setCollectedData({
+  //       ...collectedData,
+  //       apartmentSpecification: {
+  //         ...newSpecifications,
+  //       },
+  //     });
+  //     allThree.forEach((element) => {
+  //       if (collectedData.apartmentSpecification[`${element.attr}`]) {
+  //         // console.log(element);
+  //         setSelectedItemId((selectedItemId) => [
+  //           ...selectedItemId,
+  //           element.key,
+  //         ]);
+  //       }
+  //     });
+  //   }
+  // }, []);
+  console.log("asdaxcvsdfgdfsdf", collectedData, selectedItemId);
 
   function handleClick(id, attr) {
     if (collectedData.apartmentSpecification.hasOwnProperty(attr)) {
@@ -246,15 +319,15 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid
         maxWidth={800}
         container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
+        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {apartments.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
+            onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>
@@ -264,15 +337,15 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid
         maxWidth={800}
         container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
+        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {stanOutAmenities.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
+            onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>
@@ -282,15 +355,15 @@ const TellGuests = ({ collectedData, setCollectedData, setIsChoosed }) => {
       <Grid
         maxWidth={800}
         container
-        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}
-      >
+        sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
+
         {safetyItems.map((apart, i) => (
           <CustomBox
             item
             key={i}
             className={selectedItemId.includes(apart.key) ? "selected" : ""}
-            onClick={() => handleClick(apart.key, apart.attr)}
-          >
+            onClick={() => handleClick(apart.key, apart.attr)}>
+
             <Box>{apart.icon}</Box>
             <Typography sx={{ textAlign: "center" }}>{apart.title}</Typography>
           </CustomBox>

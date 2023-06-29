@@ -20,10 +20,10 @@ import {
   getSingleApartment,
   getApartmentReviews,
   getSingleApartmentState,
-  getApartmentReviwsState,
 } from "../../store/Slices/apartment";
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 import { createAllIcons } from "../../utils/createIcons";
+
 export default function HousingDetails() {
   const params = useParams();
   console.log(params.apartmentId);
@@ -43,6 +43,7 @@ export default function HousingDetails() {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
   }, [dispatch, isFavorite]);
+
   const Like = () => {
     dispatch(
       addFavorite({
@@ -61,6 +62,10 @@ export default function HousingDetails() {
     );
     setIsFavorite((prev) => !prev);
   };
+    
+
+
+
   return (
     <>
       <Box
@@ -249,17 +254,11 @@ export default function HousingDetails() {
               margin: "auto",
             }}
           >
-            <PickerDate
-              reservationsArr={singleApartment.reservationsArr}
-              price={singleApartment.price}
-            />
-
-            <Button variant="contained" color="success" sx={{ width: "280px" }}>
-              reserve
-            </Button>
+            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} id={singleApartment._id} />
           </Box>
         </Grid>
       </Grid>
+     
     </>
   );
 }

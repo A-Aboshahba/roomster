@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 // this package for dealing with dates
 import moment from "moment";
-
+import CustomizedDialogs from "../../utils/CustomizedDialogs.jsx";
 // mui icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -19,13 +19,15 @@ import {
   carouselDot,
   carouselImage,
   fixedBottom,
+  fullWidthFlex,
+  flexCenter,
 } from "../../theme/commonStyles.jsx";
 import "./CarouselCard.css";
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-const MyTripsCard = ({ reservation }) => {
+const MyTripsCard = ({ reservation, getUserReservation }) => {
   console.log(reservation);
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -74,7 +76,7 @@ const MyTripsCard = ({ reservation }) => {
         </SwipeableViews>
       )}
 
-      <Box sx={fixedBottom}>
+      <Box sx={{ display: fixedBottom, mb: 4 }}>
         <MobileStepper
           sx={{ backgroundColor: "transparent" }}
           steps={maxSteps}
@@ -120,22 +122,48 @@ const MyTripsCard = ({ reservation }) => {
             >
               {reservation.apartmentId.title}
             </Typography>
-
+          </Box>
+        </Box>
+        <Box sx={{ display: flexBetween, my: 1 }}>
+          <Box>
             <Typography
-              component="h5"
               sx={{
-                fontWeight: "bold",
-                fontSize: "1rem",
-                color: "#4CAF50",
+                color: "#8bc34a",
+                borderRadius: "5px",
+                width: 100,
+                height: 20,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+
+                fontSize: "0.9rem",
+                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
               }}
             >
-              <span> $</span>
-              {`${reservation.totalPrice}`}
+              {`$ ${reservation.apartmentId.price} / night`}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography
+              sx={{
+                color: "#1E90FF",
+                borderRadius: "5px",
+                width: 100,
+                height: 20,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+
+                fontSize: "0.9rem",
+                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
+              }}
+            >
+              {`$${reservation.totalPrice} / total`}
             </Typography>
           </Box>
         </Box>
         <Box sx={flexBetween}>
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 0 }}>
             <Typography
               sx={{
                 bgcolor: "#8bc34a",
@@ -154,7 +182,7 @@ const MyTripsCard = ({ reservation }) => {
               {`${moment(reservation.startDate).format("DD MMM YYYY")}`}
             </Typography>
           </Box>
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 0 }}>
             <Typography
               sx={{
                 bgcolor: "#1E90FF",
@@ -175,6 +203,13 @@ const MyTripsCard = ({ reservation }) => {
           </Box>
         </Box>
       </Link>
+
+      <Box sx={{ mt: 1, display: flexCenter }} fullWidth>
+        <CustomizedDialogs
+          reservation={reservation}
+          getUserReservation={getUserReservation}
+        ></CustomizedDialogs>
+      </Box>
     </Box>
   );
 };

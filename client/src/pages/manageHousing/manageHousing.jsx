@@ -260,7 +260,8 @@ export default function ManageHousing() {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        flexDirection="column">
+        flexDirection="column"
+      >
         {activeStep === steps.length ? (
           <React.Fragment>
             <Typography sx={{ mt: 7, mb: 3, fontSize: 25 }}>
@@ -290,12 +291,14 @@ export default function ManageHousing() {
                 flexDirection: "row",
                 pt: 2,
                 justifyContent: "space-between",
-              }}>
+              }}
+            >
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}>
+                sx={{ mr: 1 }}
+              >
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />

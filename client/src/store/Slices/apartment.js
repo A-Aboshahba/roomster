@@ -97,10 +97,10 @@ const apartmentsSlice = createSlice({
     },
     [getApartments.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+      // state.error = {
+      //   message: action.payload.response.data.error.message,
+      //   code: action.payload.response.data.error.code,
+      // };
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -111,10 +111,10 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+      // state.error = {
+      //   message: action.payload.response.data.error.message,
+      //   code: action.payload.response.data.error.code,
+      // };
     },
     [getApartmentReviews.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -126,10 +126,10 @@ const apartmentsSlice = createSlice({
     },
     [getApartmentReviews.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+      // state.error = {
+      //   message: action.payload.response.data.error.message,
+      //   code: action.payload.response.data.error.code,
+      // };
     },
 
     [getSingleApartment.fulfilled]: (state, action) => {
@@ -141,10 +141,11 @@ const apartmentsSlice = createSlice({
     },
     [getSingleApartment.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+      console.log(action.payload);
+      // state.error = {
+      //   message: action.payload.response.data.error.message,
+      //   code: action.payload.response.data.error.code,
+      // };
     },
     //? add review
     [addReview.fulfilled]: (state, action) => {

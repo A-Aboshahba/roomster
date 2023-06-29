@@ -11,7 +11,10 @@ const address = new mongoose.Schema(
 
 const image = new mongoose.Schema(
   {
-    url: { type: String, default: "" },
+    url: {
+      type: String,
+      default: "",
+    },
     publicId: { type: String, default: "" },
   },
   { _id: false }

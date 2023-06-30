@@ -24,7 +24,6 @@ let port = process.env.PORT || 8080;
 server.use(express.json());
 server.use(morgan("common"));
 server.use(
-
   cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -67,23 +66,21 @@ server.use("/reviews", reviewRouter);
 
 //######################### Create a PaymentIntent with the order amount and currency######################################
 
-server.post("/create-payment-intent",
-async (req, res) => {
-// Create a PaymentIntent with the order amount and currency
-const {amount,currency}=req.body;
-console.log(amount);
-const paymentIntent = await stripe.paymentIntents.create({
+server.post("/create-payment-intent", async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const { amount, currency } = req.body;
+  console.log(amount);
+  const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: currency,
     automatic_payment_methods: {
-    enabled: true,
+      enabled: true,
     },
   });
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
-}
-);
+});
 //#######################################################################
 server.use((request, response, next) => {
   response.status(404).json({ message: "Page Not Found..!" });

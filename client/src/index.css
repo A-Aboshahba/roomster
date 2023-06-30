@@ -144,3 +144,17 @@
 .swal2-container.swal2-center.swal2-backdrop-show {
   z-index: 10000;
 }
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+/* Target the scrollbar thumb */
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #0695ff;
+}

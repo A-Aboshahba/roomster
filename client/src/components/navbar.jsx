@@ -22,7 +22,7 @@ import Logout from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ResetRedux } from "../store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +32,8 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
+import { Badge, ListItemAvatar, ListSubheader, Popover } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,16 +42,18 @@ function Navbar(props) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const open = Boolean(anchorEl);
-
+  const [anchorNotification, setAnchorNotification] = useState(null);
+  const openNotification = Boolean(anchorNotification);
+  const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
   // console.log(user)
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const handleCloseLanguage = () => {
     setAnchorLanguage(null);
   };
@@ -59,6 +63,12 @@ function Navbar(props) {
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+  const handleNotificationOpen = (event) => {
+    setAnchorNotification(event.currentTarget);
+  };
+  const handleNotificationClose = () => {
+    setAnchorNotification(null);
   };
 
   const profileComponent = (
@@ -139,6 +149,7 @@ function Navbar(props) {
               handleClose();
               localStorage.clear();
               dispatch(ResetRedux());
+              props.socket.current.disconnect();
               navigate("/home");
             }}
           >
@@ -322,6 +333,14 @@ function Navbar(props) {
                 </Button>
               </Link>
             ))}
+            <IconButton
+              aria-label="show notifications"
+              onClick={handleNotificationOpen}
+              sx={{ color: "#000" }}>
+              <Badge badgeContent={1} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
 
             {/* icon dark mode  */}
             <ModeNightIcon
@@ -410,12 +429,47 @@ function Navbar(props) {
           {drawer}
         </Drawer>
       </Box>
+      <Popover
+        open={openNotification}
+        anchorEl={anchorNotification}
+        onClose={handleNotificationClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}>
+        <ListSubheader>Notifications</ListSubheader>
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 400,
+            bgcolor: "background.paper",
+            position: "relative",
+            overflow: "auto",
+            maxHeight: 400,
+            "& ul": { padding: 10 },
+          }}>
+          <Box component={"div"} sx={{ my: 2, px: 3 }} className="betweenItem">
+            <ListItemAvatar>
+              <Avatar>W</Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary="William"
+              secondary="invited you to join his trip "
+            />
+          </Box>
+        </List>
+      </Popover>
     </Box>
   );
 }
 
 Navbar.propTypes = {
   window: PropTypes.func,
+  socket: PropTypes.any,
 };
 
 export default Navbar;

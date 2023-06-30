@@ -124,7 +124,7 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.apartments.Push(...action.payload);
+      state.apartments.push(...action.payload);
     },
     [loadMoreApartments.pending]: (state) => {
       state.status = "loading";

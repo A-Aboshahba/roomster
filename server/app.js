@@ -2,6 +2,9 @@ require("./models/userModel");
 require("./models/apartmentModel");
 require("./models/reviewModel");
 require("./models/reservationModel");
+require("./models/notificationModel");
+// require("./models/conversationModel");
+// require("./models/messageModel");
 const express = require("express");
 const cors = require("cors");
 // const multer = require("multer");
@@ -12,8 +15,11 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
+const notificationRoute = require("./routes/notificationRoute");
 const stripe = require("stripe")(process.env.stripe_client_secret);
 const server = express();
+const socketio = require("socket.io");
+const { handleConnection } = require("./socket-io/socket");
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
@@ -48,12 +54,24 @@ server.use(function (req, res, next) {
 });
 
 //####__server_and_db_initialization__########################################
+let users = [];
+
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("DB Connected ");
-    server.listen(port, () => {
+    const expressServer = server.listen(port, () => {
       console.log(`server is listening at port: ${port}`);
+    });
+    // console.log("expressServer", expressServer);
+    const io = socketio(expressServer, {
+      cors: {
+        origin: "http://localhost:5173",
+        // methods: ["GET", "POST"],
+      },
+    });
+    io.on("connection", (socket) => {
+      handleConnection(io, socket, users);
     });
   })
   .catch((error) => console.log(error));
@@ -63,6 +81,7 @@ server.use("/auth", authRoute);
 server.use("/user", userRoute);
 server.use("/apartments", apartmentRouter);
 server.use("/reviews", reviewRouter);
+server.use("/notifications", notificationRoute);
 
 //######################### Create a PaymentIntent with the order amount and currency######################################
 

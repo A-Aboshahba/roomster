@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { motion } from "framer-motion";
 
-
 // mui icons
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -28,6 +27,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 import { useNavigate } from "react-router";
+import "sweetalert2/src/sweetalert2.scss";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 // eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location }) => {
   const navigate = useNavigate();
@@ -68,121 +69,145 @@ const CarouselCard = ({ location }) => {
     dispatch(deleteFavorite({ userId: user._id, location: location }));
     setIsFavorite((prev) => !prev);
   };
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want delete review",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await dispatch(
+            deleteFavorite({ userId: user._id, location: location })
+          );
+          Swal.fire("Deleted!", "Your review has been deleted.", "success");
+          e.target.closest(".reviewCard").remove();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
+
   return (
-    <motion.div  whileHover={{ scale: 1.05 }}>
-    <Box 
-      className="carouselCard"
-      sx={{
-        flexGrow: 1,
-        position: "relative",
-      }}>
-      <Box sx={fixedIcon} style={{ cursor: "pointer" }}>
-        {wishListPage ? (
-          <AiTwotoneDelete
-            size={30}
-            fill="#8e0707"
-            onClick={(e) => {
-              dispatch(
-                deleteFavorite({ userId: user._id, location: location })
+    <motion.div whileHover={{ scale: 1.05 }}>
+      <Box
+        className="carouselCard"
+        sx={{
+          flexGrow: 1,
+          position: "relative",
+        }}
+      >
+        <Box sx={fixedIcon} style={{ cursor: "pointer" }}>
+          {wishListPage ? (
+            <AiTwotoneDelete
+              size={30}
+              fill="#8e0707"
+              onClick={(e) => handleDelete()}
+            />
+          ) : isFavorite ? (
+            <AiFillHeart
+              size={24}
+              color="#fff"
+              fill="#b12929"
+              onClick={(e) => disLike()}
+            />
+          ) : (
+            <FaRegHeart
+              size={24}
+              color="#fff"
+              onClick={(e) => {
+                if (user._id === "") {
+                  navigate("/login");
+                } else {
+                  Like();
+                }
+              }}
+            />
+          )}
+        </Box>
+
+        {location.images.length && (
+          <SwipeableViews
+            axis={"x"}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+          >
+            {location.images.map((step) => {
+              return (
+                <div key={step.publicId}>
+                  <Box
+                    component="img"
+                    sx={carouselImage}
+                    src={step.url}
+                    alt={step.publicId}
+                  ></Box>
+                </div>
               );
-            }}
-          />
-        ) : isFavorite ? (
-          <AiFillHeart
-            size={24}
-            color="#fff"
-            fill="#b12929"
-            onClick={(e) => disLike()}
-          />
-        ) : (
-          <FaRegHeart
-            size={24}
-            color="#fff"
-            onClick={(e) => {
-              if (user._id === "") {
-                navigate("/login");
-              } else {
-                Like();
-              }
-            }}
-          />
+            })}
+          </SwipeableViews>
         )}
-      </Box>
 
-      {location.images.length && (
-        <SwipeableViews
-          axis={"x"}
-          index={activeStep}
-          onChangeIndex={handleStepChange}
-          enableMouseEvents>
-          {location.images.map((step) => {
-            return (
-              <div  key={step.publicId}>
-                <Box 
-                
-                  component="img"
-                  sx={carouselImage}
-                  src={step.url}
-                  alt={step.publicId}></Box>
-              </div>
-            );
-          })}
-        </SwipeableViews>
-      )}
+        <Box sx={fixedBottom}>
+          <MobileStepper
+            sx={{ backgroundColor: "transparent" }}
+            steps={maxSteps}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              <Button
+                size="small"
+                sx={carouselDot}
+                onClick={handleNext}
+                disabled={activeStep === maxSteps - 1}
+              >
+                <KeyboardArrowRight />
+              </Button>
+            }
+            backButton={
+              <Button
+                size="small"
+                sx={carouselDot}
+                onClick={handleBack}
+                disabled={activeStep === 0}
+              >
+                <KeyboardArrowLeft />
+              </Button>
+            }
+          />
+        </Box>
 
-      <Box sx={fixedBottom}>
-        <MobileStepper
-          sx={{ backgroundColor: "transparent" }}
-          steps={maxSteps}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            <Button
-              size="small"
-              sx={carouselDot}
-              onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}>
-              <KeyboardArrowRight />
-            </Button>
-          }
-          backButton={
-            <Button
-              size="small"
-              sx={carouselDot}
-              onClick={handleBack}
-              disabled={activeStep === 0}>
-              <KeyboardArrowLeft />
-            </Button>
-          }
-        />
-      </Box>
+        <Link to={`/housingDetails/${location._id}`} className="Link">
+          <Box sx={flexBetween}>
+            <Box sx={{ mt: 2 }}>
+              <Typography component="h3"> {location.title}</Typography>
 
-      <Link to={`/housingDetails/${location._id}`} className="Link">
-        <Box sx={flexBetween}>
-          <Box sx={{ mt: 2 }}>
-            <Typography component="h3"> {location.title}</Typography>
+              {/* <Typography component="h4"> {location.days}</Typography> */}
 
-            {/* <Typography component="h4"> {location.days}</Typography> */}
-
-            <Typography component="h5"> {location.price}</Typography>
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <Box sx={dFlex}>
-              {location.isNew ? (
-                <>
-                  <Typography component="h5">New</Typography>
-                  <AiFillStar size={18} />
-                </>
-              ) : (
-                <>
-                  <AiFillStar size={18} />
-                </>
-              )}
+              <Typography component="h5"> {location.price}</Typography>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <Box sx={dFlex}>
+                {location.isNew ? (
+                  <>
+                    <Typography component="h5">New</Typography>
+                    <AiFillStar size={18} />
+                  </>
+                ) : (
+                  <>
+                    <AiFillStar size={18} />
+                  </>
+                )}
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Link>
-    </Box>
+        </Link>
+      </Box>
     </motion.div>
   );
 };

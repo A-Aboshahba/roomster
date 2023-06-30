@@ -8,6 +8,8 @@ import { grey } from "@mui/material/colors";
 import store from "./store/store.jsx";
 import { Provider } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
+import "sweetalert2/src/sweetalert2.scss";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 let theme = createTheme({
   palette: {
@@ -17,7 +19,7 @@ let theme = createTheme({
     secondary: {
       main: grey[50],
     },
-    // mode:'dark'
+    // mode: "dark",
   },
 });
 

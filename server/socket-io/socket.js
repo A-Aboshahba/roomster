@@ -1,6 +1,19 @@
+// const addUser = (users, userId, socketId) => {
+//   !users.some((user) => user.userId === userId) &&
+//     users.push({ userId, socketId });
+
+// };
 const addUser = (users, userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
+  const userExists = users.some((user) => user.userId === userId);
+  if (!userExists) {
     users.push({ userId, socketId });
+  } else {
+    users.forEach((user) => {
+      if (user.userId === userId) {
+        user.socketId = socketId;
+      }
+    });
+  }
 };
 
 const removeUser = (users, socketId) => {

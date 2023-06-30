@@ -80,7 +80,7 @@ const userSlice = createSlice({
         return item._id === action.payload._id;
       });
       state.user.favourites.splice(index, 1);
-      toastMessage("success", "Delete Successfully 👏");
+      // toastMessage("success", "Delete Successfully 👏");
     },
   },
 });

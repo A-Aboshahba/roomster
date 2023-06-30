@@ -82,6 +82,25 @@ export const addReview = createAsyncThunk(
     }
   }
 );
+export const updateReview = createAsyncThunk(
+  "apartments/updateReview",
+  async (data, thunkAPI) => {
+    const { apartments, user } = thunkAPI.getState();
+    try {
+      const { reviewId } = { ...data };
+      data.apartmentId = apartments.singleApartment._id;
+      data.userId = user.user._id;
+      delete data.reviewId;
+      const response = await Roomster.patch(`reviews/${reviewId}`, data);
+      response.data.userId = { ...user.user };
+      delete data.apartmentId;
+      delete data.userId;
+      return { reviewId, data };
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
 
 const apartmentsSlice = createSlice({
   name: "apartments",
@@ -97,10 +116,11 @@ const apartmentsSlice = createSlice({
     },
     [getApartments.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+   //   state.error = {
+//message: action.payload.response.data.error.message,
+    //    code: action.payload.response.data.error.code,
+     // };
+
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -111,10 +131,11 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
+      //state.error = {
+        //message: action.payload.response.data.error.message,
+       // code: action.payload.response.data.error.code,
       };
+
     },
     [getApartmentReviews.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -141,15 +162,29 @@ const apartmentsSlice = createSlice({
     },
     [getSingleApartment.rejected]: (state, action) => {
       state.status = "failed";
-      state.error = {
-        message: action.payload.response.data.error.message,
-        code: action.payload.response.data.error.code,
-      };
+      // state.error = {
+      //   message: action.payload.response.data.error.message,
+      //   code: action.payload.response.data.error.code,
+      // };
     },
     //? add review
     [addReview.fulfilled]: (state, action) => {
       toastMessage("success", "Added Successfully");
       state.reviews.push(action.payload);
+    },
+    //? update review
+    [updateReview.fulfilled]: (state, action) => {
+      toastMessage("success", "Edit Successfully");
+      const { reviewId, data } = action.payload;
+      console.log(data);
+      state.reviews = state.reviews.map((review) => {
+        if (review._id === reviewId) {
+          console.log("found it");
+          return { ...review, ...data };
+        }
+        return review;
+      });
+      // state.reviews.push(action.payload);
     },
   },
 });

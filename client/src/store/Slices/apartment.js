@@ -116,11 +116,10 @@ const apartmentsSlice = createSlice({
     },
     [getApartments.rejected]: (state, action) => {
       state.status = "failed";
-   //   state.error = {
-//message: action.payload.response.data.error.message,
-    //    code: action.payload.response.data.error.code,
-     // };
-
+      //   state.error = {
+      //message: action.payload.response.data.error.message,
+      //    code: action.payload.response.data.error.code,
+      // };
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -132,10 +131,9 @@ const apartmentsSlice = createSlice({
     [loadMoreApartments.rejected]: (state, action) => {
       state.status = "failed";
       //state.error = {
-        //message: action.payload.response.data.error.message,
-       // code: action.payload.response.data.error.code,
-      };
-
+      //message: action.payload.response.data.error.message,
+      // code: action.payload.response.data.error.code,
+      // };
     },
     [getApartmentReviews.fulfilled]: (state, action) => {
       state.status = "succeeded";

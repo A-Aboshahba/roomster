@@ -70,7 +70,8 @@ function Navbar(props) {
             size="large"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}>
+            aria-expanded={open ? "true" : undefined}
+          >
             <Avatar sx={{ width: 32, height: 32 }}></Avatar>
           </IconButton>
         </Tooltip>
@@ -108,7 +109,8 @@ function Navbar(props) {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
         {user._id !== "" ? (
           <Link to="profile">
             <MenuItem onClick={handleClose}>
@@ -138,7 +140,8 @@ function Navbar(props) {
               localStorage.clear();
               dispatch(ResetRedux());
               navigate("/home");
-            }}>
+            }}
+          >
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
@@ -153,7 +156,8 @@ function Navbar(props) {
             to={"/register"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>
@@ -168,7 +172,8 @@ function Navbar(props) {
             to={"/login"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <ListItemIcon>
               <LoginIcon fontSize="small" />
             </ListItemIcon>
@@ -183,7 +188,8 @@ function Navbar(props) {
             to={"/help"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <Divider />
             <ListItemIcon>
               <HelpOutlineOutlinedIcon fontSize="small" />
@@ -209,7 +215,8 @@ function Navbar(props) {
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => console.log("first")}
-                sx={{ textAlign: "center" }}>
+                sx={{ textAlign: "center" }}
+              >
                 <ListItemText primary={item} />
               </ListItemButton>
             </ListItem>
@@ -241,7 +248,8 @@ function Navbar(props) {
             onClick={() => {
               localStorage.clear();
               dispatch(ResetRedux());
-            }}>
+            }}
+          >
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="LogOut" />
             </ListItemButton>
@@ -291,19 +299,22 @@ function Navbar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}>
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          >
             <img src={image} className="logo" />
           </Typography>
 
           <Box
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            className="center">
+            className="center"
+          >
             {navItems.map((item) => (
               <Link to={item} key={item}>
                 <Button component="div" size="large" sx={{ color: "#000" }}>
@@ -330,7 +341,8 @@ function Navbar(props) {
                   display: "flex",
                   alignItems: "center",
                   textAlign: "center",
-                }}></Box>
+                }}
+              ></Box>
               <Menu
                 anchorEl={anchorLanguage}
                 id="language-menu"
@@ -364,7 +376,8 @@ function Navbar(props) {
                   },
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
                 <MenuItem onClick={handleClose}>English</MenuItem>
                 <MenuItem onClick={handleClose}>Arabic</MenuItem>
               </Menu>
@@ -392,7 +405,8 @@ function Navbar(props) {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}>
+          }}
+        >
           {drawer}
         </Drawer>
       </Box>

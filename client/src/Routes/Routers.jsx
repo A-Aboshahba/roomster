@@ -7,10 +7,11 @@ import HousingDetails from "../pages/housingDetails/housingDetails";
 import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
+import MessagePage from "../pages/messagePage/MessagePage";
 import UserGuard from "../Gurd/UserGurd";
 import UserApartments from "../pages/userApartments/UserApartments";
 
-import ConfirmationPage  from "../pages/ConfirmationPage ";
+import ConfirmationPage from "../pages/ConfirmationPage ";
 
 function Routers() {
   return (
@@ -43,6 +44,14 @@ function Routers() {
         }
       />
       <Route
+        path="Message"
+        element={
+          // <UserGuard>
+          <MessagePage />
+          // </UserGuard>
+        }
+      />
+      <Route
         path="apartment/modify"
         element={
           <UserGuard>
@@ -70,7 +79,7 @@ function Routers() {
         path="success"
         element={
           <UserGuard>
-            <ConfirmationPage  />
+            <ConfirmationPage />
           </UserGuard>
         }
       />

@@ -35,6 +35,7 @@ const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
 import { Badge, ListItemAvatar, ListSubheader, Popover } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Roomster from "../API/config";
 
 function Navbar(props) {
   console.log(props.notifications)
@@ -72,9 +73,8 @@ function Navbar(props) {
   const handleNotificationClose = () => {
     setAnchorNotification(null);
   };
-  const handelSeen= ()=>
-  {
-
+  const handelSeen = () => {
+    Roomster.post('')
   }
 
   const profileComponent = (
@@ -315,7 +315,7 @@ function Navbar(props) {
           <IconButton
             aria-label="open drawer"
             edge="start"
-            onClick={()=>{handleDrawerToggle();handelSeen()}}
+            onClick={() => { handleDrawerToggle(); handelSeen() }}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
@@ -343,7 +343,7 @@ function Navbar(props) {
               aria-label="show notifications"
               onClick={handleNotificationOpen}
               sx={{ color: "#000" }}>
-              <Badge badgeContent={1} color="error">
+              <Badge badgeContent={props.notifications?.noOfUnseen > 1 ? props.notifications?.noOfUnseen : 0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

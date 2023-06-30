@@ -68,7 +68,7 @@ mongoose
     // console.log("expressServer", expressServer);
     const io = socketio(expressServer, {
       cors: {
-        origin: "http://localhost:5173",
+        origin: "*",
         // methods: ["GET", "POST"],
       },
     });

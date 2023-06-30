@@ -15,14 +15,14 @@ import { io } from "socket.io-client";
 
 function App() {
   const dispatch = useDispatch();
-  // const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const socket = useRef();
-  // useEffect(() => {
-  //   if (user._id !== "") {
-  //     socket.current = io("http://localhost:8080");
-  //     socket.current.emit("addUser", user._id);
-  //   }
-  // }, [user._id]);
+  useEffect(() => {
+    if (user._id !== "") {
+      socket.current = io("http://localhost:8080");
+      socket.current.emit("addUser", user._id);
+    }
+  }, [user._id]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,8 +31,8 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
-      socket.current = io("http://localhost:8080");
-      socket.current.emit("addUser", userId);
+      // socket.current = io("http://localhost:8080");
+      // socket.current.emit("addUser", userId);
     }
   }, [dispatch]);
 

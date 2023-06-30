@@ -1,8 +1,20 @@
-const addUser = (users, userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
-};
+// const addUser = (users, userId, socketId) => {
+//   !users.some((user) => user.userId === userId) &&
+//     users.push({ userId, socketId });
 
+// };
+const addUser = (users, userId, socketId) => {
+  const userExists = users.some((user) => user.userId === userId);
+  if (!userExists) {
+    users.push({ userId, socketId });
+  } else {
+    users.forEach((user) => {
+      if (user.userId === userId) {
+        user.socketId = socketId;
+      }
+    });
+  }
+};
 const removeUser = (users, socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
   console.log("removed user", users);
@@ -14,7 +26,7 @@ const getUser = (users, userId) => {
 //////////////////////
 
 const handleConnection = (io, socket, users) => {
-  console.log("a user connected.", socket.id, users);
+  console.log("a user connected.", socket.id);
 
   socket.on("addUser", (userId) => {
     addUser(users, userId, socket.id);

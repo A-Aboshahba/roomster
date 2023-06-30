@@ -5,13 +5,12 @@ import Avatar from "@mui/material/Avatar";
 import moment from "moment";
 import Typography from "@mui/material/Typography";
 import { Rating } from "@mui/material";
-import { AiTwotoneDelete } from "react-icons/ai";
-import { Box } from "@mui/system";
-import Swal from "sweetalert2/dist/sweetalert2.js";
-import "sweetalert2/src/sweetalert2.scss";
-import axios from "axios";
 import Roomster from "../../API/config";
 import { useSelector } from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditReview from "./EditReview";
+import "sweetalert2/src/sweetalert2.scss";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 export default function CardReview({ item }) {
   const { user } = useSelector((state) => state.user);
   const handleDelete = (e, reviewId, userId) => {
@@ -46,19 +45,6 @@ export default function CardReview({ item }) {
       className="reviewCard"
       sx={{ mb: 4, boxShadow: 0, position: "relative" }}
     >
-      {item?.userId?.email === user?.email && (
-        <AiTwotoneDelete
-          size={30}
-          fill="#8e0707"
-          onClick={(e) => handleDelete(e, item._id, item.userId._id)}
-          style={{
-            position: "absolute",
-            right: "0",
-            top: "-50px",
-            cursor: "pointer",
-          }}
-        />
-      )}
       <CardHeader
         avatar={
           <Avatar
@@ -72,7 +58,11 @@ export default function CardReview({ item }) {
         title={`${item.userId?.fullName}`}
         subheader={`${moment(item.updatedAt).format("MMM YYYY")}`}
       />
-      <CardContent>
+      <CardContent
+        style={{
+          position: "relative",
+        }}
+      >
         <Rating
           name="half-rating-read"
           defaultValue={2.5}
@@ -80,6 +70,26 @@ export default function CardReview({ item }) {
           readOnly
           value={item.rate}
         />
+        {item?.userId?._id == user._id && (
+          <div
+            style={{
+              position: "absolute",
+              right: "0",
+              top: "-50px",
+              cursor: "pointer",
+            }}
+          >
+            <DeleteIcon
+              size={30}
+              onClick={(e) => handleDelete(e, item._id, item.userId._id)}
+              sx={{
+                color: "red",
+              }}
+            />
+            <EditReview item={item} />
+          </div>
+        )}
+
         <Typography variant="body2" color="text.secondary">
           {item.description}
         </Typography>

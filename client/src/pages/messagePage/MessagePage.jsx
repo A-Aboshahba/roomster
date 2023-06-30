@@ -76,7 +76,7 @@ function MessagePage() {
             </div>
 
             <div
-              className="box-bottom"
+              className="messages-bottom"
               //   style={{ padding: "10px 10px 10px 10px" }}
             >
               <Paper elevation={3}>
@@ -98,6 +98,7 @@ function MessagePage() {
                   </Grid>
                   <Grid item xs={2}>
                     <Button
+                      color="info"
                       variant="contained"
                       endIcon={<SendIcon />}
                       sx={{ color: "white", width: "90%", marginLeft: "10px" }}

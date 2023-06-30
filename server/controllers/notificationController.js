@@ -4,6 +4,7 @@ const Notification = mongoose.model("Notifications");
 const Users = mongoose.model("Users");
 
 exports.getAll = (request, response, next) => {
+  let documents = "";
   const apiFeature = new ApiFeature(
     Notification.find({ receiverId: request.params.id }).populate({
       path: "senderId",
@@ -24,8 +25,18 @@ exports.getAll = (request, response, next) => {
         error.statusCode = 404;
         throw error;
       }
-
-      response.status(200).json({ data: docs, page: apiFeature.page });
+      documents = docs;
+      return Notification.countDocuments({
+        receiverId: request.params.id,
+        seen: false,
+      });
+    })
+    .then((count) => {
+      response.status(200).json({
+        data: documents,
+        page: apiFeature.page,
+        noOfUnseen: count,
+      });
     })
     .catch((err) => next(err));
 };
@@ -64,50 +75,3 @@ exports.makeAllSeen = (request, response, next) => {
       next(err);
     });
 };
-
-// exports.getApartmentReviews = (request, response, next) => {
-//   const apiFeature = new ApiFeature(
-//     Review.find({ apartmentId: request.params.id })
-//       .populate({
-//         path: "userId",
-//         // select: { fullName: 1, email: 1, _id: 0 },
-//       })
-//       .populate({ path: "apartmentId" }),
-//     request.query
-//   );
-
-//   apiFeature
-//     .paginate()
-//     .mongooseQuery.then((docs) => {
-//       let totalReveiws = 0;
-//       if (!docs) {
-//         let error = new Error("there're no reviews  to show");
-//         error.statusCode = 404;
-//         throw error;
-//       }
-//       docs.forEach((review) => {
-//         totalReveiws += review.rate;
-//       });
-//       response.status(200).json({
-//         data: docs,
-//         page: apiFeature.page,
-//         totalRate: (totalReveiws / docs.length).toFixed(2),
-//       });
-//     })
-//     .catch((err) => next(err));
-// };
-
-// exports.deleteReview = (request, response, next) => {
-//   Review.deleteOne({ _id: request.params.id })
-//     .then((doc) => {
-//       if (doc.matchedCount == 0) {
-//         let error = new Error("this review doesn't exist");
-//         error.statusCode = 404;
-//         throw error;
-//       }
-//       response.status(200).json({ message: " review is deleted successfully" });
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// };

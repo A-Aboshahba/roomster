@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/notificationController");
-const validator = require("./../middelwares/validators/notificationValidator");
+const controller = require("../controllers/messageController");
+const validator = require("./../middelwares/validators/messageValidator");
 const validationError = require("./../middelwares/validators/validationError");
 const authMiddleware = require("./../middelwares/authenicatedMW");
 
@@ -9,20 +9,15 @@ router
   .route("/:id")
   .get(
     authMiddleware.verifyTokenAndAuthorization,
-    validator.getAll,
+    validator.getConvoMessages,
     validationError,
-    controller.getAll
+    controller.getConvoMessages
   )
   .post(
     authMiddleware.verifyTokenAndAuthorization,
-    validator.addNewNotification,
+    validator.addNewMessage,
     validationError,
-    controller.addNewNotification
-  )
-  .patch(
-    authMiddleware.verifyTokenAndAuthorization,
-    validator.makeAllSeen,
-    validationError,
-    controller.makeAllSeen
+    controller.addNewMessage
   );
+
 module.exports = router;

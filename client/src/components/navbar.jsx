@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -36,6 +37,7 @@ import { Badge, ListItemAvatar, ListSubheader, Popover } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 function Navbar(props) {
+  console.log(props.notifications)
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
@@ -44,7 +46,7 @@ function Navbar(props) {
   const open = Boolean(anchorEl);
   const [anchorNotification, setAnchorNotification] = useState(null);
   const openNotification = Boolean(anchorNotification);
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
   // console.log(user)
 
@@ -70,6 +72,10 @@ function Navbar(props) {
   const handleNotificationClose = () => {
     setAnchorNotification(null);
   };
+  const handelSeen= ()=>
+  {
+
+  }
 
   const profileComponent = (
     <>
@@ -309,7 +315,7 @@ function Navbar(props) {
           <IconButton
             aria-label="open drawer"
             edge="start"
-            onClick={handleDrawerToggle}
+            onClick={()=>{handleDrawerToggle();handelSeen()}}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />

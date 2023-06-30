@@ -7,15 +7,17 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice.jsx";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
 import Footer from "./components/Footer/Footer";
 import { io } from "socket.io-client";
+import Roomster from "./API/config.jsx";
 
 function App() {
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.user);
+  const [notifications, setNotifications] = useState(null)
   const socket = useRef();
   // useEffect(() => {
   //   if (user._id !== "") {
@@ -38,12 +40,14 @@ function App() {
 
   useEffect(() => {
     const getNotifications = async () => {
-      // const notifications
+      const  {data}  = await Roomster.get(`notifications/${'647bc39625b8e3a36759d3b4'}`)
+      setNotifications(data)
     };
+    getNotifications()
   }, []);
   return (
     <BrowserRouter>
-      <Navbar socket={socket} />
+      <Navbar socket={socket} notifications={notifications} />
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers />
       </Container>

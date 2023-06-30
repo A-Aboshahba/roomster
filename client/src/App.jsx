@@ -5,16 +5,25 @@ import "./App.css";
 import Routers from "./Routes/Routers.jsx";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "./store/Slices/userSlice.jsx";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
 import Footer from "./components/Footer/Footer";
+import { io } from "socket.io-client";
 
 function App() {
   const dispatch = useDispatch();
-  
+  // const { user } = useSelector((state) => state.user);
+  const socket = useRef();
+  // useEffect(() => {
+  //   if (user._id !== "") {
+  //     socket.current = io("http://localhost:8080");
+  //     socket.current.emit("addUser", user._id);
+  //   }
+  // }, [user._id]);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -22,12 +31,19 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
+      socket.current = io("http://localhost:8080");
+      socket.current.emit("addUser", userId);
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    const getNotifications = async () => {
+      // const notifications
+    };
+  }, []);
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar socket={socket} />
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers />
       </Container>

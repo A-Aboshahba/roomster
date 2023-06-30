@@ -40,6 +40,7 @@ const verifyTokenAndAuthorization = (request, respsone, next) => {
   verifyToken(request, respsone, () => {
     if (
       request.accessToken._id === request.params.id ||
+      request.accessToken._id === request.params.userId ||
       request.accessToken._id === request.body.userId ||
       request.accessToken.isAdmin
     ) {

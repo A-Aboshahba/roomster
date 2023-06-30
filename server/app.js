@@ -3,8 +3,8 @@ require("./models/apartmentModel");
 require("./models/reviewModel");
 require("./models/reservationModel");
 require("./models/notificationModel");
-// require("./models/conversationModel");
-// require("./models/messageModel");
+require("./models/conversationModel");
+require("./models/messageModel");
 const express = require("express");
 const cors = require("cors");
 // const multer = require("multer");
@@ -16,6 +16,8 @@ const userRoute = require("./routes/userRoute");
 const apartmentRouter = require("./routes/apartmentRoute");
 const reviewRouter = require("./routes/reviewRoute");
 const notificationRoute = require("./routes/notificationRoute");
+const conversationRoute = require("./routes/conversationRoute");
+const messageRoute = require("./routes/messageRoute");
 const stripe = require("stripe")(process.env.stripe_client_secret);
 const server = express();
 const socketio = require("socket.io");
@@ -82,6 +84,8 @@ server.use("/user", userRoute);
 server.use("/apartments", apartmentRouter);
 server.use("/reviews", reviewRouter);
 server.use("/notifications", notificationRoute);
+server.use("/conversations", conversationRoute);
+server.use("/messages", messageRoute);
 
 //######################### Create a PaymentIntent with the order amount and currency######################################
 

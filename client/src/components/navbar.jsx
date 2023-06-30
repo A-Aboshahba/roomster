@@ -38,7 +38,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Roomster from "../API/config";
 
 function Navbar(props) {
-  console.log(props.notifications)
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
@@ -73,7 +72,8 @@ function Navbar(props) {
   const handleNotificationClose = () => {
     setAnchorNotification(null);
   };
-  const handelSeen = () => {
+  const handelSeen= ()=>
+  {
     Roomster.post('')
   }
 
@@ -315,7 +315,7 @@ function Navbar(props) {
           <IconButton
             aria-label="open drawer"
             edge="start"
-            onClick={() => { handleDrawerToggle(); handelSeen() }}
+            onClick={()=>{handleDrawerToggle();handelSeen()}}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />

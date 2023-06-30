@@ -16,15 +16,15 @@ import Roomster from "./API/config.jsx";
 
 function App() {
   const dispatch = useDispatch();
-  // const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const [notifications, setNotifications] = useState(null)
   const socket = useRef();
-  // useEffect(() => {
-  //   if (user._id !== "") {
-  //     socket.current = io("http://localhost:8080");
-  //     socket.current.emit("addUser", user._id);
-  //   }
-  // }, [user._id]);
+  useEffect(() => {
+    if (user._id !== "") {
+      socket.current = io("http://localhost:8080");
+      socket.current.emit("addUser", user._id);
+    }
+  }, [user._id]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,14 +33,12 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
-      socket.current = io("http://localhost:8080");
-      socket.current.emit("addUser", userId);
     }
   }, [dispatch]);
 
   useEffect(() => {
     const getNotifications = async () => {
-      const  {data}  = await Roomster.get(`notifications/${'647bc39625b8e3a36759d3b4'}`)
+      const  {data}  = await Roomster.get(`notifications/${'647bc39f25b8e3a36759d3b6'}`)
       setNotifications(data)
     };
     getNotifications()

@@ -33,11 +33,17 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
 const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
-import { Badge, ListItemAvatar, ListSubheader, Popover } from "@mui/material";
+import {
+  Badge,
+  CircularProgress,
+  ListItemAvatar,
+  ListSubheader,
+  Popover,
+} from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Roomster from "../API/config";
 
-function Navbar(props) {
+function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorLanguage, setAnchorLanguage] = useState(null);
   const openLanguage = Boolean(anchorLanguage);
@@ -46,6 +52,11 @@ function Navbar(props) {
   const open = Boolean(anchorEl);
   const [anchorNotification, setAnchorNotification] = useState(null);
   const openNotification = Boolean(anchorNotification);
+  const [unseenNumber, setUnseenNumber] = useState(null);
+  const [unseenConversations, setUnseenConversations] = useState([]);
+  const socket = useSelector((state) => {
+    return state.user?.socket;
+  });
   // const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
   // console.log(user)
@@ -60,7 +71,6 @@ function Navbar(props) {
     setAnchorLanguage(null);
   };
 
-  const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -72,11 +82,82 @@ function Navbar(props) {
   const handleNotificationClose = () => {
     setAnchorNotification(null);
   };
-  const handelSeen= ()=>
-  {
-    Roomster.post('')
-  }
+  const handelSeen = async () => {
+    try {
+      await Roomster.patch(`notifications/${user._id}`);
+      setUnseenNumber(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const [notifications, setNotifications] = useState({ data: [] });
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    if (unseenNumber == null && user._id != "") {
+      const getNotifications = async () => {
+        const { data } = await Roomster.get(`notifications/${user._id}`);
+        if (data.noOfUnseen != 0) setUnseenNumber(data.noOfUnseen);
+        else {
+          setUnseenNumber(0); // set unseenNumber to 1 if there are no unseen notifications
+        }
+      };
+      getNotifications();
+    }
+  }, [user._id, unseenNumber]);
+  useEffect(() => {
+    socket?.on("getNotification", (notification) => {
+      setUnseenNumber(unseenNumber + 1);
+      setNotifications((prevState) => ({
+        data: [
+          { senderId: notification.sender, text: notification.text },
+          ...prevState.data,
+        ],
+      }));
+    });
+    socket?.on("getMessage", (data) => {
+      setUnseenConversations((prevState) => {
+        if (prevState.includes(data.sender._id)) {
+          return prevState;
+        }
+        return [...prevState, data.sender._id];
+      });
+      console.log(unseenConversations, data);
+    });
+  }, [socket]);
+  const fetchNotifications = async (page) => {
+    const { data } = await Roomster.get(
+      `notifications/${user._id}?limit=6&page=${page}`
+    );
+    return data;
+  };
+
+  const loadMore = async () => {
+    if (loading || !hasMore) {
+      return;
+    }
+    setLoading(true);
+    const newData = await fetchNotifications(page);
+    if (newData.data.length === 0) {
+      setHasMore(false);
+    } else {
+      setNotifications((prevState) => ({
+        data: [...prevState.data, ...newData.data],
+      }));
+      setPage(page + 1);
+    }
+    setLoading(false);
+  };
+
+  const handleScroll = (event) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    if (scrollHeight - scrollTop === clientHeight) {
+      loadMore();
+    }
+  };
   const profileComponent = (
     <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -86,8 +167,7 @@ function Navbar(props) {
             size="large"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
+            aria-expanded={open ? "true" : undefined}>
             <Avatar sx={{ width: 32, height: 32 }}></Avatar>
           </IconButton>
         </Tooltip>
@@ -125,8 +205,7 @@ function Navbar(props) {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         {user._id !== "" ? (
           <Link to="profile">
             <MenuItem onClick={handleClose}>
@@ -155,10 +234,9 @@ function Navbar(props) {
               handleClose();
               localStorage.clear();
               dispatch(ResetRedux());
-              props.socket.current.disconnect();
+              socket.disconnect();
               navigate("/home");
-            }}
-          >
+            }}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
@@ -173,8 +251,7 @@ function Navbar(props) {
             to={"/register"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>
@@ -189,8 +266,7 @@ function Navbar(props) {
             to={"/login"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <ListItemIcon>
               <LoginIcon fontSize="small" />
             </ListItemIcon>
@@ -205,8 +281,7 @@ function Navbar(props) {
             to={"/help"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <Divider />
             <ListItemIcon>
               <HelpOutlineOutlinedIcon fontSize="small" />
@@ -229,14 +304,26 @@ function Navbar(props) {
       <List>
         {navItems.map((item) => (
           <Link to={item} key={item}>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => console.log("first")}
-                sx={{ textAlign: "center" }}
-              >
-                <ListItemText primary={item} />
-              </ListItemButton>
-            </ListItem>
+            {!(item === "Message") && (
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={() => console.log("first")}
+                  sx={{ textAlign: "center" }}>
+                  <ListItemText primary={item} />
+                </ListItemButton>
+              </ListItem>
+            )}
+            {item === "Message" && (
+              <Badge badgeContent={unseenConversations.length} color="error">
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={() => console.log("first")}
+                    sx={{ textAlign: "center" }}>
+                    <ListItemText primary={item} />
+                  </ListItemButton>
+                </ListItem>
+              </Badge>
+            )}
           </Link>
         ))}
         <Divider />
@@ -265,8 +352,7 @@ function Navbar(props) {
             onClick={() => {
               localStorage.clear();
               dispatch(ResetRedux());
-            }}
-          >
+            }}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="LogOut" />
             </ListItemButton>
@@ -305,9 +391,6 @@ function Navbar(props) {
     </Box>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: "flex", mb: 10 }}>
       <AppBar component="nav" color="secondary" position="fixed">
@@ -315,35 +398,50 @@ function Navbar(props) {
           <IconButton
             aria-label="open drawer"
             edge="start"
-            onClick={()=>{handleDrawerToggle();handelSeen()}}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
+            onClick={() => {
+              handleDrawerToggle();
+              handelSeen();
+            }}
+            sx={{ mr: 2, display: { sm: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             <img src={image} className="logo" />
           </Typography>
 
           <Box
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            className="center"
-          >
+            className="center">
             {navItems.map((item) => (
               <Link to={item} key={item}>
-                <Button component="div" size="large" sx={{ color: "#000" }}>
-                  {item}
-                </Button>
+                {!(item === "Message") && (
+                  <Button component="div" size="large" sx={{ color: "#000" }}>
+                    {item}
+                  </Button>
+                )}
+                {item === "Message" && (
+                  <Badge
+                    badgeContent={unseenConversations.length}
+                    color="error">
+                    <Button component="div" size="large" sx={{ color: "#000" }}>
+                      {item}
+                    </Button>
+                  </Badge>
+                )}
               </Link>
             ))}
             <IconButton
               aria-label="show notifications"
-              onClick={handleNotificationOpen}
+              onClick={(event) => {
+                handleNotificationOpen(event);
+                handelSeen();
+                loadMore();
+              }}
               sx={{ color: "#000" }}>
-              <Badge badgeContent={props.notifications?.noOfUnseen > 1 ? props.notifications?.noOfUnseen : 0} color="error">
+              <Badge badgeContent={unseenNumber} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -366,8 +464,7 @@ function Navbar(props) {
                   display: "flex",
                   alignItems: "center",
                   textAlign: "center",
-                }}
-              ></Box>
+                }}></Box>
               <Menu
                 anchorEl={anchorLanguage}
                 id="language-menu"
@@ -401,8 +498,7 @@ function Navbar(props) {
                   },
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
                 <MenuItem onClick={handleClose}>English</MenuItem>
                 <MenuItem onClick={handleClose}>Arabic</MenuItem>
               </Menu>
@@ -417,7 +513,6 @@ function Navbar(props) {
       </AppBar>
       <Box component="nav">
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -430,8 +525,7 @@ function Navbar(props) {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Box>
@@ -451,31 +545,46 @@ function Navbar(props) {
         <List
           sx={{
             width: "100%",
+            minWidth: 300,
             maxWidth: 400,
             bgcolor: "background.paper",
             position: "relative",
             overflow: "auto",
+            paddingBottom: 7,
             maxHeight: 400,
-            "& ul": { padding: 10 },
-          }}>
-          <Box component={"div"} sx={{ my: 2, px: 3 }} className="betweenItem">
-            <ListItemAvatar>
-              <Avatar>W</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="William"
-              secondary="invited you to join his trip "
-            />
-          </Box>
+            "& ul": { paddingBottom: 0 },
+          }}
+          onScroll={handleScroll}>
+          {notifications?.data.map((notification, index) => {
+            return (
+              <Box
+                key={index}
+                component={"div"}
+                sx={{ my: 2, px: 3 }}
+                className="betweenItem">
+                <ListItemAvatar>
+                  <Avatar
+                    alt={notification.senderId.fullName}
+                    src={notification.senderId.image.url}></Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={notification.senderId.fullName}
+                  secondary={notification.text}
+                />
+              </Box>
+            );
+          })}
+          {loading && (
+            <div className="centerItem">
+              <CircularProgress />
+            </div>
+          )}{" "}
         </List>
       </Popover>
     </Box>
   );
 }
 
-Navbar.propTypes = {
-  window: PropTypes.func,
-  socket: PropTypes.any,
-};
+Navbar.propTypes = {};
 
 export default Navbar;

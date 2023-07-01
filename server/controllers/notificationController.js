@@ -6,10 +6,12 @@ const Users = mongoose.model("Users");
 exports.getAll = (request, response, next) => {
   let documents = "";
   const apiFeature = new ApiFeature(
-    Notification.find({ receiverId: request.params.id }).populate({
-      path: "senderId",
-      select: { password: 0 },
-    }),
+    Notification.find({ receiverId: request.params.id })
+      .sort({ _id: -1 })
+      .populate({
+        path: "senderId",
+        select: { password: 0 },
+      }),
     // .populate({
     //   path: "receiverId",
     //   select: { password: 0 },

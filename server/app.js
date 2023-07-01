@@ -25,8 +25,8 @@ const { handleConnection } = require("./socket-io/socket");
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
-let port = process.env.PORT || 3030;
-// let port = process.env.PORT || 8080;
+// let port = process.env.PORT || 3030;
+let port = process.env.PORT || 8080;
 
 //############################################################################
 server.use(express.json());
@@ -68,7 +68,7 @@ mongoose
     // console.log("expressServer", expressServer);
     const io = socketio(expressServer, {
       cors: {
-        origin: "http://localhost:5173",
+        origin: "*",
         // methods: ["GET", "POST"],
       },
     });

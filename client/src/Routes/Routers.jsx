@@ -48,7 +48,9 @@ function Routers({ socket }) {
         path="Message"
         element={
           // <UserGuard>
-          <MessagePage socket={socket} />
+          <MessagePage
+          // socket={socket}
+          />
           // </UserGuard>
         }
       />

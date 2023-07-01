@@ -11,7 +11,7 @@ import { px } from "framer-motion";
 import { Stack, padding } from "@mui/system";
 function Message({ own, message }) {
   const [online, setOnline] = useState(true);
-  console.log("message", message);
+  // console.log("message", message);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       backgroundColor: online ? "#44b700" : "#eee",

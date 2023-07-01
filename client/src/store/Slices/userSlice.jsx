@@ -43,6 +43,7 @@ const initialState = {
   },
   loading: false,
   error: null,
+  socket: null,
 };
 
 const userSlice = createSlice({
@@ -53,7 +54,9 @@ const userSlice = createSlice({
       state.loading = false;
       state.user = { ...action.payload };
     },
-
+    setSocket: (state, action) => {
+      state.socket = action.payload;
+    },
     ResetRedux: () => initialState,
   },
   extraReducers: {
@@ -85,5 +88,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { addInfo, ResetRedux } = userSlice.actions;
+export const { addInfo, ResetRedux, setSocket } = userSlice.actions;
 export default userSlice.reducer;

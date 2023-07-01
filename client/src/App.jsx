@@ -6,7 +6,7 @@ import Routers from "./Routes/Routers.jsx";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "./store/Slices/userSlice.jsx";
+import { fetchUser, setSocket } from "./store/Slices/userSlice.jsx";
 import { useEffect, useRef, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
@@ -18,13 +18,14 @@ function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const [notifications, setNotifications] = useState(null);
-  const socket = useRef();
-  useEffect(() => {
-    if (user._id !== "") {
-      socket.current = io("http://localhost:3030");
-      socket.current.emit("addUser", user._id);
-    }
-  }, [user._id]);
+  // useEffect(() => {
+  //   if (user._id !== "") {
+  //     const socket = io("http://localhost:8080");
+  //     socket.emit("addUser", user._id);
+  //     dispatch(setSocket(socket));
+  //     console.log(socket);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -33,6 +34,10 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
+      const socket = io("http://localhost:8080");
+      socket.emit("addUser", userId);
+      dispatch(setSocket(socket));
+      console.log(socket);
     }
   }, [dispatch]);
 
@@ -47,9 +52,14 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
-      <Navbar socket={socket} notifications={notifications} />
+      <Navbar
+        // socket={socket}
+        notifications={notifications}
+      />
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
-        <Routers socket={socket} />
+        <Routers
+        // socket={socket}
+        />
       </Container>
       <Footer />
       <ToastContainer />

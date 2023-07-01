@@ -8,7 +8,8 @@ import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import { textAlign } from "@mui/system";
 import { addReview } from "../../store/Slices/apartment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Roomster from "../../API/config";
 const style = {
   position: "absolute",
   top: "50%",
@@ -29,11 +30,35 @@ const AddReview = () => {
   const [rate, setRate] = useState(0);
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { singleApartment } = useSelector((state) => state.apartments);
+  const socket = useSelector((state) => {
+    return state.user?.socket;
+  });
   function handleButtonClick() {
     dispatch(addReview({ rate, description }));
     setOpen(false);
     setRate(0);
     setDescription("");
+    if (singleApartment.price && user._id != "") {
+      const sendNotification = async () => {
+        try {
+          await Roomster.post(`notifications/${singleApartment.userId._id}`, {
+            senderId: `${user._id}`,
+            receiverId: `${singleApartment.userId._id}`,
+            text: `${user.fullName} add comment on your apartment , whose name it is: ${singleApartment.title}.`,
+          });
+          socket.emit("sendNotification", {
+            sender: user,
+            receiverId: `${singleApartment.userId._id}`,
+            text: `${user.fullName} add comment on your apartment , whose name it is: ${singleApartment.title}.`,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      sendNotification();
+    }
   }
   return (
     <>
@@ -45,15 +70,13 @@ const AddReview = () => {
         open={open}
         onClose={handleClose}
         aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
+        aria-describedby="keep-mounted-modal-description">
         <Box sx={style}>
           <Typography
             id="keep-mounted-modal-title"
             variant="h4"
             component="h2"
-            sx={{ mb: 2, textAlign: "center" }}
-          >
+            sx={{ mb: 2, textAlign: "center" }}>
             Add Review
           </Typography>
           <Stack spacing={1} sx={{ mb: "2rem" }}>
@@ -81,13 +104,11 @@ const AddReview = () => {
             sx={{
               mt: "2rem",
               textAlign: "center",
-            }}
-          >
+            }}>
             <Button
               variant="contained"
               color="success"
-              onClick={handleButtonClick}
-            >
+              onClick={handleButtonClick}>
               Add Review
             </Button>
           </Box>

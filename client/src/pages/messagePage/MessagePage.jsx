@@ -12,10 +12,12 @@ import { useSelector } from "react-redux";
 import Roomster from "../../API/config";
 import "./MessagePage.css";
 import Conversation from "../../components/MessagePageComponent/Conversation";
-
+import { io } from "socket.io-client";
 import Message from "../../components/MessagePageComponent/Message";
 import { padding, width } from "@mui/system";
-function MessagePage({ socket }) {
+import { v4 as uuidv4 } from "uuid";
+function MessagePage() {
+  // { socket }
   const user = useSelector((state) => {
     return state.user?.user;
   });
@@ -28,38 +30,32 @@ function MessagePage({ socket }) {
   const [friend, setFreiend] = useState(null);
   const scrollRef = useRef();
 
-  useEffect(() => {
-    console.log(socket);
-    socket.current.on("getMessage", (data) => {
-      setArrivalMessage({
-        senderId: data.sender,
-        text: data.text,
-        createdAt: Date.now(),
-      });
-    });
-  }, []);
+  const socket = useSelector((state) => {
+    return state.user?.socket;
+  });
 
   useEffect(() => {
-    arrivalMessage &&
-      currentChat?.members.includes(arrivalMessage.sender) &&
-      setMessages((prev) => [...prev, arrivalMessage]);
+    currentChat?.members.map((member) => {
+      if (arrivalMessage && member._id === arrivalMessage.senderId?._id) {
+        setMessages((prev) => [...prev, arrivalMessage]);
+      }
+    });
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
     // socket.current.emit("addUser", user._id);
-    socket.current.on("getUsers", (users) => {
+    socket?.on("getUsers", (users) => {
       setOnlineUsers(
         users
         // user.followings.filter((f) => users.some((u) => u.userId === f))
       );
     });
-  }, [user]);
+  }, [user, socket]);
 
   useEffect(() => {
     const getConversations = async () => {
       try {
         const res = await Roomster.get("conversations/" + user._id);
-        console.log("conversation", res.data.data);
         setConversations(res.data.data);
       } catch (err) {
         console.log(err);
@@ -67,12 +63,19 @@ function MessagePage({ socket }) {
     };
     getConversations();
   }, [user._id]);
+  useEffect(() => {
+    socket?.on("getMessage", (data) => {
+      setArrivalMessage({
+        senderId: data.sender,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, [socket]);
 
   useEffect(() => {
     const getMessages = async () => {
       try {
-        console.log("user id", user?._id);
-        console.log("conversation id", currentChat?._id);
         const res = await Roomster.get(
           `messages/${user?._id}/msg/${currentChat?._id}`
           // {
@@ -81,14 +84,13 @@ function MessagePage({ socket }) {
           //   // },
           // }
         );
-        console.log("messages", res.data);
         setMessages(res.data.data);
       } catch (err) {
         console.log(err);
       }
     };
     if (currentChat != null) getMessages();
-  }, [currentChat]);
+  }, [currentChat, user?._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,10 +99,9 @@ function MessagePage({ socket }) {
       text: newMessage,
       conversationId: currentChat._id,
     };
-
-    socket.current.emit("sendMessage", {
+    socket?.emit("sendMessage", {
       sender: user,
-      recieverId: friend._id,
+      receiverId: friend._id,
       text: newMessage,
     });
 
@@ -110,17 +111,12 @@ function MessagePage({ socket }) {
         conversationId: currentChat._id,
         text: newMessage,
       });
-      console.log(res.data);
       setMessages([...messages, { ...res.data, senderId: user }]);
       setNewMessage("");
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    console.log(newMessage);
-  }, [newMessage]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -146,8 +142,7 @@ function MessagePage({ socket }) {
                 onClick={() => {
                   setCurrentChat(conv);
                   setFreiend(conv.members.find((m) => m._id !== user._id));
-                }}
-              >
+                }}>
                 <Conversation conversation={conv} user={user} />
               </div>
             ))}
@@ -182,11 +177,11 @@ function MessagePage({ socket }) {
               <Divider></Divider>
               <div className="messages-box">
                 {messages.map((msg) => (
-                  <Message
-                    key={msg._id}
-                    message={msg}
-                    own={msg.senderId._id === user._id}
-                  ></Message>
+                  <div ref={scrollRef} key={uuidv4()}>
+                    <Message
+                      message={msg}
+                      own={msg.senderId._id === user._id}></Message>
+                  </div>
                 ))}
 
                 {/* <Message own={true}></Message>
@@ -211,8 +206,7 @@ function MessagePage({ socket }) {
                     spacing={1}
                     alignItems="center"
                     width={"100%"}
-                    justifyContent={"space-between"}
-                  >
+                    justifyContent={"space-between"}>
                     <Grid item xs={10}>
                       <TextField
                         sx={{ width: "100%", padding: "10px" }}
@@ -237,8 +231,7 @@ function MessagePage({ socket }) {
                           color: "white",
                           width: "95%",
                           marginLeft: "10px",
-                        }}
-                      >
+                        }}>
                         Send
                       </Button>
                     </Grid>

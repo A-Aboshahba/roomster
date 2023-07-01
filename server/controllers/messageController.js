@@ -11,9 +11,9 @@ exports.getConvoMessages = (request, response, next) => {
     request.query
   );
 
-  apiFeature
-    .paginate()
-    .mongooseQuery.then((docs) => {
+  apiFeature// .paginate()
+  .mongooseQuery
+    .then((docs) => {
       if (!docs) {
         let error = new Error("there're no Messages  to show");
         error.statusCode = 404;

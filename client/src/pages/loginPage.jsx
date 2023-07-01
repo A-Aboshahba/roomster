@@ -17,7 +17,7 @@ import Roomster from "../API/config";
 import { useNavigate } from "react-router";
 import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { addInfo, fetchUser } from "../store/Slices/userSlice";
+import { fetchUser } from "../store/Slices/userSlice";
 
 function SignInSide() {
   const navigate = useNavigate();

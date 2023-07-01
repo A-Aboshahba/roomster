@@ -105,7 +105,13 @@ export const updateReview = createAsyncThunk(
 const apartmentsSlice = createSlice({
   name: "apartments",
   initialState: INITIAL_STATE,
-  reducers: {},
+  reducers: {
+    deleteApartement: (state, action) => {
+      state.apartments.apartments = state.apartments.apartments.filter(
+        (apartement) => apartement._id !== action.payload
+      );
+    },
+  },
   extraReducers: {
     [getApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
@@ -193,4 +199,6 @@ export const getApartmentTotalReviwsState = (state) =>
   state.apartments.totalReviews;
 export const getSingleApartmentState = (state) =>
   state.apartments.singleApartment;
+export const { deleteApartement } = apartmentsSlice.reducer;
+
 export default apartmentsSlice.reducer;

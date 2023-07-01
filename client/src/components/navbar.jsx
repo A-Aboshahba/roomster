@@ -36,6 +36,7 @@ import image from "../assets/41KUZDZwSeL.png";
 import { Badge, ListItemAvatar, ListSubheader, Popover } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Roomster from "../API/config";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,6 +44,7 @@ function Navbar(props) {
   const openLanguage = Boolean(anchorLanguage);
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  console.log(user);
   const open = Boolean(anchorEl);
   const [anchorNotification, setAnchorNotification] = useState(null);
   const openNotification = Boolean(anchorNotification);
@@ -72,10 +74,9 @@ function Navbar(props) {
   const handleNotificationClose = () => {
     setAnchorNotification(null);
   };
-  const handelSeen= ()=>
-  {
-    Roomster.post('')
-  }
+  const handelSeen = () => {
+    Roomster.post("");
+  };
 
   const profileComponent = (
     <>
@@ -148,6 +149,16 @@ function Navbar(props) {
           </Link>
         ) : (
           ""
+        )}
+        {user.isAdmin && (
+          <Link to="dashboard">
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <DashboardIcon fontSize="small" />
+              </ListItemIcon>
+              Dashboard
+            </MenuItem>
+          </Link>
         )}
         {user._id !== "" ? (
           <MenuItem
@@ -258,6 +269,13 @@ function Navbar(props) {
         ) : (
           ""
         )}
+        {user.isAdmin && (
+          <ListItem disablePadding component={Link} to={"/dashboard"}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="dashboard" />
+            </ListItemButton>
+          </ListItem>
+        )}
         <Divider />
         {user._id !== "" ? (
           <ListItem
@@ -315,7 +333,10 @@ function Navbar(props) {
           <IconButton
             aria-label="open drawer"
             edge="start"
-            onClick={()=>{handleDrawerToggle();handelSeen()}}
+            onClick={() => {
+              handleDrawerToggle();
+              handelSeen();
+            }}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
@@ -342,8 +363,16 @@ function Navbar(props) {
             <IconButton
               aria-label="show notifications"
               onClick={handleNotificationOpen}
-              sx={{ color: "#000" }}>
-              <Badge badgeContent={props.notifications?.noOfUnseen > 1 ? props.notifications?.noOfUnseen : 0} color="error">
+              sx={{ color: "#000" }}
+            >
+              <Badge
+                badgeContent={
+                  props.notifications?.noOfUnseen > 1
+                    ? props.notifications?.noOfUnseen
+                    : 0
+                }
+                color="error"
+              >
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -446,7 +475,8 @@ function Navbar(props) {
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
-        }}>
+        }}
+      >
         <ListSubheader>Notifications</ListSubheader>
         <List
           sx={{
@@ -457,7 +487,8 @@ function Navbar(props) {
             overflow: "auto",
             maxHeight: 400,
             "& ul": { padding: 10 },
-          }}>
+          }}
+        >
           <Box component={"div"} sx={{ my: 2, px: 3 }} className="betweenItem">
             <ListItemAvatar>
               <Avatar>W</Avatar>

@@ -6,50 +6,66 @@ import Routers from "./Routes/Routers.jsx";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "./store/Slices/userSlice.jsx";
 import { useEffect, useRef, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
 import Footer from "./components/Footer/Footer";
 import { io } from "socket.io-client";
 import Roomster from "./API/config.jsx";
+import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
+import { getApartments } from "./store/Slices/apartment.js";
+import { fetchUser } from "./store/Slices/userSlice.jsx";
 
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const [notifications, setNotifications] = useState(null)
+  const [notifications, setNotifications] = useState(null);
   const socket = useRef();
-  useEffect(() => {
-    if (user._id !== "") {
-      socket.current = io("http://localhost:8080");
-      socket.current.emit("addUser", user._id);
-    }
-  }, [user._id]);
+  const [path, setPath] = useState("");
+  const getPathName = (pathName) => {
+    setPath(pathName);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decodedToken = jwt_decode(token);
-      const userId = decodedToken._id;
-      dispatch(fetchUser(userId));
+      console.log("decodedToken", decodedToken);
       dispatch(fetchCurrency());
+      dispatch(getApartments({ page: 1 }));
+      dispatch(fetchUser(decodedToken._id));
+      if (decodedToken.isAdmin) {
+        console.log("admin is work??");
+        dispatch(fetchUsers());
+      }
     }
   }, [dispatch]);
 
   useEffect(() => {
+    if (user._id !== "") {
+      socket.current = io("http://localhost:3030/");
+      socket.current.emit("addUser", user._id);
+    }
+  }, [user._id]);
+
+  useEffect(() => {
     const getNotifications = async () => {
-      const  {data}  = await Roomster.get(`notifications/${'647bc39f25b8e3a36759d3b6'}`)
-      setNotifications(data)
+      const { data } = await Roomster.get(
+        `notifications/${"647bc39f25b8e3a36759d3b6"}`
+      );
+      setNotifications(data);
     };
-    getNotifications()
+    getNotifications();
   }, []);
   return (
     <BrowserRouter>
-      <Navbar socket={socket} notifications={notifications} />
+      {!path.includes("/dashboard") && (
+        <Navbar socket={socket} notifications={notifications} />
+      )}
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
-        <Routers />
+        <Routers getPathName={getPathName} />
       </Container>
-      <Footer />
+      {!path.includes("/dashboard") && <Footer />}
       <ToastContainer />
     </BrowserRouter>
   );

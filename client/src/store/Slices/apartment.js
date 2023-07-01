@@ -28,7 +28,6 @@ export const getApartments = createAsyncThunk(
     }
   }
 );
-
 export const getApartmentReviews = createAsyncThunk(
   "apartments/getApartmentReviews",
   async ({ page = 1, apartmentId }, thunkAPI) => {
@@ -185,4 +184,5 @@ export const getApartmentTotalReviwsState = (state) =>
   state.apartments.totalReviews;
 export const getSingleApartmentState = (state) =>
   state.apartments.singleApartment;
+export const { deleteApartement } = apartmentsSlice.reducer;
 export default apartmentsSlice.reducer;

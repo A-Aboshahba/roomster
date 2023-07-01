@@ -37,9 +37,7 @@ function SignInSide() {
       try {
         const { data } = await Roomster.post("auth/login", values);
         localStorage.setItem("token", data.accessToken);
-        console.log(data.accessToken);
         const decodedToken = jwt_decode(data.accessToken);
-        console.log("decoded token", decodedToken._id);
         dispatch(fetchUser(decodedToken._id));
         navigate("/");
       } catch (err) {

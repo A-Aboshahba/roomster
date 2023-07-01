@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userData from "./Slices/userSlice";
 import apartments from "./Slices/apartment";
-import currencySlice from './Slices/currency';
+import currencySlice from "./Slices/currency";
+import usersSlice from "./Slices/AllUsersSlice";
 
 const store = configureStore({
   reducer: {
     user: userData,
     apartments: apartments,
-    currency:currencySlice,
+    currency: currencySlice,
+    users: usersSlice,
   },
 });
 

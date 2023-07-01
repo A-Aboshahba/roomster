@@ -5,9 +5,9 @@ const Message = mongoose.model("Messages");
 
 exports.getAll = (request, response, next) => {
   const apiFeature = new ApiFeature(
-    Conversation.find({ members: { $in: [request.params.id] } }).populate({
+    Conversation.find({ members: { $in: [request.params.userId] } }).populate({
       path: "members",
-      select: { password: 0 },
+      select: { password: 0, rentedApartments: 0, favourites: 0 },
     }),
     request.query
   );

@@ -17,11 +17,11 @@ import Roomster from "./API/config.jsx";
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const [notifications, setNotifications] = useState(null)
+  const [notifications, setNotifications] = useState(null);
   const socket = useRef();
   useEffect(() => {
     if (user._id !== "") {
-      socket.current = io("http://localhost:8080");
+      socket.current = io("http://localhost:3030");
       socket.current.emit("addUser", user._id);
     }
   }, [user._id]);
@@ -38,16 +38,18 @@ function App() {
 
   useEffect(() => {
     const getNotifications = async () => {
-      const  {data}  = await Roomster.get(`notifications/${'647bc39f25b8e3a36759d3b6'}`)
-      setNotifications(data)
+      const { data } = await Roomster.get(
+        `notifications/${"647bc39f25b8e3a36759d3b6"}`
+      );
+      setNotifications(data);
     };
-    getNotifications()
+    getNotifications();
   }, []);
   return (
     <BrowserRouter>
       <Navbar socket={socket} notifications={notifications} />
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
-        <Routers />
+        <Routers socket={socket} />
       </Container>
       <Footer />
       <ToastContainer />

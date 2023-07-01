@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Divider from "@mui/material/Divider";
-
+import moment from "moment";
 import { styled } from "@mui/material/styles";
 
 import Badge from "@mui/material/Badge";
@@ -9,8 +9,11 @@ import Avatar from "@mui/material/Avatar";
 
 import "./conversation.css";
 
-function Conversation() {
+function Conversation({ conversation, user }) {
   const [online, setOnline] = useState(true);
+  const [friend, setFreiend] = useState(
+    conversation.members.find((m) => m._id !== user._id)
+  );
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
@@ -52,14 +55,14 @@ function Conversation() {
           <Avatar
             sx={{ width: 55, height: 55 }}
             alt="Remy Sharp"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+            src={friend.image.url}
           />
         </StyledBadge>
         <div className="title-content">
-          <p className="title">
-            svsvdsvaefewfewfwefwfwefweffffffffffffffffffffffffffffffff
-          </p>
-          <p className="date">jan 2032</p>
+          <p className="title">{friend.fullName}</p>
+          <p className="date">{`${moment(conversation.createdAt).format(
+            " DD MMM YYYY "
+          )}`}</p>
         </div>
       </div>
 

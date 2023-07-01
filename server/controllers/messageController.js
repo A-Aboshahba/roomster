@@ -4,7 +4,10 @@ const Message = mongoose.model("Messages");
 
 exports.getConvoMessages = (request, response, next) => {
   const apiFeature = new ApiFeature(
-    Message.find({ conversationId: request.body.conversationId }),
+    Message.find({ conversationId: request.params.convId }).populate({
+      path: "senderId",
+      select: { password: 0 },
+    }),
     request.query
   );
 

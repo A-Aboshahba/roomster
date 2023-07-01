@@ -1,7 +1,7 @@
 .conversation {
   height: 70vh;
   border-radius: 0 10px 10px 0;
-  background-color: #e0e0e0;
+  background-color: white;
   /* padding: 10px; */
   overflow-y: scroll;
 }
@@ -19,8 +19,9 @@
   overflow-y: scroll;
 }
 .messages-bottom {
-  height: 10vh;
-  color: #0695ff;
+  height: 8vh;
+
+  /* /* color: #0695ff; */
 }
 
 .messages-top {

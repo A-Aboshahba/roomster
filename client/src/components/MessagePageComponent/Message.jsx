@@ -2,16 +2,16 @@ import React from "react";
 
 import { useState } from "react";
 import { styled } from "@mui/material/styles";
-
+import { format } from "timeago.js";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import { Typography } from "@mui/material";
 import "./Message.css";
 import { px } from "framer-motion";
 import { Stack, padding } from "@mui/system";
-function Message({ own }) {
+function Message({ own, message }) {
   const [online, setOnline] = useState(true);
-
+  console.log("message", message);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
       backgroundColor: online ? "#44b700" : "#eee",
@@ -43,21 +43,24 @@ function Message({ own }) {
   return (
     <div className={own ? "message own" : "message"}>
       <div className="message-top">
-        <Avatar
-          alt="Remy Sharp"
-          src=" https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
-          sx={{ width: 30, height: 30 }}
-        />
-
-        <p className="message-text">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam nulla
-          itaque delectus unde doloribus fugiat explicabo repellendus, modi,
-          temporibus voluptas ratione odio, beatae quo expedita architecto rem
-          molestias nostrum repudiandae.
-        </p>
+        {!own && (
+          <Avatar
+            alt="Remy Sharp"
+            src={message.senderId.image.url}
+            sx={{ width: 30, height: 30 }}
+          />
+        )}
+        <p className="message-text">{message.text}</p>{" "}
+        {own && (
+          <Avatar
+            alt="Remy Sharp"
+            src={message.senderId.image.url}
+            sx={{ width: 30, height: 30 }}
+          />
+        )}
       </div>
       <Typography mt={2} style={{ fontSize: "12px" }}>
-        1 hour age
+        {format(message.createdAt)}
       </Typography>
     </div>
   );

@@ -48,6 +48,7 @@
     "stripe": "^12.10.0",
     "styled-components": "^5.3.11",
     "sweetalert2": "^11.7.12",
+    "timeago.js": "^4.0.2",
     "yup": "^1.2.0"
   },
   "devDependencies": {

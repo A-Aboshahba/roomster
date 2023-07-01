@@ -13,7 +13,8 @@ import UserApartments from "../pages/userApartments/UserApartments";
 
 import ConfirmationPage from "../pages/ConfirmationPage ";
 
-function Routers() {
+function Routers({ socket }) {
+  console.log("socket", socket);
   return (
     <Routes>
       <Route path="login" element={<SignInSide />} />
@@ -47,7 +48,7 @@ function Routers() {
         path="Message"
         element={
           // <UserGuard>
-          <MessagePage />
+          <MessagePage socket={socket} />
           // </UserGuard>
         }
       />

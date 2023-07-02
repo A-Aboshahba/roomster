@@ -5,9 +5,9 @@ import "./App.css";
 import Routers from "./Routes/Routers.jsx";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUser, setSocket } from "./store/Slices/userSlice.jsx";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
 import Footer from "./components/Footer/Footer";
@@ -15,6 +15,9 @@ import { io } from "socket.io-client";
 
 function App() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => {
+    return state.user?.user;
+  });
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -27,16 +30,13 @@ function App() {
       dispatch(setSocket(socket));
       console.log(socket);
     }
-  }, [dispatch]);
-
+  }, [dispatch, user._id]);
 
   return (
     <BrowserRouter>
-      <Navbar
-      />
+      <Navbar />
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
-        <Routers
-        />
+        <Routers />
       </Container>
       <Footer />
       <ToastContainer />

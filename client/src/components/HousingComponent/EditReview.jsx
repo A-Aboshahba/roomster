@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
@@ -120,4 +120,4 @@ const EditReview = ({ item }) => {
   );
 };
 
-export default React.memo(EditReview);
+export default EditReview;

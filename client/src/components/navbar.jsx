@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -23,7 +22,7 @@ import Logout from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ResetRedux } from "../store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -110,6 +109,7 @@ function Navbar() {
   }, [user._id, unseenNumber]);
   useEffect(() => {
     socket?.on("getNotification", (notification) => {
+      console.log('asdasd')
       setUnseenNumber(unseenNumber + 1);
       setNotifications((prevState) => ({
         data: [
@@ -127,7 +127,7 @@ function Navbar() {
       });
       console.log(unseenConversations, data);
     });
-  }, [socket]);
+  }, [socket, unseenConversations, unseenNumber]);
   const fetchNotifications = async (page) => {
     const { data } = await Roomster.get(
       `notifications/${user._id}?limit=6&page=${page}`

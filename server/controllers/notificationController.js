@@ -65,9 +65,7 @@ exports.makeAllSeen = (request, response, next) => {
   )
     .then((doc) => {
       if (doc.matchedCount == 0) {
-        let error = new Error(" receiver id doesn't exist");
-        error.statusCode = 404;
-        throw error;
+        response.status(201).json({ message: "all ur notifications are seen" });
       }
       response
         .status(201)

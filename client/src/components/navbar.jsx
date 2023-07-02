@@ -152,8 +152,6 @@ function Navbar() {
     }
     setLoading(true);
     const newData = await fetchNotifications(page);
-    console.log(newData);
-    console.log(hasMore);
     if (newData.data.length === 0) {
       setHasMore(false);
     } else {
@@ -161,18 +159,14 @@ function Navbar() {
         data: [...prevState.data, ...newData.data],
       }));
       setPage(page + 1);
-      console.log("no of notifications", notifications);
     }
     setLoading(false);
   };
 
   const handleScroll = (event) => {
-    console.log("check for scolling");
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    console.log(scrollHeight, scrollTop, clientHeight);
     if (scrollHeight - scrollTop - 2 < clientHeight) {
       loadMore();
-      console.log("loading");
     }
   };
   const profileComponent = (

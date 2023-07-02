@@ -41,6 +41,7 @@ const EditReview = ({ item }) => {
   //   setOpen(false);
   // };
   const handleEdit = () => {
+    console.log("edit review");
     dispatch(updateReview({ reviewId: item._id, rate, description }));
     setOpen(false);
     if (singleApartment.price && user._id != "") {

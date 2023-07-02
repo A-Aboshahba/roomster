@@ -5,18 +5,8 @@ exports.checkIfRentAvailable = (newRent, rentedArr) => {
     const rentedEndDate = rentedArr[i].endDate;
     const newStart = new Date(newRent.startDate);
     const newEnd = new Date(newRent.endDate);
-    console.log(
-      "rentedArr[i].startDate :",
-      rentedArr[i].startDate,
-      "rentedArr[i].endDate: ",
-      rentedArr[i].endDate,
-      "newRent.startDate",
-      newStart,
-      "newRent.endDate",
-      newEnd
-    );
     if (
-      newEnd <= newStart || // try to rent [12,7]
+      newEnd < newStart || // try to rent [12,7]
       (newStart >= rentedStartDate && // try to rent [7,12]
         newStart <= rentedEndDate) ||
       (newEnd >= rentedStartDate && // try to rent [4,8]

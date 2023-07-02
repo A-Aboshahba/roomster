@@ -31,27 +31,17 @@ const ConfirmationPage = () => {
     return state.user?.socket;
   });
   const dispatch = useDispatch();
-  useEffect(() => {
-    async function rentApartment() {
-      await Roomster.post(`apartments/${apartmentId}/rent`, {
-        userId: userId, //From Redux
-        startDate: from, //From Date Packer
-        endDate: to, //From Date Packer
-        totalPrice: price, //From Date Packer
-      });
-      // Do something after renting the apartment
-    }
-    rentApartment();
-  }, [apartmentId, from, price, to, userId]);
-  useEffect(() => {
-    dispatch(getSingleApartment({ id: apartmentId }));
-    console.log(user._id, singleApartment);
-  }, [dispatch]);
+
   useEffect(() => {
     if (singleApartment.price && user._id != "") {
-      const sendNotification = async () => {
+      const makeRentAndSendNotification = async () => {
         try {
-          console.log(singleApartment.userId._id);
+          await Roomster.post(`apartments/${apartmentId}/rent`, {
+            userId: userId, //From Redux
+            startDate: from, //From Date Packer
+            endDate: to, //From Date Packer
+            totalPrice: price, //From Date Packer
+          });
           await Roomster.post(`notifications/${singleApartment.userId._id}`, {
             senderId: `${user._id}`,
             receiverId: `${singleApartment.userId._id}`,
@@ -66,15 +56,58 @@ const ConfirmationPage = () => {
               user.fullName
             } from ${from.slice(0, 10)}  to : ${to.slice(0, 10)}.`,
           });
+          console.log("sent notification");
         } catch (error) {
           console.log(error);
         }
       };
-      sendNotification();
-      // console.log("first", singleApartment.price)
-      // console.log("first", singleApartment.userId._id)
+      makeRentAndSendNotification();
     }
-  }, [singleApartment.price, user]);
+  }, [singleApartment.price, user._id]);
+  // useEffect(() => {
+  //   async function rentApartment() {
+  //     await Roomster.post(`apartments/${apartmentId}/rent`, {
+  //       userId: userId, //From Redux
+  //       startDate: from, //From Date Packer
+  //       endDate: to, //From Date Packer
+  //       totalPrice: price, //From Date Packer
+  //     });
+  //     // Do something after renting the apartment
+  //   }
+  //   rentApartment();
+  // }, [apartmentId, from, price, to, userId]);
+  useEffect(() => {
+    dispatch(getSingleApartment({ id: apartmentId }));
+    console.log(user._id, singleApartment);
+  }, [dispatch]);
+  // useEffect(() => {
+  //   if (singleApartment.price && user._id != "") {
+  //     const sendNotification = async () => {
+  //       try {
+  //         console.log(singleApartment.userId._id);
+  //         await Roomster.post(`notifications/${singleApartment.userId._id}`, {
+  //           senderId: `${user._id}`,
+  //           receiverId: `${singleApartment.userId._id}`,
+  //           text: ` Reservation confirmed for ${
+  //             user.fullName
+  //           } from ${from.slice(0, 10)}  to : ${to.slice(0, 10)}.`,
+  //         });
+  //         socket.emit("sendNotification", {
+  //           sender: user,
+  //           receiverId: `${singleApartment.userId._id}`,
+  //           text: ` Reservation confirmed for ${
+  //             user.fullName
+  //           } from ${from.slice(0, 10)}  to : ${to.slice(0, 10)}.`,
+  //         });
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
+  //     sendNotification();
+  //     // console.log("first", singleApartment.price)
+  //     // console.log("first", singleApartment.userId._id)
+  //   }
+  // }, [singleApartment.price, user]);
 
   return (
     <motion.div

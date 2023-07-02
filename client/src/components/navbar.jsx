@@ -96,6 +96,16 @@ function Navbar() {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
+    if (user._id == "") {
+      setUnseenNumber(null);
+      setNotifications({ data: [] });
+      setUnseenConversations([]);
+    } else {
+      loadMore();
+    }
+  }, [user._id]);
+  useEffect(() => {
+    console.log(unseenNumber, user._id);
     if (unseenNumber == null && user._id != "") {
       const getNotifications = async () => {
         const { data } = await Roomster.get(`notifications/${user._id}`);
@@ -109,7 +119,7 @@ function Navbar() {
   }, [user._id, unseenNumber]);
   useEffect(() => {
     socket?.on("getNotification", (notification) => {
-      console.log('asdasd')
+      console.log("  get notifi");
       setUnseenNumber(unseenNumber + 1);
       setNotifications((prevState) => ({
         data: [
@@ -127,7 +137,8 @@ function Navbar() {
       });
       console.log(unseenConversations, data);
     });
-  }, [socket, unseenConversations, unseenNumber]);
+  }, [socket]);
+
   const fetchNotifications = async (page) => {
     const { data } = await Roomster.get(
       `notifications/${user._id}?limit=6&page=${page}`
@@ -141,6 +152,8 @@ function Navbar() {
     }
     setLoading(true);
     const newData = await fetchNotifications(page);
+    console.log(newData);
+    console.log(hasMore);
     if (newData.data.length === 0) {
       setHasMore(false);
     } else {
@@ -148,14 +161,18 @@ function Navbar() {
         data: [...prevState.data, ...newData.data],
       }));
       setPage(page + 1);
+      console.log("no of notifications", notifications);
     }
     setLoading(false);
   };
 
   const handleScroll = (event) => {
+    console.log("check for scolling");
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    if (scrollHeight - scrollTop === clientHeight) {
+    console.log(scrollHeight, scrollTop, clientHeight);
+    if (scrollHeight - scrollTop - 2 < clientHeight) {
       loadMore();
+      console.log("loading");
     }
   };
   const profileComponent = (
@@ -438,7 +455,6 @@ function Navbar() {
               onClick={(event) => {
                 handleNotificationOpen(event);
                 handelSeen();
-                loadMore();
               }}
               sx={{ color: "#000" }}>
               <Badge badgeContent={unseenNumber} color="error">

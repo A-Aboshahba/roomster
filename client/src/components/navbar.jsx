@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -41,6 +40,8 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Roomster from "../API/config";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -116,6 +117,7 @@ function Navbar() {
       };
       getNotifications();
     }
+    
   }, [user._id, unseenNumber]);
   useEffect(() => {
     socket?.on("getNotification", (notification) => {
@@ -137,7 +139,7 @@ function Navbar() {
       });
       console.log(unseenConversations, data);
     });
-  }, [socket]);
+  },  [socket, unseenConversations, unseenNumber]);
 
   const fetchNotifications = async (page) => {
     const { data } = await Roomster.get(
@@ -238,6 +240,16 @@ function Navbar() {
           </Link>
         ) : (
           ""
+        )}
+        {user.isAdmin && (
+          <Link to="dashboard">
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <DashboardIcon fontSize="small" />
+              </ListItemIcon>
+              Dashboard
+            </MenuItem>
+          </Link>
         )}
         {user._id !== "" ? (
           <MenuItem
@@ -355,6 +367,13 @@ function Navbar() {
           </ListItem>
         ) : (
           ""
+        )}
+         {user.isAdmin && (
+          <ListItem disablePadding component={Link} to={"/dashboard"}>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary="dashboard" />
+            </ListItemButton>
+          </ListItem>
         )}
         <Divider />
         {user._id !== "" ? (

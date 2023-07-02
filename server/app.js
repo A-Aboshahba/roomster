@@ -25,8 +25,8 @@ const { handleConnection } = require("./socket-io/socket");
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
-// let port = process.env.PORT || 3030;
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 3030;
+// let port = process.env.PORT || 8080;
 
 //############################################################################
 server.use(express.json());

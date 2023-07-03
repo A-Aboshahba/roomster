@@ -93,5 +93,12 @@ router
     validationError,
     controller.getUserApartments
   );
-
+router
+  .route("/:id/password")
+  .patch(
+    verifyTokenAndAuthorization,
+    validator.changeSingleUserPassword,
+    validationError,
+    controller.changeSingleUserPassword
+  );
 module.exports = router;

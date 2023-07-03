@@ -276,6 +276,51 @@ exports.deleteProfileImage = (request, response, next) => {
     .catch((err) => next(err));
 };
 
+exports.updateProfileImage = (request, response, next) => {
+  const publicId = request.file.path.replace(/^.*[\\\/]/, "").split(".")[0];
+  const image = { url: request.file.path, publicId: publicId };
+
+  User.findOne({
+    _id: request.params.id,
+  })
+    .then((doc) => {
+      if (!doc) {
+        let error = new Error("this apartment doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      cloudinary.uploader
+        .destroy("users/" + request.body.imageId)
+        .then((result) => {
+          console.log(result);
+          if (result.result == "not found") {
+            let error = new Error("image id is not correct");
+            error.statusCode = 404;
+            throw error;
+          }
+          User.updateOne(
+            { _id: request.params.id },
+            {
+              $set: { image: image },
+            }
+          )
+            .then((doc) => {
+              if (doc.matchedCount == 0) {
+                let error = new Error("this apartment doesn't exist");
+                error.statusCode = 404;
+                throw error;
+              }
+              response
+                .status(200)
+                .json({ message: " image is updated successfully" });
+            })
+            .catch((err) => next(err));
+        })
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
+};
+
 module.exports.getUserReservations = (request, response, next) => {
   const apiFeature = new ApiFeature(
     Reservation.find({ userId: request.params.id }).populate({

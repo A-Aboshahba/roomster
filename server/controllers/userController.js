@@ -38,7 +38,7 @@ module.exports.getAllUsers = (request, response, next) => {
 };
 
 module.exports.getSingleUser = (request, response, next) => {
-  User.findOne({ _id: request.params.id }, { password: 0, email: 0 })
+  User.findOne({ _id: request.params.id }, { password: 0 })
     .find()
     .populate({
       path: "favourites",

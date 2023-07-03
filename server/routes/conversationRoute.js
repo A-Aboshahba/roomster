@@ -25,5 +25,12 @@ router
     validationError,
     controller.makeConvoMessagesSeen
   );
-
+router
+  .route("/:userId/unseenConversations")
+  .get(
+    authMiddleware.verifyTokenAndAuthorization,
+    validator.getUnseenConversations,
+    validationError,
+    controller.getUnseenConversations
+  );
 module.exports = router;

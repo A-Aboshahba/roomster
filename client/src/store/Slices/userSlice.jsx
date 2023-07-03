@@ -44,6 +44,7 @@ const initialState = {
   loading: false,
   error: null,
   socket: null,
+  unseen: [],
 };
 
 const userSlice = createSlice({
@@ -58,6 +59,21 @@ const userSlice = createSlice({
       state.socket = action.payload;
     },
     ResetRedux: () => initialState,
+    setUnseen: (state, action) => {
+      state.unseen = action.payload;
+    },
+    addUnseen: (state, action) => {
+      if (!state.unseen.includes(action.payload)) {
+        state.unseen = [...state.unseen, action.payload];
+      }
+    },
+    removeUnseen: (state, action) => {
+      console.log("here");
+      state.unseen = state.unseen.filter((id) => id !== action.payload);
+    },
+    resetUnseen: (state) => {
+      state.unseen = [];
+    },
   },
   extraReducers: {
     [fetchUser.pending]: (state) => {
@@ -88,5 +104,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { addInfo, ResetRedux, setSocket } = userSlice.actions;
+export const {
+  addInfo,
+  ResetRedux,
+  setSocket,
+  setUnseen,
+  addUnseen,
+  removeUnseen,
+  resetUnseen,
+} = userSlice.actions;
 export default userSlice.reducer;

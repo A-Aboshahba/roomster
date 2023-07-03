@@ -24,7 +24,12 @@ import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ResetRedux } from "../store/Slices/userSlice";
+import {
+  ResetRedux,
+  addUnseen,
+  resetUnseen,
+  setUnseen,
+} from "../store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -55,6 +60,9 @@ function Navbar() {
   const [unseenConversations, setUnseenConversations] = useState([]);
   const socket = useSelector((state) => {
     return state.user?.socket;
+  });
+  const unseenConvo = useSelector((state) => {
+    return state.user?.unseen;
   });
   // const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
@@ -99,11 +107,12 @@ function Navbar() {
     if (user._id == "") {
       setUnseenNumber(null);
       setNotifications({ data: [] });
-      setUnseenConversations([]);
+      dispatch(resetUnseen());
     } else {
       loadMore();
     }
   }, [user._id]);
+
   useEffect(() => {
     console.log(unseenNumber, user._id);
     if (unseenNumber == null && user._id != "") {
@@ -115,6 +124,16 @@ function Navbar() {
         }
       };
       getNotifications();
+    }
+    if (unseenConvo.length == 0 && user._id != "") {
+      const getUnseenConversaations = async () => {
+        const response = await Roomster.get(
+          `conversations/${user._id}/unseenConversations`
+        );
+        console.log(response);
+        dispatch(setUnseen(response.data.senderIds));
+      };
+      getUnseenConversaations();
     }
   }, [user._id, unseenNumber]);
   useEffect(() => {
@@ -129,13 +148,7 @@ function Navbar() {
       }));
     });
     socket?.on("getMessage", (data) => {
-      setUnseenConversations((prevState) => {
-        if (prevState.includes(data.sender._id)) {
-          return prevState;
-        }
-        return [...prevState, data.sender._id];
-      });
-      console.log(unseenConversations, data);
+      dispatch(addUnseen(data.sender._id));
     });
   }, [socket]);
 
@@ -325,7 +338,7 @@ function Navbar() {
               </ListItem>
             )}
             {item === "Message" && (
-              <Badge badgeContent={unseenConversations.length} color="error">
+              <Badge badgeContent={unseenConvo.length} color="error">
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={() => console.log("first")}
@@ -434,9 +447,7 @@ function Navbar() {
                   </Button>
                 )}
                 {item === "Message" && (
-                  <Badge
-                    badgeContent={unseenConversations.length}
-                    color="error">
+                  <Badge badgeContent={unseenConvo.length} color="error">
                     <Button component="div" size="large" sx={{ color: "#000" }}>
                       {item}
                     </Button>

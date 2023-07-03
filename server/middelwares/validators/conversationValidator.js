@@ -16,3 +16,6 @@ module.exports.makeConvoMessagesSeen = [
     .isMongoId()
     .withMessage("conversationId must be mongo ObjectId"),
 ];
+module.exports.getUnseenConversations = [
+  param("userId").isMongoId().withMessage("id must be mongo ObjectId"),
+];

@@ -18,7 +18,6 @@ const addUser = (users, userId, socketId) => {
 
 const removeUser = (users, socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
-  console.log("removed user", users);
 };
 
 const getUser = (users, userId) => {
@@ -49,9 +48,10 @@ const handleConnection = (io, socket, users) => {
       text,
     });
   });
-
+  socket.on("getOnlineUsers", () => {
+    io.emit("sentOnlineUsers", users);
+  });
   socket.on("disconnect", () => {
-    console.log("a user disconnected!", socket.id);
     removeUser(users, socket.id);
     io.emit("getUsers", users);
     console.log("a user disconnected!", users);

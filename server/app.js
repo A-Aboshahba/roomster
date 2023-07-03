@@ -21,12 +21,12 @@ const messageRoute = require("./routes/messageRoute");
 const stripe = require("stripe")(process.env.stripe_client_secret);
 const server = express();
 const socketio = require("socket.io");
-const { handleConnection } = require("./socket-io/socket");
+// const { handleConnection } = require("./socket-io/socket");
 //############################################################################
 
 // Enable CORS and allow PATCH method for any origin
-let port = process.env.PORT || 3030;
-// let port = process.env.PORT || 8080;
+// let port = process.env.PORT || 3030;
+let port = process.env.PORT || 8080;
 
 //############################################################################
 server.use(express.json());
@@ -54,9 +54,27 @@ server.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
-
-//####__server_and_db_initialization__########################################
+// ###__socket__functions__#############################
 let users = [];
+const addUser = (userId, socketId) => {
+  const userExists = users.some((user) => user.userId === userId);
+  if (!userExists) {
+    users.push({ userId, socketId });
+  } else {
+    users.forEach((user) => {
+      if (user.userId === userId) {
+        user.socketId = socketId;
+      }
+    });
+  }
+};
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
+//####__server_and_db_initialization__########################################
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -73,7 +91,34 @@ mongoose
       },
     });
     io.on("connection", (socket) => {
-      handleConnection(io, socket, users);
+      socket.on("addUser", (userId) => {
+        addUser(userId, socket.id);
+        io.emit("getUsers", users);
+        console.log("a user added.", socket.id, users);
+      });
+
+      socket.on("sendMessage", ({ sender, receiverId, text }) => {
+        const user = getUser(receiverId);
+        io.to(user?.socketId).emit("getMessage", {
+          sender,
+          text,
+        });
+      });
+      socket.on("sendNotification", ({ sender, receiverId, text }) => {
+        const user = getUser(receiverId);
+        io.to(user?.socketId).emit("getNotification", {
+          sender,
+          text,
+        });
+      });
+      socket.on("getOnlineUsers", () => {
+        io.emit("sentOnlineUsers", users);
+      });
+      socket.on("disconnect", () => {
+        removeUser(socket.id);
+        io.emit("getUsers", users);
+        console.log("a user disconnected!", users);
+      });
     });
   })
   .catch((error) => console.log(error));

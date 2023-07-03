@@ -80,11 +80,6 @@ exports.makeConvoMessagesSeen = (request, response, next) => {
     { $set: { seen: true } }
   )
     .then((doc) => {
-      if (doc.matchedCount == 0) {
-        let error = new Error(" conversationId doesn't exist");
-        error.statusCode = 404;
-        throw error;
-      }
       response.status(201).json({ message: "messages updated successfully" });
     })
     .catch((err) => {

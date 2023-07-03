@@ -28,6 +28,7 @@ function MessagePage() {
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [searchString, setSearchString] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [friend, setFreiend] = useState(null);
@@ -37,6 +38,7 @@ function MessagePage() {
   const [hasMore, setHasMore] = useState(true);
   const [unseenConversations, setUnseenConversations] = useState([]);
   const [openChat, setOpenChat] = useState(null);
+  const conversationsBeforeSearch = useRef(null);
   const dipsatch = useDispatch();
   const location = useLocation();
   const socket = useSelector((state) => {
@@ -45,6 +47,30 @@ function MessagePage() {
   const unseenConvo = useSelector((state) => {
     return state.user?.unseen;
   });
+  useEffect(() => {
+    if (
+      conversations.length !== 0 &&
+      conversationsBeforeSearch.current === null
+    ) {
+      console.log("saving initial conversations");
+      conversationsBeforeSearch.current = [...conversations];
+      console.log(conversationsBeforeSearch.current);
+    }
+    let searchedConversations = [];
+    conversationsBeforeSearch.current?.forEach((conversation) => {
+      conversation.members.forEach((member) => {
+        if (
+          !searchedConversations.includes(conversation) &&
+          member.fullName.toLowerCase().includes(searchString.toLowerCase())
+        ) {
+          searchedConversations.push(conversation);
+        }
+      });
+    });
+    console.log(searchString);
+    setConversations([...searchedConversations]);
+    setCurrentChat(null);
+  }, [searchString]);
   useEffect(() => {
     const openConversation = async (memberId) => {
       try {
@@ -211,6 +237,13 @@ function MessagePage() {
     setHasMore(true);
     setFreiend(conv?.members.find((m) => m._id !== user._id));
     dipsatch(removeUnseen(conv?.members.find((m) => m._id !== user._id)._id));
+    try {
+      Roomster.patch("conversations/" + user._id, {
+        conversationId: conv._id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   const loadMore = async () => {
     if (loading || !hasMore) {
@@ -253,6 +286,10 @@ function MessagePage() {
             variant="standard"
             style={{ width: "100%", margin: "0 0 10px 0" }}
             placeholder="search for friend"
+            value={searchString}
+            onChange={(e) => {
+              setSearchString(e.target.value);
+            }}
           />
 
           <div className="conversation">
@@ -316,7 +353,7 @@ function MessagePage() {
                     justifyContent={"space-between"}>
                     <Grid item xs={10}>
                       <TextField
-                        sx={{ width: "100%", padding: "10px" }}
+                        sx={{ width: "80%", padding: "10px" }}
                         id="standard-basic"
                         color="info"
                         variant="standard"

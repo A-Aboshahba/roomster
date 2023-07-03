@@ -1,14 +1,14 @@
 import React from "react";
 
 import Grid from "@mui/material/Grid";
-import { Divider, TextField } from "@mui/material";
+import { CircularProgress, Divider, TextField } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Roomster from "../../API/config";
 import "./MessagePage.css";
 import Conversation from "../../components/MessagePageComponent/Conversation";
@@ -16,6 +16,9 @@ import { io } from "socket.io-client";
 import Message from "../../components/MessagePageComponent/Message";
 import { padding, width } from "@mui/system";
 import { v4 as uuidv4 } from "uuid";
+import { removeUnseen } from "../../store/Slices/userSlice";
+import { useLocation } from "react-router-dom";
+
 function MessagePage() {
   // { socket }
   const user = useSelector((state) => {
@@ -29,10 +32,35 @@ function MessagePage() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [friend, setFreiend] = useState(null);
   const scrollRef = useRef();
-
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [unseenConversations, setUnseenConversations] = useState([]);
+  const [openChat, setOpenChat] = useState(null);
+  const dipsatch = useDispatch();
+  const location = useLocation();
   const socket = useSelector((state) => {
     return state.user?.socket;
   });
+  const unseenConvo = useSelector((state) => {
+    return state.user?.unseen;
+  });
+  useEffect(() => {
+    const openConversation = async (memberId) => {
+      try {
+        const response = await Roomster.post("conversations/" + user._id, {
+          members: [memberId, user._id],
+        });
+        setOpenChat(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (location.state) {
+      const { id } = location.state;
+      openConversation(id);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     currentChat?.members.map((member) => {
@@ -41,50 +69,116 @@ function MessagePage() {
       }
     });
   }, [arrivalMessage, currentChat]);
-
   useEffect(() => {
-    // socket.current.emit("addUser", user._id);
-    socket?.on("getUsers", (users) => {
-      setOnlineUsers(
-        users
-        // user.followings.filter((f) => users.some((u) => u.userId === f))
-      );
-    });
-  }, [user, socket]);
-
-  useEffect(() => {
-    const getConversations = async () => {
-      try {
-        const res = await Roomster.get("conversations/" + user._id);
-        setConversations(res.data.data);
-      } catch (err) {
-        console.log(err);
+    let isExist = null;
+    conversations.forEach((conversation) => {
+      if (conversation?._id === openChat?._id) {
+        isExist = conversation;
       }
-    };
-    getConversations();
+    });
+    if (isExist !== null) {
+      setCurrentChat(isExist);
+      setPage(1);
+      setHasMore(true);
+      setFreiend(isExist?.members.find((m) => m._id !== user._id));
+      dipsatch(
+        removeUnseen(isExist?.members.find((m) => m._id !== user._id)._id)
+      );
+      // console.log(isExist);
+    } else {
+      if (openChat !== null) {
+        setConversations((prev) => [openChat, ...prev]);
+        setCurrentChat(openChat);
+        setPage(1);
+        setHasMore(true);
+        setFreiend(openChat?.members.find((m) => m._id !== user._id));
+        dipsatch(
+          removeUnseen(openChat?.members.find((m) => m._id !== user._id)._id)
+        );
+      }
+    }
+  }, [openChat, conversations]);
+  // useEffect(() => {
+  //   socket?.emit("getOnlineUsers");
+  //   socket?.on("sentOnlineUsers", (users) => {
+  //     setOnlineUsers(users);
+  //   });
+  //   socket?.on("getUsers", (users) => {
+  //     setOnlineUsers(users);
+  //   });
+  //   console.log("onlineUsers", onlineUsers);
+  // }, [user._id, socket, onlineUsers]);
+
+  useEffect(() => {
+    if (user._id != "") {
+      const getConversations = async () => {
+        try {
+          const res = await Roomster.get("conversations/" + user._id);
+          setConversations(res.data.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getConversations();
+
+      const getUnseenConversaations = async () => {
+        const response = await Roomster.get(
+          `conversations/${user._id}/unseenConversations`
+        );
+        setUnseenConversations(response.data.conversationIds);
+      };
+      getUnseenConversaations();
+    }
   }, [user._id]);
   useEffect(() => {
     socket?.on("getMessage", (data) => {
-      setArrivalMessage({
-        senderId: data.sender,
-        text: data.text,
-        createdAt: Date.now(),
+      let conversationExists = false;
+      conversations.forEach((conversation) => {
+        conversation.members.forEach((member) => {
+          if (member._id === data.sender._id) {
+            conversationExists = true;
+          }
+        });
       });
+      if (conversationExists) {
+        setArrivalMessage({
+          senderId: data.sender,
+          text: data.text,
+          createdAt: Date.now(),
+        });
+      } else {
+        const openConversation = async (memberId) => {
+          try {
+            const response = await Roomster.post("conversations/" + user._id, {
+              members: [memberId, user._id],
+            });
+            setConversations((prev) => [response.data, ...prev]);
+            setCurrentChat(response.data);
+            setPage(1);
+            setHasMore(true);
+            setFreiend(response.data?.members.find((m) => m._id !== user._id));
+            dipsatch(
+              removeUnseen(
+                response.data?.members.find((m) => m._id !== user._id)._id
+              )
+            );
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        openConversation(data.sender._id);
+      }
     });
-  }, [socket]);
+  }, [socket, currentChat]);
 
   useEffect(() => {
     const getMessages = async () => {
       try {
         const res = await Roomster.get(
-          `messages/${user?._id}/msg/${currentChat?._id}`
-          // {
-          //   // data: {
-          //   conversationId: currentChat?._id,
-          //   // },
-          // }
+          `messages/${user?._id}/msg/${currentChat?._id}?limit=10&page=${page}`
         );
-        setMessages(res.data.data);
+        setMessages(res.data.data.reverse());
+        setPage(2);
       } catch (err) {
         console.log(err);
       }
@@ -94,17 +188,11 @@ function MessagePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const message = {
-      sender: user._id,
-      text: newMessage,
-      conversationId: currentChat._id,
-    };
     socket?.emit("sendMessage", {
       sender: user,
       receiverId: friend._id,
       text: newMessage,
     });
-
     try {
       const res = await Roomster.post("/messages/" + user._id, {
         senderId: user._id,
@@ -117,11 +205,43 @@ function MessagePage() {
       console.log(err);
     }
   };
-
+  const cliclOnConversation = (conv) => {
+    setCurrentChat(conv);
+    setPage(1);
+    setHasMore(true);
+    setFreiend(conv?.members.find((m) => m._id !== user._id));
+    dipsatch(removeUnseen(conv?.members.find((m) => m._id !== user._id)._id));
+  };
+  const loadMore = async () => {
+    if (loading || !hasMore) {
+      return;
+    }
+    setLoading(true);
+    setPage(page + 1);
+    const newData = await Roomster.get(
+      `messages/${user?._id}/msg/${currentChat?._id}?limit=10&page=${page}`
+    );
+    if (newData.data.data.length === 0) {
+      setHasMore(false);
+    } else {
+      setMessages((prevState) => [
+        ...newData.data.data.reverse(),
+        ...prevState,
+      ]);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [currentChat, arrivalMessage, messages]);
 
+  const handleScroll = (event) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    // console.log(scrollHeight, scrollTop, clientHeight);
+    if (scrollTop === 0) {
+      loadMore();
+    }
+  };
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
       <Grid item xs={3} sm={4} md={4}>
@@ -137,22 +257,15 @@ function MessagePage() {
 
           <div className="conversation">
             {conversations.map((conv) => (
-              <div
-                key={conv._id}
-                onClick={() => {
-                  setCurrentChat(conv);
-                  setFreiend(conv.members.find((m) => m._id !== user._id));
-                }}>
-                <Conversation conversation={conv} user={user} />
+              <div key={conv._id} onClick={() => cliclOnConversation(conv)}>
+                <Conversation
+                  conversation={conv}
+                  user={user}
+                  unseen={unseenConvo}
+                  // onlineUsers={onlineUsers}
+                />
               </div>
             ))}
-
-            {/* <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation />
-            <Conversation /> */}
           </div>
         </Paper>
       </Grid>
@@ -175,7 +288,7 @@ function MessagePage() {
                 // subheader="September 14, 2016"
               />
               <Divider></Divider>
-              <div className="messages-box">
+              <div className="messages-box" onScroll={handleScroll}>
                 {messages.map((msg) => (
                   <div ref={scrollRef} key={uuidv4()}>
                     <Message
@@ -183,17 +296,11 @@ function MessagePage() {
                       own={msg.senderId._id === user._id}></Message>
                   </div>
                 ))}
-
-                {/* <Message own={true}></Message>
-              <Message></Message>
-              <Message own={true}></Message>
-              <Message></Message>
-              <Message own={true}></Message>
-              <Message></Message>
-              <Message own={true}></Message>
-              <Message></Message>
-              <Message own={true}></Message>
-              <Message></Message> */}
+                {loading && (
+                  <div className="centerItem">
+                    <CircularProgress />
+                  </div>
+                )}
               </div>
 
               <div

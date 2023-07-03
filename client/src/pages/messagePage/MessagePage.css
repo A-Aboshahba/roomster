@@ -7,21 +7,20 @@
 }
 
 .messages {
-  height: 82vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
 }
 .messages-box {
   padding: 10px;
   height: 60vh;
-
   border-radius: 10px 0 0 10px;
   overflow-y: scroll;
 }
 .messages-bottom {
-  height: 8vh;
+  /* height: 8vh; */
 
-  /* /* color: #0695ff; */
+   /* color: #0695ff; */
 }
 
 .messages-top {

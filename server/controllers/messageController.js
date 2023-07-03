@@ -4,16 +4,18 @@ const Message = mongoose.model("Messages");
 
 exports.getConvoMessages = (request, response, next) => {
   const apiFeature = new ApiFeature(
-    Message.find({ conversationId: request.params.convId }).populate({
-      path: "senderId",
-      select: { password: 0 },
-    }),
+    Message.find({ conversationId: request.params.convId })
+      .sort({ _id: -1 })
+      .populate({
+        path: "senderId",
+        select: { password: 0 },
+      }),
     request.query
   );
 
-  apiFeature// .paginate()
-  .mongooseQuery
-    .then((docs) => {
+  apiFeature
+    .paginate()
+    .mongooseQuery.then((docs) => {
       if (!docs) {
         let error = new Error("there're no Messages  to show");
         error.statusCode = 404;

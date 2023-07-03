@@ -14,7 +14,8 @@ import MoreOffer from "../../components/HousingComponent/MoreOffer";
 import ReviewSection from "../../components/HousingComponent/ReviewSection";
 import HousingInfo from "../../components/HousingComponent/HousingInfo";
 import PickerDate from "../../components/HousingComponent/PickerData/PickerDate";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSingleApartment,
@@ -28,6 +29,7 @@ export default function HousingDetails() {
   const params = useParams();
   console.log(params.apartmentId);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const singleApartment = useSelector(getSingleApartmentState);
   let counter = 0;
   const user = useSelector((state) => {
@@ -62,10 +64,9 @@ export default function HousingDetails() {
     );
     setIsFavorite((prev) => !prev);
   };
-    
-
-
-
+  const openChat = (id) => {
+    navigate("/Message", { state: { id } });
+  };
   return (
     <>
       <Box
@@ -73,8 +74,7 @@ export default function HousingDetails() {
           flexGrow: 1,
           position: "relative",
           marginTop: "6rem",
-        }}
-      >
+        }}>
         <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
           <Typography variant="h5" color="initial">
             {singleApartment.title}
@@ -101,8 +101,7 @@ export default function HousingDetails() {
           sx={{
             height: 500,
             overflow: "hidden",
-          }}
-        >
+          }}>
           <Grid item xs={12} md={6}>
             <img
               style={{
@@ -116,8 +115,7 @@ export default function HousingDetails() {
           <Grid
             item
             xs={6}
-            sx={{ display: { xs: "none", md: "block" }, height: 500 }}
-          >
+            sx={{ display: { xs: "none", md: "block" }, height: 500 }}>
             <Grid container spacing={2} component="div" sx={{ height: 500 }}>
               <Grid item xs={6}>
                 <img
@@ -182,8 +180,7 @@ export default function HousingDetails() {
           alignItems: "flex-start",
           justifyContent: "space-between",
         }}
-        spacing={3}
-      >
+        spacing={3}>
         <Grid item md={7}>
           <Box sx={{ mb: 1 }}>
             <Avatar
@@ -194,6 +191,12 @@ export default function HousingDetails() {
             <Box>
               <Typography variant="h4" color="initial">
                 Entire villa hosted by {singleApartment?.userId?.fullName}
+                {user._id !== singleApartment?.userId?._id && (
+                  <Button
+                    onClick={() => openChat(singleApartment?.userId?._id)}>
+                    chat
+                  </Button>
+                )}
               </Typography>
               <Typography variant="p" color="initial">
                 Balcony ({singleApartment.apartmentSpecification?.noOfBalcony})-
@@ -228,8 +231,7 @@ export default function HousingDetails() {
                             alignItems: "center",
                             gap: 2,
                             mb: 3,
-                          }}
-                        >
+                          }}>
                           {item.icon}
                           <Typography variant="body1" color="initial">
                             {item.title}
@@ -252,13 +254,15 @@ export default function HousingDetails() {
               padding: "10px",
               width: "fit-content",
               margin: "auto",
-            }}
-          >
-            <PickerDate reservationsArr={singleApartment.reservationsArr} price={singleApartment.price} id={singleApartment._id} />
+            }}>
+            <PickerDate
+              reservationsArr={singleApartment.reservationsArr}
+              price={singleApartment.price}
+              id={singleApartment._id}
+            />
           </Box>
         </Grid>
       </Grid>
-     
     </>
   );
 }

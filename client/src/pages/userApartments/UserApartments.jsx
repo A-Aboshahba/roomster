@@ -17,7 +17,7 @@ const UserApartments = () => {
     if (user._id !== "") {
       try {
         const { data } = await Roomster.get(`user/${user._id}/apartments`);
-        // console.log("data", data);
+        console.log("data", data);
         setApartments(data);
         console.log("asdasdas", apartments);
       } catch (error) {

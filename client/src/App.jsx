@@ -29,7 +29,7 @@ function App() {
       const userId = decodedToken._id;
       dispatch(fetchUser(userId));
       dispatch(fetchCurrency());
-      const socket = io("http://localhost:3030");
+      const socket = io("http://localhost:8080");
       socket.emit("addUser", userId);
       dispatch(setSocket(socket));
       dispatch(getApartments({ page: 1 }));      

@@ -24,9 +24,16 @@ p {
 }
 
 .card-conversation:hover {
-  background-color: #acf3b8;
+  background-color: #0695ff;
 }
-
+.seen{
+  background-color: white;
+  
+}
+.unseen{
+  background-color: #eee;
+  font-weight: bolder;
+}
 .card-conversation .title-content {
   display: block;
 }

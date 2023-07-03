@@ -6,6 +6,14 @@ module.exports.deleteSingleUser = param("id")
   .isMongoId()
   .withMessage("id must be mongo ObjectId");
 
+module.exports.changeSingleUserPassword = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+  body("password")
+    .isString()
+    .withMessage("password must be alphapetic")
+    .notEmpty()
+    .withMessage("password cant be blank"),
+];
 module.exports.updateSingleUser = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
   body("isAdmin").isEmpty().withMessage("cant update this propety"),
@@ -29,11 +37,13 @@ module.exports.updateSingleUser = [
     .withMessage("fullName must be alphapetic")
     .optional(),
   body("password")
-    .isString()
-    .withMessage("password must be alphapetic")
-    .notEmpty()
-    .withMessage("password cant be blank")
-    .optional(),
+    .isEmpty()
+    .withMessage("you  can't change password from here"),
+  // .isString()
+  // .withMessage("password must be alphapetic")
+  // .notEmpty()
+  // .withMessage("password cant be blank")
+  // .optional()
   body("email")
     .notEmpty()
     .withMessage("email cant be blank")
@@ -74,6 +84,10 @@ module.exports.addProfileImage = [
 ];
 module.exports.deleteProfileImage = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+];
+module.exports.updateProfileImage = [
+  param("id").isMongoId().withMessage("id must be mongo ObjectId"),
+  body("imageId").isString().withMessage("imageId must be String "),
 ];
 module.exports.getUserReservations = [
   param("id").isMongoId().withMessage("id must be mongo ObjectId"),

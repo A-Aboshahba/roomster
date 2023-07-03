@@ -7,17 +7,21 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser, setSocket } from "./store/Slices/userSlice.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
 import Footer from "./components/Footer/Footer";
 import { io } from "socket.io-client";
+import { getApartments } from "./store/Slices/apartment.js";
+import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
+
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => {
     return state.user?.user;
   });
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -28,17 +32,30 @@ function App() {
       const socket = io("http://localhost:8080");
       socket.emit("addUser", userId);
       dispatch(setSocket(socket));
-      console.log(socket);
+      dispatch(getApartments({ page: 1 }));      
+      if (decodedToken.isAdmin) {
+        console.log("admin is work??");
+        dispatch(fetchUsers());
+      }
     }
   }, [dispatch, user._id]);
 
+  //========================
+  const [path, setPath] = useState("");
+  const getPathName = (pathName) => {
+    setPath(pathName);
+  };
+  //=======================
+
   return (
-    <BrowserRouter>
-      <Navbar />
+      <BrowserRouter>
+      {!path.includes("/dashboard") && (
+        <Navbar />
+      )}
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
-        <Routers />
+        <Routers getPathName={getPathName} />
       </Container>
-      <Footer />
+      {!path.includes("/dashboard") && <Footer />}
       <ToastContainer />
     </BrowserRouter>
   );

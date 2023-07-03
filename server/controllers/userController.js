@@ -74,9 +74,48 @@ module.exports.updateSingleUser = (request, response, next) => {
         throw error;
       }
       console.log(data);
+      response.status(200).json({ data: "edit User successfully..!", data });
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.updateSingleUser = (request, response, next) => {
+  // if (request.body.password) {
+  //   request.body.password = CryptoJS.AES.encrypt(
+  //     request.body.password,
+  //     process.env.PASS_SEC
+  //   ).toString();
+  // }
+  User.updateOne({ _id: request.params.id }, request.body)
+    .then((data) => {
+      if (data.matchedCount == 0) {
+        let error = new Error("this user doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      console.log(data);
+      response.status(200).json({ data: "edit User successfully..!", data });
+    })
+    .catch((error) => next(error));
+};
+
+module.exports.changeSingleUserPassword = (request, response, next) => {
+  request.body.password = CryptoJS.AES.encrypt(
+    request.body.password,
+    process.env.PASS_SEC
+  ).toString();
+
+  User.updateOne({ _id: request.params.id }, request.body)
+    .then((data) => {
+      if (data.matchedCount == 0) {
+        let error = new Error("this user doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      console.log(data);
       response
         .status(200)
-        .json({ data: "edit  Teacher successfully..!", data });
+        .json({ message: "password changed successfully..!", data });
     })
     .catch((error) => next(error));
 };
@@ -229,6 +268,51 @@ exports.deleteProfileImage = (request, response, next) => {
               response
                 .status(200)
                 .json({ message: " image is deleted successfully" });
+            })
+            .catch((err) => next(err));
+        })
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
+};
+
+exports.updateProfileImage = (request, response, next) => {
+  const publicId = request.file.path.replace(/^.*[\\\/]/, "").split(".")[0];
+  const image = { url: request.file.path, publicId: publicId };
+
+  User.findOne({
+    _id: request.params.id,
+  })
+    .then((doc) => {
+      if (!doc) {
+        let error = new Error("this apartment doesn't exist");
+        error.statusCode = 404;
+        throw error;
+      }
+      cloudinary.uploader
+        .destroy("users/" + request.body.imageId)
+        .then((result) => {
+          console.log(result);
+          if (result.result == "not found") {
+            let error = new Error("image id is not correct");
+            error.statusCode = 404;
+            throw error;
+          }
+          User.updateOne(
+            { _id: request.params.id },
+            {
+              $set: { image: image },
+            }
+          )
+            .then((doc) => {
+              if (doc.matchedCount == 0) {
+                let error = new Error("this apartment doesn't exist");
+                error.statusCode = 404;
+                throw error;
+              }
+              response
+                .status(200)
+                .json({ message: " image is updated successfully" });
             })
             .catch((err) => next(err));
         })

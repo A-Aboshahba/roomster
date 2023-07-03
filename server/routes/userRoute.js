@@ -67,6 +67,13 @@ router
     validator.deleteProfileImage,
     validationError,
     controller.deleteProfileImage
+  )
+  .patch(
+    verifyTokenAndAuthorization,
+    validator.updateProfileImage,
+    validationError,
+    controller.upload.single("image"),
+    controller.updateProfileImage
   );
 router
   .route("/:id/reservations")
@@ -93,5 +100,12 @@ router
     validationError,
     controller.getUserApartments
   );
-
+router
+  .route("/:id/password")
+  .patch(
+    verifyTokenAndAuthorization,
+    validator.changeSingleUserPassword,
+    validationError,
+    controller.changeSingleUserPassword
+  );
 module.exports = router;

@@ -6,13 +6,15 @@ import moment from "moment";
 import Typography from "@mui/material/Typography";
 import { Rating } from "@mui/material";
 import Roomster from "../../API/config";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditReview from "./EditReview";
 import "sweetalert2/src/sweetalert2.scss";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { removeReview } from "../../store/Slices/apartment";
 export default function CardReview({ item }) {
   const { user } = useSelector((state) => state.user);
+  let dispatch = useDispatch();
   const handleDelete = (e, reviewId, userId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -25,13 +27,9 @@ export default function CardReview({ item }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await Roomster.delete(`reviews/${reviewId}`, {
-            data: {
-              userId: userId,
-            },
-          });
+          await dispatch(removeReview({ reviewId, userId }));
           Swal.fire("Deleted!", "Your review has been deleted.", "success");
-          e.target.closest(".reviewCard").remove();
+          e.target.closest(".reviewCard").parentNode.remove();
         } catch (error) {
           console.log(error);
         }

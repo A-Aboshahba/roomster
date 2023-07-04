@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
-import { green } from "@mui/material/colors";
+import { blue, green } from "@mui/material/colors";
 import { grey } from "@mui/material/colors";
 import store from "./store/store.jsx";
 import { Provider } from "react-redux";
@@ -15,6 +15,9 @@ let theme = createTheme({
   palette: {
     primary: {
       main: green[500],
+    },
+    blue: {
+      main: blue[500],
     },
     secondary: {
       main: grey[50],

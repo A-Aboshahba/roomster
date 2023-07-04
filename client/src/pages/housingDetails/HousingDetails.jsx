@@ -24,6 +24,7 @@ import {
 } from "../../store/Slices/apartment";
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 import { createAllIcons } from "../../utils/createIcons";
+import { SkeletonPageDetails } from "../../utils/SkeletonPage";
 
 export default function HousingDetails() {
   const params = useParams();
@@ -32,8 +33,8 @@ export default function HousingDetails() {
   const navigate = useNavigate();
   const singleApartment = useSelector(getSingleApartmentState);
   let counter = 0;
-  const user = useSelector((state) => {
-    return state.user?.user;
+  const { user, loading } = useSelector((state) => {
+    return state.user;
   });
   const allIcons = createAllIcons(singleApartment.apartmentSpecification);
   const [isFavorite, setIsFavorite] = useState(
@@ -69,200 +70,233 @@ export default function HousingDetails() {
   };
   return (
     <>
-      <Box
-        sx={{
-          flexGrow: 1,
-          position: "relative",
-          marginTop: "6rem",
-        }}>
-        <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
-          <Typography variant="h5" color="initial">
-            {singleApartment.title}
-          </Typography>
-          <Box style={{ cursor: "pointer" }}>
-            {isFavorite ? (
-              <AiFillHeart
-                size={30}
-                color="#fff"
-                fill="#b12929"
-                onClick={() => {
-                  disLike();
-                }}
-              />
-            ) : (
-              <FaRegHeart size={30} color="#000" onClick={() => Like()} />
-            )}
-          </Box>
-        </Box>
-        <Grid
-          container
-          spacing={2}
-          component="div"
-          sx={{
-            height: 500,
-            overflow: "hidden",
-          }}>
-          <Grid item xs={12} md={6}>
-            <img
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              src={singleApartment.images ? singleApartment.images[0].url : ""}
-              alt=""
-            />
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            sx={{ display: { xs: "none", md: "block" }, height: 500 }}>
-            <Grid container spacing={2} component="div" sx={{ height: 500 }}>
-              <Grid item xs={6}>
-                <img
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  src={
-                    singleApartment.images ? singleApartment.images[1].url : ""
-                  }
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <img
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  src={
-                    singleApartment.images ? singleApartment.images[2].url : ""
-                  }
-                  alt=""
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <img
-                  style={{
-                    width: " 100%",
-                    height: "100%",
-                  }}
-                  src={
-                    singleApartment.images ? singleApartment.images[3].url : ""
-                  }
-                  alt=""
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <img
-                  style={{
-                    width: " 100%",
-                    height: "100%",
-                  }}
-                  src={
-                    singleApartment.images ? singleApartment.images[4].url : ""
-                  }
-                  alt=""
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        {/* to display more image for housing */}
-        <Box sx={{ position: "absolute", bottom: "20px", left: "10px" }}>
-          <FullScreenDialog images={singleApartment.images} />
-        </Box>
-      </Box>
-      <Grid
-        container
-        sx={{
-          mt: 4,
-          mb: 1,
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-        }}
-        spacing={3}>
-        <Grid item md={7}>
-          <Box sx={{ mb: 1 }}>
-            <Avatar
-              sx={{ width: 70, height: 70 }}
-              alt={singleApartment?.userId?.fullName}
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
-            />
-            <Box>
-              <Typography variant="h4" color="initial">
-                Entire villa hosted by {singleApartment?.userId?.fullName}
-                {user._id !== singleApartment?.userId?._id && (
-                  <Button
-                    onClick={() => openChat(singleApartment?.userId?._id)}>
-                    chat
-                  </Button>
-                )}
-              </Typography>
-              <Typography variant="p" color="initial">
-                Balcony ({singleApartment.apartmentSpecification?.noOfBalcony})-
-                Beds ({singleApartment.apartmentSpecification?.noOfBeds})-
-                Kitchens ({singleApartment.apartmentSpecification?.noOfKitchens}
-                ) - Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
-              </Typography>
-            </Box>
-          </Box>
-          <Divider />
-          <HousingInfo title="Description" body={singleApartment.description} />
-          <HousingInfo title="main rolls" body={singleApartment.rules} />
-          <HousingInfo
-            title="cancelation policy"
-            body={singleApartment.cancelPolicy}
-          />
-          <Box sx={{ mt: 2, mb: 1 }}>
-            <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
-              What this home has to offer
-            </Typography>
-            <Grid container spacing={2} sx={{ paddingLeft: "18px" }}>
-              {allIcons[0] != undefined &&
-                allIcons.map(
-                  (item) =>
-                    item.isFound &&
-                    counter < 6 && (
-                      <Grid item key={item.key} xs={12} sm={6}>
-                        <span style={{ display: "none" }}>{counter++}</span>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            mb: 3,
-                          }}>
-                          {item.icon}
-                          <Typography variant="body1" color="initial">
-                            {item.title}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    )
-                )}
-            </Grid>
-            <MoreOffer allIcons={allIcons} />
-          </Box>
-          <Divider />
-          <ReviewSection />
-        </Grid>
-        <Grid item md={5} sx={{ position: "sticky", top: 100 }}>
+      {!loading ? (
+        <>
           <Box
             sx={{
-              textAlign: "center",
-              boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-              padding: "10px",
-              width: "fit-content",
-              margin: "auto",
-            }}>
-            <PickerDate
-              reservationsArr={singleApartment.reservationsArr}
-              price={singleApartment.price}
-              id={singleApartment._id}
-            />
+              flexGrow: 1,
+              position: "relative",
+              marginTop: "6rem",
+            }}
+          >
+            <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
+              <Typography variant="h5" color="initial">
+                {singleApartment.title}
+              </Typography>
+              <Box style={{ cursor: "pointer" }}>
+                {isFavorite ? (
+                  <AiFillHeart
+                    size={30}
+                    color="#fff"
+                    fill="#b12929"
+                    onClick={() => {
+                      disLike();
+                    }}
+                  />
+                ) : (
+                  <FaRegHeart size={30} color="#000" onClick={() => Like()} />
+                )}
+              </Box>
+            </Box>
+            <Grid
+              container
+              spacing={2}
+              component="div"
+              sx={{
+                height: 500,
+                overflow: "hidden",
+              }}
+            >
+              <Grid item xs={12} md={6}>
+                <img
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  src={
+                    singleApartment.images ? singleApartment.images[0].url : ""
+                  }
+                  alt=""
+                />
+              </Grid>
+              <Grid
+                item
+                xs={6}
+                sx={{ display: { xs: "none", md: "block" }, height: 500 }}
+              >
+                <Grid
+                  container
+                  spacing={2}
+                  component="div"
+                  sx={{ height: 500 }}
+                >
+                  <Grid item xs={6}>
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      src={
+                        singleApartment.images
+                          ? singleApartment.images[1].url
+                          : ""
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      src={
+                        singleApartment.images
+                          ? singleApartment.images[2].url
+                          : ""
+                      }
+                      alt=""
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <img
+                      style={{
+                        width: " 100%",
+                        height: "100%",
+                      }}
+                      src={
+                        singleApartment.images
+                          ? singleApartment.images[3].url
+                          : ""
+                      }
+                      alt=""
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <img
+                      style={{
+                        width: " 100%",
+                        height: "100%",
+                      }}
+                      src={
+                        singleApartment.images
+                          ? singleApartment.images[4].url
+                          : ""
+                      }
+                      alt=""
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            {/* to display more image for housing */}
+            <Box sx={{ position: "absolute", bottom: "20px", left: "10px" }}>
+              <FullScreenDialog images={singleApartment.images} />
+            </Box>
           </Box>
-        </Grid>
-      </Grid>
+          <Grid
+            container
+            sx={{
+              mt: 4,
+              mb: 1,
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+            }}
+            spacing={3}
+          >
+            <Grid item md={7}>
+              <Box sx={{ mb: 1 }}>
+                <Avatar
+                  sx={{ width: 70, height: 70 }}
+                  alt={singleApartment?.userId?.fullName}
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+                />
+                <Box>
+                  <Typography variant="h4" color="initial">
+                    Entire villa hosted by {singleApartment?.userId?.fullName}
+                    {user._id !== singleApartment?.userId?._id && (
+                      <Button
+                        onClick={() => openChat(singleApartment?.userId?._id)}
+                      >
+                        chat
+                      </Button>
+                    )}
+                  </Typography>
+                  <Typography variant="p" color="initial">
+                    Balcony (
+                    {singleApartment.apartmentSpecification?.noOfBalcony})- Beds
+                    ({singleApartment.apartmentSpecification?.noOfBeds})-
+                    Kitchens (
+                    {singleApartment.apartmentSpecification?.noOfKitchens}) -
+                    Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider />
+              <HousingInfo
+                title="Description"
+                body={singleApartment.description}
+              />
+              <HousingInfo title="main rolls" body={singleApartment.rules} />
+              <HousingInfo
+                title="cancelation policy"
+                body={singleApartment.cancelPolicy}
+              />
+              <Box sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
+                  What this home has to offer
+                </Typography>
+                <Grid container spacing={2} sx={{ paddingLeft: "18px" }}>
+                  {allIcons[0] != undefined &&
+                    allIcons.map(
+                      (item) =>
+                        item.isFound &&
+                        counter < 6 && (
+                          <Grid item key={item.key} xs={12} sm={6}>
+                            <span style={{ display: "none" }}>{counter++}</span>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 2,
+                                mb: 3,
+                              }}
+                            >
+                              {item.icon}
+                              <Typography variant="body1" color="initial">
+                                {item.title}
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        )
+                    )}
+                </Grid>
+                <MoreOffer allIcons={allIcons} />
+              </Box>
+              <Divider />
+              <ReviewSection />
+            </Grid>
+            <Grid item md={5} sx={{ position: "sticky", top: 100 }}>
+              <Box
+                sx={{
+                  textAlign: "center",
+                  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  padding: "10px",
+                  width: "fit-content",
+                  margin: "auto",
+                }}
+              >
+                <PickerDate
+                  reservationsArr={singleApartment.reservationsArr}
+                  price={singleApartment.price}
+                  id={singleApartment._id}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <SkeletonPageDetails />
+      )}
     </>
   );
 }

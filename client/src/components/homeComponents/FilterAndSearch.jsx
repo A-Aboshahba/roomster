@@ -1,18 +1,17 @@
 import React, { useEffect } from "react";
 import { Grid, TextField } from "@mui/material";
 import FilterButton from "./FilterButton";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { getApartments } from "../../store/Slices/apartment";
 
 const FilterAndSearch = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
-  console.log(searchQuery);
   const dispatch = useDispatch();
-  
-    useEffect(() => {
-      dispatch(getApartments({ page: 1, keyword: `&keyword=${searchQuery}` }));
-    }, [dispatch, searchQuery]);
-  
+
+  useEffect(() => {
+    dispatch(getApartments({ page: 1, keyword: `&keyword=${searchQuery}` }));
+  }, [dispatch, searchQuery]);
+
   return (
     <Grid
       container
@@ -22,7 +21,7 @@ const FilterAndSearch = () => {
       className="center"
     >
       <Grid item xs={9} md={10} lg={11}>
-        <form >
+        <form>
           <TextField
             fullWidth
             variant="outlined"
@@ -40,7 +39,7 @@ const FilterAndSearch = () => {
         <Grid container justifyContent="center">
           <FilterButton />
         </Grid>
-      </Grid> 
+      </Grid>
     </Grid>
   );
 };

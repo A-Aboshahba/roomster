@@ -106,14 +106,12 @@ export default function FilterButton() {
     .join('&');
 
 
-  console.log(queryString)
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setWholeObj(prevValues => ({ ...prevValues, [name]: checked }));
   };
 
-  console.log(wholeObj)
   function handlePropertyTypeClick(id, title) {
     setIsClicked(!clicked)
     setWholeObj({ ...wholeObj, type: title })

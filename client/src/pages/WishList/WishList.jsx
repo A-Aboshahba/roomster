@@ -1,14 +1,16 @@
-import { useEffect } from "react";
 import LocationCards from "../../components/Card/LocationCard";
 import { useSelector } from "react-redux";
+
+import { SkeletonCard } from "../../utils/SkeletonPage";
+
 function WishList() {
-  const user = useSelector((state) => {
-    return state.user.user;
+  const { user, loading } = useSelector((state) => {
+    return state.user;
   });
-  console.log("User Data From Wish List ", user);
+  console.log(loading);
   return (
     <>
-      <LocationCards cards={user?.favourites} />;
+      {!loading ? <LocationCards cards={user?.favourites} /> : <SkeletonCard />}
     </>
   );
 }

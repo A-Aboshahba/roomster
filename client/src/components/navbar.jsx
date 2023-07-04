@@ -66,7 +66,6 @@ function Navbar() {
   });
   // const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
-  // console.log(user)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,7 +113,6 @@ function Navbar() {
   }, [user._id]);
 
   useEffect(() => {
-    console.log(unseenNumber, user._id);
     if (unseenNumber == null && user._id != "") {
       const getNotifications = async () => {
         const { data } = await Roomster.get(`notifications/${user._id}`);
@@ -130,7 +128,6 @@ function Navbar() {
         const response = await Roomster.get(
           `conversations/${user._id}/unseenConversations`
         );
-        console.log(response);
         dispatch(setUnseen(response.data.senderIds));
       };
       getUnseenConversaations();
@@ -138,7 +135,6 @@ function Navbar() {
   }, [user._id, unseenNumber]);
   useEffect(() => {
     socket?.on("getNotification", (notification) => {
-      console.log("  get notifi");
       setUnseenNumber(unseenNumber + 1);
       setNotifications((prevState) => ({
         data: [
@@ -368,10 +364,7 @@ function Navbar() {
           <Link to={item} key={item}>
             {!(item === "Message") && (
               <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => console.log("first")}
-                  sx={{ textAlign: "center" }}
-                >
+                <ListItemButton sx={{ textAlign: "center" }}>
                   <ListItemText primary={item} />
                 </ListItemButton>
               </ListItem>
@@ -379,10 +372,7 @@ function Navbar() {
             {item === "Message" && (
               <Badge badgeContent={unseenConvo.length} color="error">
                 <ListItem disablePadding>
-                  <ListItemButton
-                    onClick={() => console.log("first")}
-                    sx={{ textAlign: "center" }}
-                  >
+                  <ListItemButton sx={{ textAlign: "center" }}>
                     <ListItemText primary={item} />
                   </ListItemButton>
                 </ListItem>

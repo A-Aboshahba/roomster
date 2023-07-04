@@ -45,6 +45,7 @@ const initialState = {
   error: null,
   socket: null,
   unseen: [],
+  onlineUsers: [],
 };
 
 const userSlice = createSlice({
@@ -73,6 +74,14 @@ const userSlice = createSlice({
     },
     resetUnseen: (state) => {
       state.unseen = [];
+    },
+    addOnlineUser: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
+    removeOnlineUser: (state, action) => {
+      state.onlineUsers = state.onlineUsers.filter(
+        (user) => user !== action.payload
+      );
     },
   },
   extraReducers: {
@@ -112,5 +121,6 @@ export const {
   addUnseen,
   removeUnseen,
   resetUnseen,
+  addOnlineUser,
 } = userSlice.actions;
 export default userSlice.reducer;

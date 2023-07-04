@@ -11,49 +11,34 @@ import Avatar from "@mui/material/Avatar";
 import "./conversation.css";
 import { useSelector } from "react-redux";
 
-function Conversation({
-  conversation,
-  user,
-  unseen,
-  //  onlineUsers
-}) {
-  const [onlineUsers, setOnlineUsers] = useState([]);
+function Conversation({ conversation, user, unseen }) {
   const [online, setOnline] = useState(false);
   const [friend, setFreiend] = useState(
     conversation.members.find((m) => m._id !== user._id)
   );
-  const socket = useSelector((state) => {
-    return state.user?.socket;
+  const onlineUsers = useSelector((state) => {
+    return state.user?.onlineUsers;
   });
 
-  useEffect(() => {
-    socket?.emit("getOnlineUsers");
-    socket?.on("sentOnlineUsers", (users) => {
-      setOnlineUsers(users);
+  const isOnline = (id) => {
+    onlineUsers?.forEach((onlineUser) => {
+      if (onlineUser.userId === id) {
+        setOnline(true);
+      }
     });
-    socket?.on("getUsers", (users) => {
-      setOnlineUsers(users);
-    });
-    console.log("onlineUsers", onlineUsers);
-  }, [user._id]);
-
+  };
   useEffect(() => {
-    const isOnline = (id) => {
-      onlineUsers?.forEach((onlineUser) => {
-        if (onlineUser.userId === id) {
-          // return true;
-          setOnline(true);
-        } else {
-          setOnline(false);
-        }
-      });
-    };
     isOnline(friend._id);
-  }, [friend._id, onlineUsers]);
+  }, [friend, onlineUsers, online]);
+
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
-      backgroundColor: online ? "#44b700" : "#eee",
-      color: online ? "#44b700" : "#eee",
+      backgroundColor: onlineUsers.some((user) => user.userId === friend._id)
+        ? "#44b700"
+        : "#eee",
+      color: onlineUsers.some((user) => user.userId === friend._id)
+        ? "#44b700"
+        : "#eee",
       boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
       "&::after": {
         position: "absolute",
@@ -84,11 +69,7 @@ function Conversation({
       <div
         className={`card-conversation ${
           unseen.includes(friend._id) ? "unseen" : "seen"
-        }`}
-        // style={{
-        //   backgroundColor: unseen.includes(conversation._id) ? "#eee" : "white",
-        // }}
-      >
+        }`}>
         <StyledBadge
           overlap="circular"
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -111,9 +92,4 @@ function Conversation({
     </>
   );
 }
-// @media only screen and (max-width: 600px) {
-//     .MuiCardHeader-root .MuiTypography-root {
-//       display: none;
-//     }
-//   }
 export default Conversation;

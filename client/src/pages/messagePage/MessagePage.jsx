@@ -1,7 +1,10 @@
-import React from "react";
-
 import Grid from "@mui/material/Grid";
-import { CircularProgress, Divider, TextField } from "@mui/material";
+import {
+  CircularProgress,
+  Divider,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
@@ -12,13 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Roomster from "../../API/config";
 import "./MessagePage.css";
 import Conversation from "../../components/MessagePageComponent/Conversation";
-import { io } from "socket.io-client";
 import Message from "../../components/MessagePageComponent/Message";
-import { createUnaryUnit, padding, width } from "@mui/system";
+import { Box } from "@mui/system";
 import { v4 as uuidv4 } from "uuid";
-import { removeUnseen } from "../../store/Slices/userSlice";
+import { addOnlineUser, removeUnseen } from "../../store/Slices/userSlice";
 import { useLocation } from "react-router-dom";
-
+import { flexCenter } from "../../theme/commonStyles";
 function MessagePage() {
   // { socket }
   const user = useSelector((state) => {
@@ -30,19 +32,21 @@ function MessagePage() {
   const [newMessage, setNewMessage] = useState("");
   const [searchString, setSearchString] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [onlineUsers, setOnlineUsers] = useState([]);
   const [friend, setFreiend] = useState(null);
   const scrollRef = useRef();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [unseenConversations, setUnseenConversations] = useState([]);
   const [openChat, setOpenChat] = useState(null);
   const conversationsBeforeSearch = useRef(null);
   const dipsatch = useDispatch();
   const location = useLocation();
   const conversationLength = useRef(null);
   const isOpenNewChat = useRef(true);
+  const textMessageRef = useRef("");
+  const onlineUsers = useSelector((state) => {
+    return state.user?.onlineUsers;
+  });
   const socket = useSelector((state) => {
     return state.user?.socket;
   });
@@ -73,6 +77,11 @@ function MessagePage() {
     setConversations([...searchedConversations]);
     setCurrentChat(null);
   }, [searchString]);
+  useEffect(() => {
+    socket?.on("getUsers", (users) => {
+      dipsatch(addOnlineUser(users));
+    });
+  }, [user._id]);
   useEffect(() => {
     const openConversation = async (memberId) => {
       try {
@@ -105,7 +114,6 @@ function MessagePage() {
       }
     });
     if (isExist !== null) {
-      // setCurrentChat(isExist);
       setPage(1);
       setHasMore(true);
       if (currentChat === isExist) {
@@ -113,8 +121,6 @@ function MessagePage() {
           removeUnseen(isExist?.members.find((m) => m._id !== user._id)._id)
         );
       }
-      // setFreiend(isExist?.members.find((m) => m._id !== user._id));
-      // console.log(isExist);
     } else {
       if (openChat !== null) {
         console.log("openchat");
@@ -146,14 +152,6 @@ function MessagePage() {
         }
       };
       getConversations();
-
-      const getUnseenConversaations = async () => {
-        const response = await Roomster.get(
-          `conversations/${user._id}/unseenConversations`
-        );
-        setUnseenConversations(response.data.conversationIds);
-      };
-      getUnseenConversaations();
     }
   }, [user._id]);
   useEffect(() => {
@@ -193,20 +191,21 @@ function MessagePage() {
   }, [currentChat, user?._id]);
 
   const handleSubmit = async (e) => {
+    console.log(textMessageRef.current.value);
     e.preventDefault();
     socket?.emit("sendMessage", {
       sender: user,
       receiverId: friend._id,
-      text: newMessage,
+      text: textMessageRef.current.value,
     });
     try {
       const res = await Roomster.post("/messages/" + user._id, {
         senderId: user._id,
         conversationId: currentChat._id,
-        text: newMessage,
+        text: textMessageRef.current.value,
       });
       setMessages([...messages, { ...res.data, senderId: user }]);
-      setNewMessage("");
+      textMessageRef.current.value = "";
     } catch (err) {
       console.log(err);
     }
@@ -249,7 +248,7 @@ function MessagePage() {
   }, [currentChat, arrivalMessage, messages]);
 
   const handleScroll = (event) => {
-    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    const { scrollTop } = event.currentTarget;
     // console.log(scrollHeight, scrollTop, clientHeight);
     if (scrollTop === 0) {
       loadMore();
@@ -271,7 +270,6 @@ function MessagePage() {
               setSearchString(e.target.value);
             }}
           />
-
           <div className="conversation">
             {conversations.map((conv) => (
               <div key={conv._id} onClick={() => cliclOnConversation(conv)}>
@@ -289,7 +287,7 @@ function MessagePage() {
 
       <Grid item xs={9} sm={8} md={8}>
         <Paper elevation={3}>
-          {currentChat && (
+          {currentChat !== null ? (
             <div className="messages">
               <CardHeader
                 className="messages-top"
@@ -302,7 +300,11 @@ function MessagePage() {
                   />
                 }
                 title={friend.fullName}
-                // subheader="September 14, 2016"
+                subheader={
+                  onlineUsers.some((user) => user.userId === friend._id)
+                    ? "online"
+                    : "offline"
+                }
               />
               <Divider></Divider>
               <div className="messages-box" onScroll={handleScroll}>
@@ -338,10 +340,11 @@ function MessagePage() {
                         color="info"
                         variant="standard"
                         placeholder="type message"
-                        value={newMessage}
-                        onChange={(e) => {
-                          setNewMessage(e.target.value);
-                        }}
+                        // value={newMessage}
+                        // onChange={(e) => {
+                        //   setNewMessage(e.target.value);
+                        // }}
+                        inputRef={textMessageRef}
                       />
                     </Grid>
                     <Grid item xs={2}>
@@ -363,6 +366,35 @@ function MessagePage() {
                 </Paper>
               </div>
             </div>
+          ) : (
+            // <Paper elevation={3}>
+
+            <Box
+              component="div"
+              display={flexCenter}
+              style={{
+                backgroundImage:
+                  "url('https://res.cloudinary.com/djc98fviu/image/upload/v1688438306/empty_mail_box_jskiym.jpg')",
+                height: "83vh",
+                width: "100%",
+                borderRadius: "5px",
+                backgroundSize: "cover",
+
+                backgroundRepeat: "no-repeat",
+              }}>
+              <Typography
+                variant="h5"
+                style={{
+                  borderRadius: "10px",
+                  padding: "10px 50px",
+                  color: "white",
+                  backgroundColor: "#00000080",
+                }}>
+                Open Chat
+              </Typography>
+            </Box>
+
+            // </Paper>
           )}
         </Paper>
       </Grid>

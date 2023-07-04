@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import EditProfile from "./EditProfile.jsx";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
+import { Avatar } from "@mui/material";
 
 const Profile = () => {
   const user = useSelector((state) => state.user.user);
@@ -19,22 +20,23 @@ const Profile = () => {
             alignItems: "center",
           }}
         >
-          <Box
-            component="img"
-            sx={{
-              border: "1px solid black",
-              borderRadius: "50%",
-              height: { lg: 200, md: 150, sm: 100, xs: 100 },
-              width: { lg: 200, md: 150, sm: 100, xs: 100 },
-            }}
-            alt="img"
-            src={
-              user?.image?.url === ""
-                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
-                : user?.image?.url
-            }
-          />
+          {user?.image?.url === "" ? (
+            <Avatar sx={{ width: 150, height: 150 }}></Avatar>
+          ) : (
+            <Box
+              component="img"
+              sx={{
+                border: "1px solid black",
+                borderRadius: "50%",
+                height: { lg: 200, md: 150, sm: 100, xs: 100 },
+                width: { lg: 200, md: 150, sm: 100, xs: 100 },
+              }}
+              alt="img"
+              src={user?.image?.url}
+            />
+          )}
         </Box>
+
         <Grid container spacing={2} mt={3}>
           <Grid
             item

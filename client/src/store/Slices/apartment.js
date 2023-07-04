@@ -82,6 +82,22 @@ export const addReview = createAsyncThunk(
     }
   }
 );
+export const removeReview = createAsyncThunk(
+  "apartments/removeReview",
+  async (data, thunkAPI) => {
+    const { reviewId, userId } = data;
+    try {
+      const response = await Roomster.delete(`reviews/${reviewId}`, {
+        data: {
+          userId: userId,
+        },
+      });
+      return reviewId;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
 export const updateReview = createAsyncThunk(
   "apartments/updateReview",
   async (data, thunkAPI) => {
@@ -176,6 +192,14 @@ const apartmentsSlice = createSlice({
       toastMessage("success", "Added Successfully");
       state.reviews.push(action.payload);
     },
+    //? remove review
+    [removeReview.fulfilled]: (state, action) => {
+      console.log(state.reviews);
+      let indexToRemove = state.reviews.findIndex((obj) => {
+        return obj._id == action.payload;
+      });
+      state.reviews.splice(indexToRemove, 1);
+    },
     //? update review
     [updateReview.fulfilled]: (state, action) => {
       toastMessage("success", "Edit Successfully");
@@ -183,7 +207,6 @@ const apartmentsSlice = createSlice({
       console.log(data);
       state.reviews = state.reviews.map((review) => {
         if (review._id === reviewId) {
-          console.log("found it");
           return { ...review, ...data };
         }
         return review;
@@ -199,5 +222,5 @@ export const getApartmentTotalReviwsState = (state) =>
   state.apartments.totalReviews;
 export const getSingleApartmentState = (state) =>
   state.apartments.singleApartment;
-  export const { deleteApartement } = apartmentsSlice.reducer;
+export const { deleteApartement } = apartmentsSlice.reducer;
 export default apartmentsSlice.reducer;

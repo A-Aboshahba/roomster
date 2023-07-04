@@ -16,10 +16,8 @@ import { Box } from "@mui/system";
 function ReviewSection() {
   const apartmentReviews = useSelector(getApartmentReviwsState);
   const apartmentReviewsAverage = useSelector(getApartmentTotalReviwsState);
+  let counter = 0;
 
-  // useEffect(()=>{
-
-  // },[])
   const [hasReview] = useState(true);
   return (
     <>
@@ -31,20 +29,16 @@ function ReviewSection() {
             <StarIcon sx={{ color: "#f2fe05" }} />
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <CardReview item={apartmentReviews[0]} />
-
-              <CardReview item={apartmentReviews[1]} />
-
-              <CardReview item={apartmentReviews[2]} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <CardReview item={apartmentReviews[3]} />
-
-              <CardReview item={apartmentReviews[4]} />
-
-              <CardReview item={apartmentReviews[5]} />
-            </Grid>
+            {apartmentReviews[0] != undefined &&
+              apartmentReviews.map(
+                (item) =>
+                  counter < 6 && (
+                    <Grid item key={item._id} xs={12} sm={6}>
+                      <span style={{ display: "none" }}>{counter++}</span>
+                      <CardReview item={item} />
+                    </Grid>
+                  )
+              )}
           </Grid>
           <MoreReview />
           <Box component="span" sx={{ margin: "0 1rem" }}></Box>

@@ -78,6 +78,10 @@ function MessagePage() {
     setCurrentChat(null);
   }, [searchString]);
   useEffect(() => {
+    socket.emit("getOnlineUsers");
+    socket?.on("sentOnlineUsers", (users) => {
+      dipsatch(addOnlineUser(users));
+    });
     socket?.on("getUsers", (users) => {
       dipsatch(addOnlineUser(users));
     });

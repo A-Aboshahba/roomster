@@ -14,7 +14,7 @@ import "./MessagePage.css";
 import Conversation from "../../components/MessagePageComponent/Conversation";
 import { io } from "socket.io-client";
 import Message from "../../components/MessagePageComponent/Message";
-import { padding, width } from "@mui/system";
+import { createUnaryUnit, padding, width } from "@mui/system";
 import { v4 as uuidv4 } from "uuid";
 import { removeUnseen } from "../../store/Slices/userSlice";
 import { useLocation } from "react-router-dom";
@@ -41,6 +41,8 @@ function MessagePage() {
   const conversationsBeforeSearch = useRef(null);
   const dipsatch = useDispatch();
   const location = useLocation();
+  const conversationLength = useRef(null);
+  const isOpenNewChat = useRef(true);
   const socket = useSelector((state) => {
     return state.user?.socket;
   });
@@ -103,37 +105,34 @@ function MessagePage() {
       }
     });
     if (isExist !== null) {
-      setCurrentChat(isExist);
+      // setCurrentChat(isExist);
       setPage(1);
       setHasMore(true);
-      setFreiend(isExist?.members.find((m) => m._id !== user._id));
-      dipsatch(
-        removeUnseen(isExist?.members.find((m) => m._id !== user._id)._id)
-      );
+      if (currentChat === isExist) {
+        dipsatch(
+          removeUnseen(isExist?.members.find((m) => m._id !== user._id)._id)
+        );
+      }
+      // setFreiend(isExist?.members.find((m) => m._id !== user._id));
       // console.log(isExist);
     } else {
       if (openChat !== null) {
+        console.log("openchat");
         setConversations((prev) => [openChat, ...prev]);
-        setCurrentChat(openChat);
         setPage(1);
         setHasMore(true);
-        setFreiend(openChat?.members.find((m) => m._id !== user._id));
-        dipsatch(
-          removeUnseen(openChat?.members.find((m) => m._id !== user._id)._id)
-        );
+        console.log("isOpenNewChat.current", isOpenNewChat.current);
+        if (isOpenNewChat.current === true) {
+          setFreiend(openChat?.members.find((m) => m._id !== user._id));
+          dipsatch(
+            removeUnseen(openChat?.members.find((m) => m._id !== user._id)._id)
+          );
+          setCurrentChat(openChat);
+          isOpenNewChat.current = false;
+        }
       }
     }
   }, [openChat, conversations]);
-  // useEffect(() => {
-  //   socket?.emit("getOnlineUsers");
-  //   socket?.on("sentOnlineUsers", (users) => {
-  //     setOnlineUsers(users);
-  //   });
-  //   socket?.on("getUsers", (users) => {
-  //     setOnlineUsers(users);
-  //   });
-  //   console.log("onlineUsers", onlineUsers);
-  // }, [user._id, socket, onlineUsers]);
 
   useEffect(() => {
     if (user._id != "") {
@@ -141,6 +140,7 @@ function MessagePage() {
         try {
           const res = await Roomster.get("conversations/" + user._id);
           setConversations(res.data.data);
+          conversationLength.current = res.data.data.length;
         } catch (err) {
           console.log(err);
         }
@@ -158,45 +158,25 @@ function MessagePage() {
   }, [user._id]);
   useEffect(() => {
     socket?.on("getMessage", (data) => {
-      let conversationExists = false;
-      conversations.forEach((conversation) => {
-        conversation.members.forEach((member) => {
-          if (member._id === data.sender._id) {
-            conversationExists = true;
-          }
-        });
+      const openConversation = async (memberId) => {
+        isOpenNewChat.current = false;
+        try {
+          const response = await Roomster.post("conversations/" + user._id, {
+            members: [memberId, user._id],
+          });
+          setOpenChat(response.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      openConversation(data.sender._id);
+      setArrivalMessage({
+        senderId: data.sender,
+        text: data.text,
+        createdAt: Date.now(),
       });
-      if (conversationExists) {
-        setArrivalMessage({
-          senderId: data.sender,
-          text: data.text,
-          createdAt: Date.now(),
-        });
-      } else {
-        const openConversation = async (memberId) => {
-          try {
-            const response = await Roomster.post("conversations/" + user._id, {
-              members: [memberId, user._id],
-            });
-            setConversations((prev) => [response.data, ...prev]);
-            setCurrentChat(response.data);
-            setPage(1);
-            setHasMore(true);
-            setFreiend(response.data?.members.find((m) => m._id !== user._id));
-            dipsatch(
-              removeUnseen(
-                response.data?.members.find((m) => m._id !== user._id)._id
-              )
-            );
-          } catch (err) {
-            console.log(err);
-          }
-        };
-        openConversation(data.sender._id);
-      }
     });
-  }, [socket, currentChat]);
-
+  }, [socket]);
   useEffect(() => {
     const getMessages = async () => {
       try {

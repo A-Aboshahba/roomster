@@ -9,20 +9,28 @@ import {
   getApartmentsState,
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
+import { SkeletonCard } from "../../utils/SkeletonPage";
 function Homepage() {
   const dispatch = useDispatch();
   const apartments = useSelector(getApartmentsState);
+  const { loading } = useSelector((state) => {
+    return state.user;
+  });
   useEffect(() => {
     dispatch(getApartments({ page: 1 }));
-    // console.log(apartments);
   }, [dispatch]);
-
   return (
     <>
-      <FilterAndSearch />
-      <Grid container columnSpacing={2} rowSpacing={4}>
-        <LocationCards cards={apartments} />;
-      </Grid>
+      {!loading ? (
+        <>
+          <FilterAndSearch />
+          <Grid container columnSpacing={2} rowSpacing={4}>
+            <LocationCards cards={apartments} />;
+          </Grid>
+        </>
+      ) : (
+        <SkeletonCard />
+      )}
     </>
   );
 }

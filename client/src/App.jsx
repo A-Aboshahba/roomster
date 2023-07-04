@@ -15,7 +15,6 @@ import { io } from "socket.io-client";
 import { getApartments } from "./store/Slices/apartment.js";
 import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
 
-
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => {
@@ -32,9 +31,8 @@ function App() {
       const socket = io("http://localhost:8080");
       socket.emit("addUser", userId);
       dispatch(setSocket(socket));
-      dispatch(getApartments({ page: 1 }));      
+      dispatch(getApartments({ page: 1 }));
       if (decodedToken.isAdmin) {
-        console.log("admin is work??");
         dispatch(fetchUsers());
       }
     }
@@ -48,10 +46,8 @@ function App() {
   //=======================
 
   return (
-      <BrowserRouter>
-      {!path.includes("/dashboard") && (
-        <Navbar />
-      )}
+    <BrowserRouter>
+      {!path.includes("/dashboard") && <Navbar />}
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers getPathName={getPathName} />
       </Container>

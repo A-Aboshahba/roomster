@@ -208,7 +208,7 @@ export default function HousingDetails() {
                 <Avatar
                   sx={{ width: 70, height: 70 }}
                   alt={singleApartment?.userId?.fullName}
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+                  src={user.image?.url != "" ? user.image?.url : ""}
                 />
                 <Box>
                   <Typography variant="h4" color="initial">

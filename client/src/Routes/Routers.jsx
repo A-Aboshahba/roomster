@@ -12,7 +12,7 @@ import UserGuard from "../Gurd/UserGurd";
 import UserApartments from "../pages/userApartments/UserApartments";
 import ConfirmationPage from "../pages/ConfirmationPage ";
 /* eslint-disable react/prop-types */
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Users from "../pages/dashboardPage/users/Users";
 import Team from "../pages/dashboardPage/team/Team";
 import Topbar from "../pages/dashboardPage/global/Topbar";
@@ -22,13 +22,13 @@ import CreateUser from "../pages/dashboardPage/createUser";
 import ApartmentsInfo from "../pages/dashboardPage/apartments/ApartmentsInfo";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useMode, ColorModeContext } from "../theme";
-
+import LandingPage from "../pages/landingPage/LandingPage";
 
 function Routers({ getPathName }) {
   // function checkIsAdmin(props) {
   //   const token = localStorage.getItem("token");
   //   const data = jwt_decode(token);
-    
+
   //   if (data.isAdmin) {
 
   //     return props.children;
@@ -46,9 +46,10 @@ function Routers({ getPathName }) {
 
   return (
     <Routes>
+      <Route path="Home" element={<LandingPage />} />
       <Route path="login" element={<SignInSide />} />
       <Route path="register" element={<Signup />} />
-      <Route path="Home" element={<Homepage />} />
+      <Route path="Rooms" element={<Homepage />} />
       <Route
         path="profile/"
         element={

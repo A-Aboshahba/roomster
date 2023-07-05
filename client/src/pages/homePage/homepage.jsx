@@ -10,7 +10,6 @@ import {
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
 import { SkeletonCard } from "../../utils/SkeletonPage";
-import { Header } from "../../components/Header/Header";
 function Homepage() {
   const dispatch = useDispatch();
   const apartments = useSelector(getApartmentsState);
@@ -24,8 +23,6 @@ function Homepage() {
     <>
       {!loading ? (
         <>
-              <Header/>
-
           <FilterAndSearch />
           <Grid container columnSpacing={2} rowSpacing={4}>
             <LocationCards cards={apartments} />;

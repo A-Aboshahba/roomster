@@ -34,7 +34,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
-const navItems = ["Home", "Message", "My Trips", "Manage Housing"];
+const navItems = ["Home", "Rooms", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
 import {
   Badge,
@@ -187,7 +187,8 @@ function Navbar() {
             size="large"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}>
+            aria-expanded={open ? "true" : undefined}
+          >
             {user?.image?.url === "" ? (
               <Avatar sx={{ width: 32, height: 32 }}></Avatar>
             ) : (
@@ -234,7 +235,8 @@ function Navbar() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
         {user._id !== "" ? (
           <Link to="profile">
             <MenuItem onClick={handleClose}>
@@ -288,7 +290,8 @@ function Navbar() {
               socket.disconnect();
               navigate("/home");
             }}
-            sx={{ color: "#CD1818" }}>
+            sx={{ color: "#CD1818" }}
+          >
             <ListItemIcon>
               <Logout fontSize="small" sx={{ color: "#CD1818" }} />
             </ListItemIcon>
@@ -303,7 +306,8 @@ function Navbar() {
             to={"/register"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>
@@ -318,7 +322,8 @@ function Navbar() {
             to={"/login"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <ListItemIcon>
               <LoginIcon fontSize="small" />
             </ListItemIcon>
@@ -333,7 +338,8 @@ function Navbar() {
             to={"/help"}
             onClick={() => {
               handleClose();
-            }}>
+            }}
+          >
             <Divider />
             <ListItemIcon>
               <HelpOutlineOutlinedIcon fontSize="small" />
@@ -413,7 +419,8 @@ function Navbar() {
             onClick={() => {
               localStorage.clear();
               dispatch(ResetRedux());
-            }}>
+            }}
+          >
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="LogOut" />
             </ListItemButton>
@@ -463,19 +470,22 @@ function Navbar() {
               handleDrawerToggle();
               handelSeen();
             }}
-            sx={{ mr: 2, display: { sm: "none" } }}>
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          >
             <img src={image} className="logo" />
           </Typography>
 
           <Box
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            className="center">
+            className="center"
+          >
             {navItems.map((item) => (
               <Link to={item} key={item}>
                 {!(item === "Message") && (
@@ -498,7 +508,8 @@ function Navbar() {
                 handleNotificationOpen(event);
                 handelSeen();
               }}
-              sx={{ color: "#000" }}>
+              sx={{ color: "#000" }}
+            >
               <Badge badgeContent={unseenNumber} color="error">
                 <NotificationsIcon />
               </Badge>
@@ -522,7 +533,8 @@ function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   textAlign: "center",
-                }}></Box>
+                }}
+              ></Box>
               <Menu
                 anchorEl={anchorLanguage}
                 id="language-menu"
@@ -556,7 +568,8 @@ function Navbar() {
                   },
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
                 <MenuItem onClick={handleClose}>English</MenuItem>
                 <MenuItem onClick={handleClose}>Arabic</MenuItem>
               </Menu>
@@ -583,7 +596,8 @@ function Navbar() {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}>
+          }}
+        >
           {drawer}
         </Drawer>
       </Box>
@@ -598,7 +612,8 @@ function Navbar() {
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
-        }}>
+        }}
+      >
         <ListSubheader>Notifications</ListSubheader>
         <List
           sx={{
@@ -612,18 +627,21 @@ function Navbar() {
             maxHeight: 400,
             "& ul": { paddingBottom: 0 },
           }}
-          onScroll={handleScroll}>
+          onScroll={handleScroll}
+        >
           {notifications?.data.map((notification, index) => {
             return (
               <Box
                 key={index}
                 component={"div"}
                 sx={{ my: 2, px: 3 }}
-                className="betweenItem">
+                className="betweenItem"
+              >
                 <ListItemAvatar>
                   <Avatar
                     alt={notification.senderId.fullName}
-                    src={notification.senderId.image.url}></Avatar>
+                    src={notification.senderId.image.url}
+                  ></Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={notification.senderId.fullName}

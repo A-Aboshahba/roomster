@@ -449,7 +449,7 @@ function Navbar() {
   );
 
   return (
-    <Box sx={{ display: "flex", mb: 10 }}>
+    <Box sx={{ display: "flex", mb: 9 }}>
       <AppBar component="nav" color="secondary" position="fixed">
         <Toolbar>
           <IconButton

@@ -1,18 +1,12 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Checkbox, FormControlLabel } from "@mui/material";
 import Roomster from "../../API/config";
 import { useSelector } from "react-redux";
 import ChangePassword from "../../components/profileComponent/ChangePassword";
@@ -33,14 +27,12 @@ export default function EditProfile() {
     lastName: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
-    email: Yup.string().email("Invalid email address").required("Required"),
   });
 
   const formik = useFormik({
     initialValues: {
       firstName: `${user.firstName}`,
       lastName: `${user.lastName}`,
-      email: `${user.email}`,
       address: {
         country: `${user.address?.country}`,
         city: `${user.address?.city}`,
@@ -49,7 +41,6 @@ export default function EditProfile() {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       EditData(values);
     },
   });

@@ -12,10 +12,10 @@ import { useSelector } from "react-redux";
 import ChangePassword from "../../components/profileComponent/ChangePassword";
 
 export default function EditProfile() {
-
   const user = useSelector((state) => state.user.user);
 
   async function EditData(values) {
+    console.log(values);
     await Roomster.patch(`user/${user._id}`, values);
     window.location.reload();
   }
@@ -27,7 +27,6 @@ export default function EditProfile() {
     lastName: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
-
   });
 
   const formik = useFormik({
@@ -42,7 +41,6 @@ export default function EditProfile() {
 
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       EditData(values);
     },
   });

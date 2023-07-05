@@ -193,10 +193,10 @@ const CarouselCard = ({ location }) => {
             </Box>
             <Box sx={{ mt: 2 }}>
               <Box sx={dFlex}>
-                {location.isNew ? (
+                {location.avgRating ? (
                   <>
-                    <Typography component="h5">New</Typography>
-                    <AiFillStar size={18} />
+                    {location.avgRating?.toFixed(1)}{" "}
+                    <AiFillStar size={18} color="#FFC95F" />
                   </>
                 ) : (
                   <>

@@ -17,25 +17,23 @@ const FilterAndSearch = () => {
       container
       spacing={1}
       alignItems="center"
-      sx={{ height: "60px", marginBottom: "60px" }}
+      sx={{ height: "60px", marginBottom: "110px" }}
       className="center"
     >
-      <Grid item xs={9} md={10} lg={11}>
-        <form>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Search Apartments"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{
-              border: "1px solid #ddd",
-              borderRadius: 3,
-            }}
-          />
-        </form>
+      <Grid item xs={12} sm={9} md={10} lg={11}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Search Apartments"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{
+            border: "1px solid #ddd",
+            borderRadius: 3,
+          }}
+        />
       </Grid>
-      <Grid item xs={3} md={2} lg={1}>
+      <Grid item xs={12} sm={3} md={2} lg={1}>
         <Grid container justifyContent="center">
           <FilterButton />
         </Grid>

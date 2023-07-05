@@ -387,7 +387,11 @@ function Navbar() {
         {user._id !== "" ? (
           <ListItem disablePadding component={Link} to={"/wishlist"}>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <Badge badgeContent={user.favourites.length} color="primary">
+              <Badge
+                badgeContent={user.favourites.length}
+                sx={{ margin: "auto" }}
+                color="primary"
+              >
                 <ListItemText primary="wishlist" />
               </Badge>
             </ListItemButton>

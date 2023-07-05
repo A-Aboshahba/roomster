@@ -18,11 +18,10 @@ import { useSelector } from "react-redux";
 import ChangePassword from "../../components/profileComponent/ChangePassword";
 
 export default function EditProfile() {
-  const [showPassword, setShowPassword] = React.useState(false);
-
   const user = useSelector((state) => state.user.user);
 
   async function EditData(values) {
+    console.log(values);
     await Roomster.patch(`user/${user._id}`, values);
     window.location.reload();
   }
@@ -35,9 +34,6 @@ export default function EditProfile() {
       .max(20, "Must be 20 characters or less")
       .required("Required"),
     email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string()
-      .required("Required")
-      .min(6, "Must be at least 6 characters"),
   });
 
   const formik = useFormik({
@@ -45,7 +41,6 @@ export default function EditProfile() {
       firstName: `${user.firstName}`,
       lastName: `${user.lastName}`,
       email: `${user.email}`,
-      password: `${user.password}`,
       address: {
         country: `${user.address?.country}`,
         city: `${user.address?.city}`,
@@ -58,10 +53,6 @@ export default function EditProfile() {
       EditData(values);
     },
   });
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   return (
     <Box

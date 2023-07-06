@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&family=Outfit:wght@300;400;500;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&family=Jost:ital,wght@0,600;0,700;1,400;1,500;1,900&family=Outfit:wght@300;400;500;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Josefin+Sans:wght@100&family=Jost:ital,wght@0,600;0,700;1,400;1,500;1,900&family=Outfit:wght@300;400;500;700;800;900&family=Roboto:ital,wght@0,400;0,500;1,500&display=swap');
 
+*{
+margin: 0;
+}
 .logo {
-  width: 118px;
-  height: 45px;
+  width: 143px;
+  height: 66px;
   border-radius: 40px;
   -webkit-border-radius: 40px;
   -moz-border-radius: 40px;
@@ -35,8 +37,10 @@
   align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
-  z-index: 1000;
-}
+  z-index: 1000;}
+
+
+
 
 /* Style the Google Translate Element */
 #google_translate_element {
@@ -196,3 +200,4 @@
 .profile_image {
   object-fit: cover;
 }
+

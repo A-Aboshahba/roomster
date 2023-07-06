@@ -10,10 +10,10 @@ import { fetchUser, setSocket } from "./store/Slices/userSlice.jsx";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { fetchCurrency } from "./store/Slices/currency.jsx";
-import Footer from "./components/Footer/Footer";
 import { io } from "socket.io-client";
 import { getApartments } from "./store/Slices/apartment.js";
 import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,7 +51,9 @@ function App() {
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers getPathName={getPathName} />
       </Container>
-      {!path.includes("/dashboard") && <Footer />}
+      {/* {!path.includes("/dashboard") && <Footer />} */}
+      <Footer/>
+
       <ToastContainer />
     </BrowserRouter>
   );

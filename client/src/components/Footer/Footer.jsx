@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import { selectCurrenct } from "../../store/Slices/currency";
 import { useDispatch } from "react-redux";
@@ -12,6 +13,7 @@ function Footer() {
     document.body.appendChild(addScript);
     window.googleTranslateElementInit = googleTranslateElementInit;
   }, [])
+  
   return (
     <div id="footer">
       <div className="betweenItem">

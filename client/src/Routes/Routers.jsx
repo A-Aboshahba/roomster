@@ -205,7 +205,7 @@ function Routers({ getPathName }) {
         />
       </Route>
 
-      <Route path="*" element={<Homepage />} />
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   );
 }

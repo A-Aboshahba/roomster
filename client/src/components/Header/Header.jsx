@@ -254,13 +254,14 @@ export function Header() {
         display: "flex",
         height: {
           xs: "auto",
-          lg: "90vh",
+          lg: "85vh",
         },
         mx: {
           xs: "20px",
           lg: "50px",
         },
-        mb: 5,
+        mb: 12,
+        
       }}
     >
       <Box
@@ -391,7 +392,7 @@ export function Header() {
                   the ultimate comfort and convenience.
                 </Typography>
               </motion.div>
-              <Link to="/Rooms"> 
+              <Link to="/Book"> 
                <Button className="button" 
                 sx={{
                   color: "#fff",

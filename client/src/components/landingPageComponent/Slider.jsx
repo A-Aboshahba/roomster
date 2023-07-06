@@ -52,7 +52,7 @@ const Slider = ({ apartments }) => {
 
 
   return (
-    <div className='container' style={{ mt: "3rem" }}>
+    <div className='container' style={{ mt: "4rem" }}>
       <h5 className="sliderHeader" style={{mt:10}}> 
        Our Best apartments </h5> 
       <Typography variant="h5"  className="slidersub" sx={{mt:1,mb:3}}>

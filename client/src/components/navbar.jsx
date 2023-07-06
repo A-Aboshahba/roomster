@@ -34,7 +34,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
-const navItems = ["Home", "Rooms", "Message", "My Trips", "Manage Housing"];
+const navItems = ["Home", "Book", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
 import {
   Badge,

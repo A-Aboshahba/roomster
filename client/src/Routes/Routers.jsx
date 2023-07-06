@@ -49,7 +49,7 @@ function Routers({ getPathName }) {
       <Route path="Home" element={<LandingPage />} />
       <Route path="login" element={<SignInSide />} />
       <Route path="register" element={<Signup />} />
-      <Route path="Rooms" element={<Homepage />} />
+      <Route path="Book" element={<Homepage />} />
       <Route
         path="profile/"
         element={

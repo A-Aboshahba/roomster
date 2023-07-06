@@ -51,8 +51,8 @@ function App() {
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers getPathName={getPathName} />
       </Container>
-      {/* {!path.includes("/dashboard") && <Footer />} */}
-      <Footer/>
+      {!path.includes("/dashboard") && <Footer />}
+     
 
       <ToastContainer />
     </BrowserRouter>

@@ -459,9 +459,23 @@ function Navbar() {
     </Box>
   );
 
+  const[bgcolor,setColor]=useState(true);
+
+  const changeColor=()=>{
+    if(window.scrollY >=50){
+      setColor(false)
+    }else{setColor(true)}
+  }
+  window.addEventListener('scroll',changeColor)
   return (
-    <Box sx={{ display: "flex", mb: 9 }}>
-      <AppBar component="nav" color="secondary" position="fixed">
+    <Box sx={{ display: "flex", mb: 12 }}>
+      <AppBar component="nav" position="fixed"
+       sx={{height:'80px',
+       backgroundColor: bgcolor ? "transparent" : "#ffffff",
+       boxShadow: bgcolor ? "none" : "0px 2px 8px rgba(0, 0, 0, 0.32)",
+       transition: "all 0.18s ease-in",
+     }}
+      >
         <Toolbar>
           <IconButton
             aria-label="open drawer"
@@ -489,13 +503,13 @@ function Navbar() {
             {navItems.map((item) => (
               <Link to={item} key={item}>
                 {!(item === "Message") && (
-                  <Button component="div" size="large" sx={{ color: "#000" }}>
+                  <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.1rem'}}>
                     {item}
                   </Button>
                 )}
                 {item === "Message" && (
                   <Badge badgeContent={unseenConvo.length} color="error">
-                    <Button component="div" size="large" sx={{ color: "#000" }}>
+                    <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.1rem'}}>
                       {item}
                     </Button>
                   </Badge>

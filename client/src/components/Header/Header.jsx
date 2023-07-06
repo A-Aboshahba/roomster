@@ -201,6 +201,8 @@ import image from "../../assets/wallpaperflare.com_wallpaper.jpg";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useLayoutEffect, useState } from "react";
+import './Header.css'
+import { Link } from "react-router-dom";
 
 export function Header() {
   const xsMotion = {
@@ -389,7 +391,8 @@ export function Header() {
                   the ultimate comfort and convenience.
                 </Typography>
               </motion.div>
-              <Button
+              <Link to="/Rooms"> 
+               <Button className="button" 
                 sx={{
                   color: "#fff",
                   width: {
@@ -397,6 +400,7 @@ export function Header() {
                     sm: "40%",
                   },
                   height: "25%",
+                  transition:" all 1000ms",
 
                   backgroundColor: "#000",
                   fontFamily: "jost",
@@ -413,10 +417,13 @@ export function Header() {
                   },
                   textAlign: "left",
                   my: 3,
+
+          
                 }}
               >
                 GEt Explore
-              </Button>
+              </Button> 
+              </Link> 
             </Typography>
           </motion.div>
         </AnimatePresence>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Header } from "../../components/Header/Header";
 import Slider from "../../components/landingPageComponent/Slider";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-key */
+/* eslint-disable react/prop-types */
 import { Container } from "@mui/system";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -10,20 +13,17 @@ import { motion } from "framer-motion";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
-import { AiFillStar, AiFillHeart, AiTwotoneDelete } from "react-icons/ai";
-import { FaRegHeart } from "react-icons/fa";
+import { AiFillStar } from "react-icons/ai";
 import {
   flexBetween,
   dFlex,
-  carouselDot,
-  fixedIcon,
-  carouselImage,
-  fixedBottom,
+  
 } from "../../theme/commonStyles.jsx";
 import "../Card/CarouselCard.css";
 import { Link } from "react-router-dom";
 import "sweetalert2/src/sweetalert2.scss";
 
+import './Slider.Module.css'
 const Slider = ({ apartments }) => {
   const responsive = {
     desktop: {
@@ -47,25 +47,16 @@ const Slider = ({ apartments }) => {
       items: 1,
     },
   };
-  const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
-  };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1); // when we click the back arrow
-  };
 
-  const handleStepChange = (step) => {
-    setActiveStep(step); // handle swipe change
-  };
-  const maxSteps = apartments.images?.length;
 
   return (
-    <Container sx={{ mt: "3rem" }}>
-      <Typography variant="h5" color="initial">
-        Best Seller
+    <div className='container' style={{ mt: "3rem" }}>
+      <h5 className="sliderHeader" style={{mt:10}}> 
+       Our Best apartments </h5> 
+      <Typography variant="h5"  className="slidersub" sx={{mt:1,mb:3}}>
+      Plenty of services to assure your relaxation and comfortability.
       </Typography>
       <Carousel
         responsive={responsive}
@@ -139,7 +130,7 @@ const Slider = ({ apartments }) => {
               )
           )}
       </Carousel>
-    </Container>
+    </div>
   );
 };
 

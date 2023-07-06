@@ -34,8 +34,8 @@ const PickerDate = ({ reservationsArr = [], price = 1, id = '' }) => {
   const [range, setRange] = useState();
 
   let footer = (
-    <Typography color="primary" sx={{ textAlign: "center" }}>
-      Please pick the first day.
+    <Typography color="primary" sx={{ textAlign: "center",mt:2 }}>
+      Please pick the first day
     </Typography>
   );
 

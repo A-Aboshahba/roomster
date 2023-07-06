@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-import Divider from "@mui/material/Divider";
 import moment from "moment";
 import { styled } from "@mui/material/styles";
 
@@ -11,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import "./conversation.css";
 import { useSelector } from "react-redux";
 
-function Conversation({ conversation, user, unseen }) {
+function Conversation({ conversation, user }) {
   const [online, setOnline] = useState(false);
   const [friend, setFreiend] = useState(
     conversation.members.find((m) => m._id !== user._id)
@@ -66,7 +65,7 @@ function Conversation({ conversation, user, unseen }) {
 
   return (
     <>
-      <div
+      {/* <div
         className={`card-conversation ${
           unseen.includes(friend._id) ? "unseen" : "seen"
         }`}>
@@ -85,10 +84,36 @@ function Conversation({ conversation, user, unseen }) {
           <p className="date">{`${moment(conversation.createdAt).format(
             " DD MMM YYYY "
           )}`}</p>
-        </div>
-      </div>
 
-      <Divider variant="fullWidth" />
+          
+        </div>
+      </div> */}
+           <li className="messaging-member messaging-member--online">
+                <div className="messaging-member__wrapper" >
+                  <div className="messaging-member__avatar">
+                  <StyledBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          variant="dot">
+          <Avatar
+            sx={{ width: 60, height: 60 }}
+            alt="Remy Sharp"
+            src={friend.image.url}
+          />
+        </StyledBadge>
+                            </div>
+                            <div className="title-content p-0">
+          <p className="title m-0 mt-2 ">{friend.fullName}</p>
+          <p className="user-profile__location m-0">{`${moment(conversation.createdAt).format(
+            " DD MMM YYYY "
+          )}`}</p>
+
+          
+        </div>
+                            
+    
+                </div>
+              </li>
     </>
   );
 }

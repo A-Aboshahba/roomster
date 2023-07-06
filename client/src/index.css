@@ -1,9 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Josefin+Sans:wght@100&family=Jost:ital,wght@0,600;0,700;1,400;1,500;1,900&family=Outfit:wght@300;400;500;700;800;900&family=Roboto:ital,wght@0,400;0,500;1,500&display=swap');
 
-*{
-margin: 0;
-}
+
+
 .logo {
   width: 143px;
   height: 66px;
@@ -22,7 +21,7 @@ margin: 0;
 }
 
 #root {
-  padding-bottom: 110px;
+  /* padding-bottom: 110px; */
 }
 
 /* Position the footer at the bottom of the page */
@@ -172,11 +171,11 @@ margin: 0;
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
 }
-
+/* 
 .app {
   display: flex;
   position: relative;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -201,3 +200,7 @@ margin: 0;
   object-fit: cover;
 }
 
+a{
+  text-decoration: none !important;
+  color: black !important;
+}

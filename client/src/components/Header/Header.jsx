@@ -254,7 +254,7 @@ export function Header() {
         display: "flex",
         height: {
           xs: "auto",
-          lg: "85vh",
+          lg: "80vh",
         },
         mx: {
           xs: "20px",
@@ -336,7 +336,7 @@ export function Header() {
                   xs: "20px",
                   sm: "30px",
                   md: "35px",
-                  lg: "60px",
+                  lg: "48px;",
                 },
                 textAlign: "left",
                 width: {
@@ -346,9 +346,9 @@ export function Header() {
                   xs: "90%",
                 },
                 height: {
-                  lg: "90%",
-                  sm: "70%",
-                  xs: "50%",
+                  lg: "95%",
+                  sm: "85%",
+                  xs: "70%",
                 },
                 my: 3,
                 borderRadius: "10px",
@@ -396,11 +396,11 @@ export function Header() {
                <Button className="button" 
                 sx={{
                   color: "#fff",
-                  width: {
+                  minWidth: {
                     xs: "25%",
                     sm: "40%",
                   },
-                  height: "25%",
+                  height:  "25%" ,
                   transition:" all 1000ms",
 
                   backgroundColor: "#000",
@@ -414,7 +414,7 @@ export function Header() {
                     xs: "8px",
                     sm: "16px",
                     md: "20px",
-                    lg: "22px",
+                    lg: "26px",
                   },
                   textAlign: "left",
                   my: 3,
@@ -422,7 +422,7 @@ export function Header() {
           
                 }}
               >
-                GEt Explore
+                Get Explore
               </Button> 
               </Link> 
             </Typography>

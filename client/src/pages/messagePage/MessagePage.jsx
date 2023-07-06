@@ -1,31 +1,27 @@
-import Grid from "@mui/material/Grid";
+/* eslint-disable react/no-unescaped-entities */
+
 import {
   CircularProgress,
-  Divider,
-  TextField,
-  Typography,
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Roomster from "../../API/config";
-import "./MessagePage.css";
+import "./MessagePage.scss";
 import Conversation from "../../components/MessagePageComponent/Conversation";
 import Message from "../../components/MessagePageComponent/Message";
-import { Box } from "@mui/system";
 import { v4 as uuidv4 } from "uuid";
 import { addOnlineUser, removeUnseen } from "../../store/Slices/userSlice";
 import { useLocation } from "react-router-dom";
-import { flexCenter } from "../../theme/commonStyles";
+import InputEmoji from "react-input-emoji";
+
 function MessagePage() {
   // { socket }
   const user = useSelector((state) => {
     return state.user?.user;
   });
+  const [value, setValue] = useState("");
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -43,7 +39,6 @@ function MessagePage() {
   const location = useLocation();
   const conversationLength = useRef(null);
   const isOpenNewChat = useRef(true);
-  const textMessageRef = useRef("");
   const onlineUsers = useSelector((state) => {
     return state.user?.onlineUsers;
   });
@@ -78,7 +73,7 @@ function MessagePage() {
     setCurrentChat(null);
   }, [searchString]);
   useEffect(() => {
-    socket.emit("getOnlineUsers");
+    socket?.emit("getOnlineUsers");
     socket?.on("sentOnlineUsers", (users) => {
       dipsatch(addOnlineUser(users));
     });
@@ -195,21 +190,21 @@ function MessagePage() {
   }, [currentChat, user?._id]);
 
   const handleSubmit = async (e) => {
-    console.log(textMessageRef.current.value);
     e.preventDefault();
+    console.log(friend)
     socket?.emit("sendMessage", {
       sender: user,
       receiverId: friend._id,
-      text: textMessageRef.current.value,
+      "text": value,
     });
     try {
       const res = await Roomster.post("/messages/" + user._id, {
         senderId: user._id,
         conversationId: currentChat._id,
-        text: textMessageRef.current.value,
+        text: value,
       });
       setMessages([...messages, { ...res.data, senderId: user }]);
-      textMessageRef.current.value = "";
+      setValue('');
     } catch (err) {
       console.log(err);
     }
@@ -253,66 +248,214 @@ function MessagePage() {
 
   const handleScroll = (event) => {
     const { scrollTop } = event.currentTarget;
-    // console.log(scrollHeight, scrollTop, clientHeight);
+    console.log(scrollTop);
     if (scrollTop === 0) {
       loadMore();
     }
   };
-  return (
-    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-      <Grid item xs={3} sm={4} md={4}>
-        <Paper elevation={3} sx={{ padding: "10px" }}>
-          <TextField
-            id="standard-basic"
-            label="search"
-            color="success"
-            variant="standard"
-            style={{ width: "100%", margin: "0 0 10px 0" }}
-            placeholder="search for friend"
-            value={searchString}
-            onChange={(e) => {
-              setSearchString(e.target.value);
-            }}
-          />
-          <div className="conversation">
-            {conversations.map((conv) => (
-              <div key={conv._id} onClick={() => cliclOnConversation(conv)}>
-                <Conversation
-                  conversation={conv}
-                  user={user}
-                  unseen={unseenConvo}
-                  // onlineUsers={onlineUsers}
-                />
-              </div>
-            ))}
-          </div>
-        </Paper>
-      </Grid>
 
-      <Grid item xs={9} sm={8} md={8}>
-        <Paper elevation={3}>
-          {currentChat !== null ? (
-            <div className="messages">
-              <CardHeader
-                className="messages-top"
-                avatar={
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={friend.image.url}
-                    // " https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
-                    sx={{ width: 55, height: 55 }}
+  //.........................
+    const chat = document.querySelector(".chat");
+    const profile = document.querySelector(".user-profile");
+
+    /* ===================================
+        Screen resize handler
+    ====================================== */
+    const smallDevice = window.matchMedia("(max-width: 767px)");
+    const largeScreen = window.matchMedia("(max-width: 1199px)");
+    function chatMobile() {
+      if(chat != null)
+      chat.classList.add("chat--mobile");
+    }
+    function handleDeviceChange(e) {
+      if (e.matches) chatMobile();
+      else chatDesktop();
+    }
+
+    function handleLargeScreenChange(e) {
+      if (e.matches) profileToogleOnLarge();
+      else profileExtraLarge();
+    }
+
+
+    function chatDesktop() {
+      
+    if(chat != null)
+    {
+      chat.classList.remove("chat--mobile");
+    }
+    }
+
+    function profileToogleOnLarge() {
+      if(profile != null)
+      {
+        profile.classList.add("user-profile--large");
+      }
+    }
+
+    function profileExtraLarge() {
+      if(profile != null)
+      {
+        profile.classList.remove("user-profile--large");
+      }
+    }
+
+    if (smallDevice && largeScreen != null) {
+      smallDevice.addEventListener("change", handleDeviceChange);
+      largeScreen.addEventListener("change", handleLargeScreenChange);
+    }
+
+    if ( smallDevice &&  largeScreen != null)
+    {
+      handleDeviceChange(smallDevice);
+      handleLargeScreenChange(largeScreen);
+    }
+
+    /* ===================================
+        Events
+    ====================================== */
+
+    const messagingMember = document.querySelectorAll('.messaging-member');
+    const chatPrevious = document.querySelector(".chat__previous");
+    const chatDetails = document.querySelector(".chat__details");
+    const userProfileClose = document.querySelector(".user-profile__close");
+    if (messagingMember != null) {
+      messagingMember.forEach(messagingMember => {
+        messagingMember.addEventListener("click", function () {
+          if(chat !=null)
+          {
+            chat.style.display = "block";
+            chat.classList.add("chat--show");
+          }
+        });
+      });
+    }
+
+    if(chatPrevious != null)
+    {
+    chatPrevious.addEventListener("click", function () {
+      
+        chat.classList.remove("chat--show");
+      });
+    }
+          if(chatDetails != null)
+      {
+        chatDetails.addEventListener("click", function () {
+          if(profile !=null)
+          {
+            profile.style.display = "block";
+            profile.classList.add("user-profile--show");
+          }
+        });
+      }
+
+      if(userProfileClose != null)
+      {
+
+        userProfileClose.addEventListener("click", function () {
+          profile.classList.remove("user-profile--show");
+        });
+      }
+
+ 
+
+  return (
+
+
+    <div className="home-page__content messages-page" style={{backgroundColor:'#f2f2f2',border:'1px solid #f2f2f2'}}>
+  <div className="container-fluid h-100">
+    <div className="row px-0 h-100">
+      {/* <!-- start message list section  --> */}
+      
+      <div className="col-12 col-md-4 col-lg-5 col-xl-3 px-0 messages-page__list-scroll" >
+
+        <div className="messages-page__header mb-0 px-4 pt-3 pb-3">
+          <span className="messages-page__title">Chats</span>
+          
+        </div>
+        <div className="messages-page__search mb-0 px-3 pb-3">
+          <div className="custom-form__search-wrapper">
+            <input type="text" className="form-control custom-form" id="search"  onChange={(e) => {
+                    setSearchString(e.target.value);
+                  }} placeholder="Enter person name …" />
+            <button type="submit" className="custom-form__search-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" className="svg-icon svg-icon--search" viewBox="0 0 46.6 46.6">
+                <path d="M46.1,43.2l-9-8.9a20.9,20.9,0,1,0-2.8,2.8l8.9,9a1.9,1.9,0,0,0,1.4.5,2,2,0,0,0,1.5-.5A2.3,2.3,0,0,0,46.1,43.2ZM4,21a17,17,0,1,1,33.9,0A17.1,17.1,0,0,1,33,32.9h-.1A17,17,0,0,1,4,21Z" fill="#f68b3c" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <ul className="messages-page__list pb-5 px-1 px-md-3">
+          {conversations.map((conv) => (
+            <div key={conv._id} onClick={() => cliclOnConversation(conv)}>
+                  <Conversation
+                    conversation={conv}
+                    user={user}
+                    unseen={unseenConvo}
+                  // onlineUsers={onlineUsers}
                   />
-                }
-                title={friend.fullName}
-                subheader={
-                  onlineUsers.some((user) => user.userId === friend._id)
-                    ? "online"
-                    : "offline"
-                }
-              />
-              <Divider></Divider>
-              <div className="messages-box" onScroll={handleScroll}>
-                {messages.map((msg) => (
+
+                  </div>
+                  ))}
+
+        </ul>
+      </div>
+      {/* <!-- end message list section  -->
+      <!-- start content section  --> */}
+        {currentChat !== null ? (
+          <div className="chat col-12 col-md-8 col-lg-7 col-xl-6 px-0 pl-md-1 chat--show">
+            <div className="chat__container">
+              <div className="chat__wrapper py-2 pt-mb-2 pb-md-3">
+                <div className="chat__messaging messaging-member--online pb-2 pb-md-2 pl-2 pl-md-4 pr-2">
+                  <div className="chat__previous d-flex d-md-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="svg-icon svg-icon--previous" viewBox="0 0 45.5 30.4">
+                      <path d="M43.5,13.1H7l9.7-9.6A2.1,2.1,0,1,0,13.8.6L.9,13.5h0L.3,14v.6c0,.1-.1.1-.1.2v.4a2,2,0,0,0,.6,1.5l.3.3L13.8,29.8a2.1,2.1,0,1,0,2.9-2.9L7,17.2H43.5a2,2,0,0,0,2-2A2.1,2.1,0,0,0,43.5,13.1Z" fill="#f68b3c" />
+                    </svg>
+                  </div>
+               
+
+                    <div className="chat__infos pl-2 pl-md-0  p-0" >
+                        <CardHeader
+                          className="messages-top"
+                          avatar={
+                            <Avatar
+                              alt="Remy Sharp"
+                              src={friend.image.url}
+                              // " https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU"
+                              sx={{ width: 40, height: 40 }}
+                            />
+                          }
+                          title={friend.fullName}
+                          subheader={
+                            onlineUsers.some((user) => user.userId === friend._id)
+                              ? "online"
+                              : "offline"
+                          }
+                        />
+                    </div>
+
+
+                  <div className="chat__actions mr-2 ">
+                    <ul className="m-0">
+
+                      <li className="chat__details d-flex d-xl-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="svg-icon" viewBox="0 0 42.2 11.1">
+                          <g>
+                            <circle cx="5.6" cy="5.6" r="5.6" fill="#d87232" />
+                            <circle cx="21.1" cy="5.6" r="5.6" fill="#d87232" />
+                            <circle cx="36.6" cy="5.6" r="5.6" fill="#d87232" />
+                          </g>
+                        </svg>
+                      </li>
+                    </ul>
+
+                  </div>
+                </div>
+                <div className="chat__content pt-4 px-3" onScroll={handleScroll}>
+                  <ul className="chat__list-messages">
+                  <div className="messages-box" >
+                        {messages.map((msg) => (
                   <div ref={scrollRef} key={uuidv4()}>
                     <Message
                       message={msg}
@@ -325,84 +468,69 @@ function MessagePage() {
                   </div>
                 )}
               </div>
+                  </ul>
+                </div>
+                <div className="chat__send-container px-2 px-md-3 pt-1 pt-md-3">
+                  <div className="custom-form__send-wrapper ">
+                    <div className="w-100 pe-5">
 
-              <div
-                className="messages-bottom"
-                //   style={{ padding: "10px 10px 10px 10px" }}
-              >
-                <Paper elevation={3}>
-                  <Grid
-                    container
-                    spacing={1}
-                    alignItems="center"
-                    width={"100%"}
-                    justifyContent={"space-between"}>
-                    <Grid item xs={10}>
-                      <TextField
-                        sx={{ width: "80%", padding: "10px" }}
-                        id="standard-basic"
-                        color="info"
-                        variant="standard"
-                        placeholder="type message"
-                        // value={newMessage}
-                        // onChange={(e) => {
-                        //   setNewMessage(e.target.value);
-                        // }}
-                        inputRef={textMessageRef}
+                      <InputEmoji
+                        placeholder="Type a message"
+                        value={value}
+                        onChange={setValue}                       
+                       height={25}
                       />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <Button
-                        onClick={handleSubmit}
-                        color="info"
-                        style={{ backgroundColor: "#0695ff" }}
-                        variant="contained"
-                        endIcon={<SendIcon />}
-                        sx={{
-                          color: "white",
-                          width: "95%",
-                          marginLeft: "10px",
-                        }}>
-                        Send
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Paper>
+                    </div>
+
+                    <button  onClick={handleSubmit}  className="custom-form__send-submit">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="svg-icon svg-icon--send" viewBox="0 0 45.6 45.6">
+                        <g>
+                          <path d="M20.7,26.7a1.4,1.4,0,0,1-1.2-.6,1.6,1.6,0,0,1,0-2.4L42.6.5a1.8,1.8,0,0,1,2.5,0,1.8,1.8,0,0,1,0,2.5L21.9,26.1A1.6,1.6,0,0,1,20.7,26.7Z" fill="#d87232" />
+                          <path d="M29.1,45.6a1.8,1.8,0,0,1-1.6-1L19.4,26.2,1,18.1a1.9,1.9,0,0,1-1-1.7,1.8,1.8,0,0,1,1.2-1.6L43.3.1a1.7,1.7,0,0,1,1.8.4,1.7,1.7,0,0,1,.4,1.8L30.8,44.4a1.8,1.8,0,0,1-1.6,1.2ZM6.5,16.7l14.9,6.6a2,2,0,0,1,.9.9l6.6,14.9L41,4.6Z" fill="#d87232" />
+                        </g>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          ) : (
-            // <Paper elevation={3}>
-
-            <Box
-              component="div"
-              display={flexCenter}
-              style={{
-                backgroundImage:
-                  "url('https://res.cloudinary.com/djc98fviu/image/upload/v1688438306/empty_mail_box_jskiym.jpg')",
-                height: "83vh",
-                width: "100%",
-                borderRadius: "5px",
-                backgroundSize: "cover",
-
-                backgroundRepeat: "no-repeat",
-              }}>
-              <Typography
-                variant="h5"
-                style={{
-                  borderRadius: "10px",
-                  padding: "10px 50px",
-                  color: "white",
-                  backgroundColor: "#00000080",
-                }}>
-                Open Chat
-              </Typography>
-            </Box>
-
-            // </Paper>
-          )}
-        </Paper>
-      </Grid>
-    </Grid>
+          </div>
+          ) : ''}
+      {/* <!-- end content section  -->
+      <!-- start infos section  --> */}
+       {currentChat !== null ? (
+      <div className="col-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4 user-profile">
+        <div className="user-profile__close d-flex d-xl-none">
+          <svg xmlns="http://www.w3.org/2000/svg" className="svg-icon" viewBox="0 0 38.8 38.9">
+            <g>
+              <path d="M2,38.9a1.9,1.9,0,0,1-1.4-.5,2.1,2.1,0,0,1,0-2.9L35.4.6a1.9,1.9,0,0,1,2.8,0,1.9,1.9,0,0,1,0,2.8L3.4,38.4A1.9,1.9,0,0,1,2,38.9Z" fill="#d87232" />
+              <path d="M36.8,38.9a1.9,1.9,0,0,1-1.4-.5L.6,3.4A1.9,1.9,0,0,1,.6.6,1.9,1.9,0,0,1,3.4.6L38.2,35.5a2.1,2.1,0,0,1,0,2.9A1.9,1.9,0,0,1,36.8,38.9Z" fill="#d87232" />
+            </g>
+          </svg>
+        </div>
+        <div className="user-profile__wrapper">
+          <div className="user-profile__avatar">
+          <Avatar
+                              alt="Remy Sharp"
+                              src={friend.image.url}
+                              sx={{ width: 200, height: 200 }}
+                            />
+          </div>
+          <div className="user-profile__details mt-1">
+            <span className="user-profile__name">{friend.fullName}</span>
+            <span className="user-profile__location">{friend.address.country},{friend.address.city}</span>
+            <span className="user-profile__phone">{friend.email}</span>
+          </div>
+        </div>
+      </div>):
+      
+      <div className=" col new_chat">
+      </div>      
+      }
+      {/* <!-- end infos section  --> */}
+    </div>
+  </div>
+</div>
   );
 }
 

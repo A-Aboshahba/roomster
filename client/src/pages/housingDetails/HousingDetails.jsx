@@ -1,21 +1,16 @@
+/* eslint-disable react/no-unknown-property */
 import Box from "@mui/material/Box";
-import { Button, Divider, Grid, Typography } from "@mui/material";
+import { Divider, Grid, Typography } from "@mui/material";
 import FullScreenDialog from "../../components/HousingComponent/MoreImages";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import HouseboatIcon from "@mui/icons-material/Houseboat";
-import WifiIcon from "@mui/icons-material/Wifi";
-import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
 import MoreOffer from "../../components/HousingComponent/MoreOffer";
 import ReviewSection from "../../components/HousingComponent/ReviewSection";
 import HousingInfo from "../../components/HousingComponent/HousingInfo";
 import PickerDate from "../../components/HousingComponent/PickerData/PickerDate";
 import { useNavigate, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSingleApartment,
@@ -25,6 +20,7 @@ import {
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 import { createAllIcons } from "../../utils/createIcons";
 import { SkeletonPageDetails } from "../../utils/SkeletonPage";
+import './HousingDetails.css'
 
 export default function HousingDetails() {
   const params = useParams();
@@ -42,6 +38,7 @@ export default function HousingDetails() {
       return favorite._id == params.apartmentId;
     })
   );
+
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
@@ -108,16 +105,20 @@ export default function HousingDetails() {
               }}
             >
               <Grid item xs={12} md={6}>
-                <img
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  src={
-                    singleApartment.images ? singleApartment.images[0].url : ""
-                  }
-                  alt=""
-                />
+
+              <img
+                      style={{
+                        width: " 100%",
+                        height: "100%",
+                        borderRadius:5,
+                      }}
+                      src={
+                        singleApartment.images
+                          ? singleApartment.images[0].url
+                          : ""
+                      }
+                      alt=""
+                    />
               </Grid>
               <Grid
                 item
@@ -135,6 +136,7 @@ export default function HousingDetails() {
                       style={{
                         width: "100%",
                         height: "100%",
+                        borderRadius:5
                       }}
                       src={
                         singleApartment.images
@@ -148,6 +150,7 @@ export default function HousingDetails() {
                       style={{
                         width: "100%",
                         height: "100%",
+                        borderRadius:5
                       }}
                       src={
                         singleApartment.images
@@ -162,6 +165,7 @@ export default function HousingDetails() {
                       style={{
                         width: " 100%",
                         height: "100%",
+                        borderRadius:5
                       }}
                       src={
                         singleApartment.images
@@ -176,6 +180,7 @@ export default function HousingDetails() {
                       style={{
                         width: " 100%",
                         height: "100%",
+                        borderRadius:5
                       }}
                       src={
                         singleApartment.images
@@ -198,27 +203,31 @@ export default function HousingDetails() {
             sx={{
               mt: 4,
               mb: 1,
+              mx:1,
               alignItems: "flex-start",
               justifyContent: "space-between",
             }}
-            spacing={3}
+            spacing={2}
           >
-            <Grid item md={7}>
-              <Box sx={{ mb: 1 }}>
+            <Grid item md={7} sx={{backgroundColor:'#f2f2f2',borderRadius:3,px:2}}>
+              <Box sx={{ mb: 1}}>
                 <Avatar
                   sx={{ width: 70, height: 70 }}
                   alt={singleApartment?.userId?.fullName}
                   src={user.image?.url != "" ? user.image?.url : ""}
                 />
                 <Box>
-                  <Typography variant="h4" color="initial">
+                  <Typography variant="h5" color="initial">
                     Entire villa hosted by {singleApartment?.userId?.fullName}
                     {user._id !== singleApartment?.userId?._id && (
-                      <Button
-                        onClick={() => openChat(singleApartment?.userId?._id)}
-                      >
-                        chat
-                      </Button>
+
+                          <button class="chatBtn" onClick={() => openChat(singleApartment?.userId?._id)}>
+                          <svg height="1.6em" fill="white" xml:space="preserve" viewBox="0 0 1000 1000" y="0px" x="0px" version="1.1">
+                          <path d="M881.1,720.5H434.7L173.3,941V720.5h-54.4C58.8,720.5,10,671.1,10,610.2v-441C10,108.4,58.8,59,118.9,59h762.2C941.2,59,990,108.4,990,169.3v441C990,671.1,941.2,720.5,881.1,720.5L881.1,720.5z M935.6,169.3c0-30.4-24.4-55.2-54.5-55.2H118.9c-30.1,0-54.5,24.7-54.5,55.2v441c0,30.4,24.4,55.1,54.5,55.1h54.4h54.4v110.3l163.3-110.2H500h381.1c30.1,0,54.5-24.7,54.5-55.1V169.3L935.6,169.3z M717.8,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.5,24.7,54.5,55.2C772.2,420.2,747.8,444.8,717.8,444.8L717.8,444.8z M500,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.4,24.7,54.4,55.2C554.4,420.2,530.1,444.8,500,444.8L500,444.8z M282.2,444.8c-30.1,0-54.5-24.7-54.5-55.1c0-30.4,24.4-55.2,54.5-55.2c30.1,0,54.4,24.7,54.4,55.2C336.7,420.2,312.3,444.8,282.2,444.8L282.2,444.8z"></path>
+                          </svg>
+                          <span class="tooltip">Chat</span>
+                          </button>
+     
                     )}
                   </Typography>
                   <Typography variant="p" color="initial">
@@ -242,7 +251,7 @@ export default function HousingDetails() {
                 body={singleApartment.cancelPolicy}
               />
               <Box sx={{ mt: 2, mb: 1 }}>
-                <Typography variant="h4" color="initial" sx={{ mb: 4 }}>
+                <Typography variant="h5" color="initial" sx={{ mb: 4 }}>
                   What this home has to offer
                 </Typography>
                 <Grid container spacing={2} sx={{ paddingLeft: "18px" }}>
@@ -283,6 +292,7 @@ export default function HousingDetails() {
                   padding: "10px",
                   width: "fit-content",
                   margin: "auto",
+                  backgroundColor:'#f2f2f2'
                 }}
               >
                 <PickerDate

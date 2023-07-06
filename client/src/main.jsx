@@ -1,5 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import "@fontsource/cairo/600.css"; // Specify weight
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
@@ -9,9 +11,18 @@ import store from "./store/store.jsx";
 import { Provider } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import "sweetalert2/src/sweetalert2.scss";
-import Swal from "sweetalert2/dist/sweetalert2.js";
+
+
 
 let theme = createTheme({
+  typography: {
+    "fontFamily": `Cairo`,
+    "fontSize": 17,
+    allVariants: {
+      textTransform: 'capitalize',
+    },
+  },
+  textTransform: "initial",
   palette: {
     primary: {
       main: green[500],

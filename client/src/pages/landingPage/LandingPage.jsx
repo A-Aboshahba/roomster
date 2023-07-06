@@ -17,6 +17,7 @@ function LandingPage() {
 
   return (
     <>
+
       <Header />
       <Slider apartments={apartments} />
     </>

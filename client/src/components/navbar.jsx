@@ -493,7 +493,7 @@ function Navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <img src={image} className="logo" />
+           <Link to='/Home'><img src={image} className="logo" /></Link> 
           </Typography>
 
           <Box
@@ -503,13 +503,13 @@ function Navbar() {
             {navItems.map((item) => (
               <Link to={item} key={item}>
                 {!(item === "Message") && (
-                  <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.1rem'}}>
+                  <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.2rem'}}>
                     {item}
                   </Button>
                 )}
                 {item === "Message" && (
                   <Badge badgeContent={unseenConvo.length} color="error">
-                    <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.1rem'}}>
+                    <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.2rem'}}>
                       {item}
                     </Button>
                   </Badge>

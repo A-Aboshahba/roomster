@@ -1,18 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
-import { Container } from "@mui/system";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import React from "react";
 import Box from "@mui/material/Box";
-import MobileStepper from "@mui/material/MobileStepper";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { motion } from "framer-motion";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import SwipeableViews from "react-swipeable-views";
 import { AiFillStar } from "react-icons/ai";
 import {
   flexBetween,
@@ -28,7 +21,7 @@ const Slider = ({ apartments }) => {
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1200 },
-      items: 5,
+      items: 4,
     },
     tablet: {
       breakpoint: { max: 1200, min: 900 },
@@ -49,13 +42,11 @@ const Slider = ({ apartments }) => {
   };
 
 
-
-
   return (
-    <div className='container' style={{ mt: "4rem" }}>
+    <div className='container' style={{ mt: "4rem",paddingBottom:'110px' }}>
       <h5 className="sliderHeader" style={{mt:10}}> 
-       Our Best apartments </h5> 
-      <Typography variant="h5"  className="slidersub" sx={{mt:1,mb:3}}>
+        Our Best apartments </h5> 
+      <Typography variant="h6" sx={{mb:2}}>
       Plenty of services to assure your relaxation and comfortability.
       </Typography>
       <Carousel
@@ -106,9 +97,7 @@ const Slider = ({ apartments }) => {
                       <Box sx={{ mt: 2 }}>
                         <Typography component="h3"> {card.title}</Typography>
 
-                        {/* <Typography component="h4"> {card.days}</Typography> */}
 
-                        <Typography component="h5"> {card.price}</Typography>
                       </Box>
                       <Box sx={{ mt: 2 }}>
                         <Box sx={dFlex}>

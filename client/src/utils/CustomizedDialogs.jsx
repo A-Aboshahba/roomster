@@ -51,7 +51,7 @@ export default function CustomizedDialogs({ reservation, getUserReservation }) {
     }
   };
   return (
-    <div>
+    <div  className="w-100">
       <Button
         onClick={handleClickOpen}
         size="small"

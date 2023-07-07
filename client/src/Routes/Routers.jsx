@@ -23,6 +23,8 @@ import ApartmentsInfo from "../pages/dashboardPage/apartments/ApartmentsInfo";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useMode, ColorModeContext } from "../theme";
 import LandingPage from "../pages/landingPage/LandingPage";
+import Terms from "../pages/Terms/Terms";
+import Privacy from "../pages/Privacy/Privacy";
 
 function Routers({ getPathName }) {
   // function checkIsAdmin(props) {
@@ -204,7 +206,8 @@ function Routers({ getPathName }) {
           }
         />
       </Route>
-
+        <Route path="/terms" element={<Terms/>}/>
+        <Route path="/privacy" element={<Privacy/>}/>
       <Route path="*" element={<LandingPage />} />
     </Routes>
   );

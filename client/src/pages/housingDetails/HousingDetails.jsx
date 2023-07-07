@@ -74,6 +74,7 @@ export default function HousingDetails() {
               flexGrow: 1,
               position: "relative",
               marginTop: "6rem",
+              marginBottom:'8rem'
             }}
           >
             <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>

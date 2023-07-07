@@ -11,7 +11,7 @@ const LandingPageFooter = () => {
               <div className="buttons">
                 <a
                   rel="noreferrer"
-                  href="https://www.facebook.com/profile.php?id=100019862141727"
+                  href="https://www.facebook.com/RoomsterCorp/?locale=ar_AR"
                   target="_blank"
                   className="fb"
                 >
@@ -19,7 +19,7 @@ const LandingPageFooter = () => {
                 </a>
                 <a
                   rel="noreferrer"
-                  href="https://twitter.com/"
+                  href="https://twitter.com/roomster"
                   target="_blank"
                   className="tw"
                 >
@@ -27,7 +27,7 @@ const LandingPageFooter = () => {
                 </a>
                 <a
                   rel="noreferrer"
-                  href="https://www.instagram.com/ahmed__jamal99/"
+                  href="https://www.instagram.com/roomster/"
                   target="_blank"
                   className="insta"
                 >
@@ -36,7 +36,7 @@ const LandingPageFooter = () => {
 
                 <a
                   rel="noreferrer"
-                  href="https://www.linkedin.com/in/ahmed-jamal-43b76b205/"
+                  href="https://www.linkedin.com/company/roomster/about/"
                   target="_blank"
                   className="in"
                 >
@@ -51,10 +51,10 @@ const LandingPageFooter = () => {
           <div className="List">
             <h5>Useful Links</h5>
             <ul>
-              <li>About us</li>
-              <li>My profile</li>
-              <li>Pricing plans</li>
-              <li>Contacts</li>
+              <a href="https://www.linkedin.com/company/roomster-corp-/"><li>About us</li></a>
+              <a href="/profile"><li>My profile</li></a>
+              <a href="https://www.linkedin.com/company/roomster-corp-/"> <li>Pricing plans</li></a>
+              <a href="https://www.linkedin.com/company/roomster-corp-/"><li>Contacts Us</li></a>
             </ul>
           </div>
         </div>
@@ -63,10 +63,10 @@ const LandingPageFooter = () => {
             <h5>Support</h5>
 
             <ul>
-              <li>Live TV</li>
-              <li>Live News</li>
-              <li>Live Sports</li>
-              <li>Stream Library</li>
+            <a href="/terms"><li>Terms</li></a>
+            <li>Help Center</li>
+             <li>FAQ</li>
+             <li>Bookmarks</li>
             </ul>
           </div>
         </div>
@@ -74,10 +74,10 @@ const LandingPageFooter = () => {
           <div className="List">
             <h5>Latest News</h5>
             <ul>
-              <li>TV Shows</li>
-              <li>Movies</li>
-              <li>Kids</li>
-              <li>Collections</li>
+            <a href="/privacy"> <li>Privacy</li></a>
+            <li>Collections</li>
+             <li>News</li>
+             <li>Affiliate Program</li>
             </ul>
           </div>
         </div>

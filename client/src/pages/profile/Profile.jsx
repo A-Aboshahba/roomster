@@ -257,7 +257,7 @@ const Profile = () => {
                   src={imageSrc}
                 />
               ) : (
-                <Avatar sx={{ width: "120px", height: "120px"}}> <AddPhotoAlternateIcon sx={{ fontSize: "4.5rem", width: "50%", height: "50%" }} />
+                <Avatar sx={{ width: "120px", height: "120px"}}><AddPhotoAlternateIcon sx={{ fontSize: "4.5rem", width: "50%", height: "50%" }} />
                 </Avatar>
                 )}
 

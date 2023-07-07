@@ -13,7 +13,7 @@ import { fetchCurrency } from "./store/Slices/currency.jsx";
 import { io } from "socket.io-client";
 import { getApartments } from "./store/Slices/apartment.js";
 import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
-import Footer from "./components/Footer/Footer";
+// import Footer from "./components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();

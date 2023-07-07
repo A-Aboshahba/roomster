@@ -196,7 +196,7 @@ function Navbar() {
                 className="profile_image"
                 src={user?.image?.url}
                 alt="profile-pic"
-                style={{ width: 32, height: 32 }}
+                style={{ width: 40, height: 40 ,borderRadius:'50%'}}
               />
             )}
           </IconButton>
@@ -247,8 +247,7 @@ function Navbar() {
                   className="profile_image"
                   src={user?.image?.url}
                   alt="profile-pic"
-                  style={{ width: 32, height: 32 }}
-                />
+                  style={{ width: 40, height: 40 ,borderRadius:'50%',marginRight: "15px"}}                />
               )}
               Profile
             </MenuItem>

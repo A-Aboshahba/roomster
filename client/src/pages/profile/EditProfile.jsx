@@ -8,14 +8,27 @@ import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Roomster from "../../API/config";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ChangePassword from "../../components/profileComponent/ChangePassword";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import { useState } from "react";
+import { setUserProfileImage } from "../../store/Slices/userSlice";
 
-export default function EditProfile() {
-  const user = useSelector((state) => state.user.user);
+
+export default function EditProfile({setOpen}) {
+  const dispatch = useDispatch();
+  const [imageSrc, setImageSrc] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
+  
+  const user = useSelector((state) => state.user?.user);
+  console.log(user);
+  const userId = user._id;
+  const publicId = user?.image?.publicId;
+
+  const imageUrl= user?.image?.url
 
   async function EditData(values) {
-    console.log(values);
     await Roomster.patch(`user/${user._id}`, values);
     window.location.reload();
   }
@@ -38,13 +51,56 @@ export default function EditProfile() {
         city: `${user.address?.city}`,
       },
     },
-
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      EditData(values);
+      EditData(values);  
     },
   });
-
+  
+  
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      setImageSrc(e.target.result);
+    };
+  };
+ 
+ const handleImageSubmit = async () => {
+   if (imageFile) {
+     try {
+       const formData = new FormData(); 
+       formData.append("image", imageFile);
+       
+       if(imageUrl===''){
+        const response=  await Roomster.post(`user/${userId}/image`, formData,{headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch(setUserProfileImage(response.data.image));
+      console.log(response);  
+    }else{
+      
+      console.log(publicId);
+      formData.append("imageId",`${publicId}` );
+      const response=  await Roomster.patch(`user/${userId}/image`, formData, {headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    dispatch(setUserProfileImage(response.data.image));
+    console.log(response);
+  }
+        setOpen(false);     
+        setImageFile(null);
+        setImageSrc(null);  
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
   return (
     <Box
       sx={{
@@ -59,6 +115,66 @@ export default function EditProfile() {
         Edit Profile
       </Typography>
       <div>
+        
+<Box sx={{ display: "flex", alignItems: "center" }}>
+  <label htmlFor="profilePhoto" style={{ cursor: "pointer" }}>
+    <input
+      accept="image/*"
+      id="profilePhoto"
+      type="file"
+      style={{ display: "none" }}
+      onChange={handleImageUpload}
+    />
+
+    <Box sx={{ position: "relative",mb:5}}>
+      {imageSrc === null ? (
+ <Box
+ component="img"
+ sx={{
+   border: "1px solid black",
+   borderRadius: "50%",
+   height: { lg: 100, md: 150, sm: 100, xs: 100 },
+   width: { lg: 100, md: 150, sm: 100, xs: 100 },         
+ }}
+ alt="img"
+ src={user?.image?.url}
+/>      ) : (
+        <Box
+          component="img"
+          sx={{
+            border: "1px solid black",
+            borderRadius: "50%",
+            height: { lg: 100, md: 150, sm: 100, xs: 100 },
+            width: { lg: 100, md: 150, sm: 100, xs: 100 },         
+          }}
+          alt="img"
+          src={imageSrc}
+        />
+      )}
+      <Box
+        component={AddPhotoAlternateIcon}
+        alt="Add Photo Icon"
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          backgroundColor: "white",
+          borderRadius: "50%",
+          padding: 1,
+          height: '40px !important' ,
+          width: '40px !important',
+          cursor: "pointer",
+         
+        }}
+      />
+    </Box>
+  </label>
+
+  <Button onClick={()=>handleImageSubmit()} style={{ backgroundColor:'#4caf50',color: '#ffff', fontWeight: 'bold', 
+  borderRadius: '5px', border: '2px solid', padding: '4px 12px', marginLeft: '27px'}} disabled={imageFile === null}>
+  Update
+</Button>
+   </Box>
         <TextField
           name="firstName"
           required
@@ -130,7 +246,7 @@ export default function EditProfile() {
           />
         </FormControl>
 
-        <Button type="submit" variant="contained" sx={{ m: 1, color: "white" }}>
+        <Button  type="submit" variant="contained" sx={{ m: 1, color: "white" }}>
           Save Changes
         </Button>
 

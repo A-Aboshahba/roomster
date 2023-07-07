@@ -123,7 +123,7 @@ function Routers({ getPathName }) {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className="app">
+                <div className="dashBoard">
                   <Sidebar isSidebar={isSidebar} />
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />
@@ -140,7 +140,7 @@ function Routers({ getPathName }) {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className="app">
+                <div className="dashBoard">
                   <Sidebar isSidebar={isSidebar} />
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />
@@ -158,7 +158,7 @@ function Routers({ getPathName }) {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className="app">
+                <div className="dashBoard">
                   <Sidebar isSidebar={isSidebar} />
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />
@@ -175,7 +175,7 @@ function Routers({ getPathName }) {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className="app">
+                <div className="dashBoard">
                   <Sidebar isSidebar={isSidebar} />
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />
@@ -192,7 +192,7 @@ function Routers({ getPathName }) {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className="app">
+                <div className="dashBoard">
                   <Sidebar isSidebar={isSidebar} />
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />

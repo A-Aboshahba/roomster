@@ -68,6 +68,7 @@ const userSlice = createSlice({
         state.unseen = [...state.unseen, action.payload];
       }
     },
+   
     removeUnseen: (state, action) => {
       console.log("here");
       state.unseen = state.unseen.filter((id) => id !== action.payload);
@@ -82,6 +83,9 @@ const userSlice = createSlice({
       state.onlineUsers = state.onlineUsers.filter(
         (user) => user !== action.payload
       );
+    },
+      setUserProfileImage: (state, action) => {
+        state.user.image = action.payload;
     },
   },
   extraReducers: {
@@ -122,5 +126,7 @@ export const {
   removeUnseen,
   resetUnseen,
   addOnlineUser,
+  setUserProfileImage
 } = userSlice.actions;
 export default userSlice.reducer;
+

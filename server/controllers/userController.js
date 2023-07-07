@@ -312,7 +312,7 @@ exports.updateProfileImage = (request, response, next) => {
               }
               response
                 .status(200)
-                .json({ message: " image is updated successfully" });
+                .json({ message: " image is updated successfully", image:image });
             })
             .catch((err) => next(err));
         })

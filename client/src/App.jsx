@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 import Navbar from "./components/navbar.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -13,7 +13,8 @@ import { fetchCurrency } from "./store/Slices/currency.jsx";
 import { io } from "socket.io-client";
 import { getApartments } from "./store/Slices/apartment.js";
 import { fetchUsers } from "./store/Slices/AllUsersSlice.jsx";
-// import Footer from "./components/Footer/Footer";
+import LandingPageFooter from "./components/landingPageComponent/Footer/LandingPageFooter.jsx";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,8 +52,9 @@ function App() {
       <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers getPathName={getPathName} />
       </Container>
-      {/* {!path.includes("/dashboard") && <Footer />} */}
-     
+      {["/", "/Home"].includes(path) && <LandingPageFooter />}
+      {["/", "/Home"].includes(path) && <Divider />}
+      {!path.includes("/dashboard") && <Footer />}
 
       <ToastContainer />
     </BrowserRouter>

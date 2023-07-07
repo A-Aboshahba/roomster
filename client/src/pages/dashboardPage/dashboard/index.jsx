@@ -8,7 +8,7 @@ import Header from "../../../components/dashboardComponent/Header";
 import GeographyChart from "../../../components/dashboardComponent/GeographyChart";
 import StatBox from "../../../components/dashboardComponent/StatBox";
 import ProgressCircle from "../../../components/dashboardComponent/ProgressCircle";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getApartmentsState } from "../../../store/Slices/apartment";
 import { getAllUserState } from "../../../store/Slices/AllUsersSlice";
 
@@ -34,14 +34,13 @@ const Dashboard = () => {
     });
   });
 
-  const mostResApartemnt =apartemnts.reduce((acc,curr)=>{
-    if(curr.reservationsArr.length>acc.length){
-      return curr
+  const mostResApartemnt = apartemnts.reduce((acc, curr) => {
+    if (curr.reservationsArr.length > acc.length) {
+      return curr;
+    } else {
+      return acc;
     }
-    else{
-    return acc;
-    }
-    },[])
+  }, []);
 
   // console.log(totalPrice);
   // console.log(totalReservations);
@@ -128,8 +127,8 @@ const Dashboard = () => {
           <StatBox
             title={`${totalPrice * 0.004} $`}
             subtitle="Website benefits"
-            progress={(totalPrice * 0.004)/ totalPrice}
-            increase={`+${(totalPrice * 0.004)/ totalPrice}%`}
+            progress={(totalPrice * 0.004) / totalPrice}
+            increase={`+${(totalPrice * 0.004) / totalPrice}%`}
             icon={
               <AttachMoneyIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -172,39 +171,37 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
-            <Typography
+          <Typography
             variant="h5"
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
-          
           >
-          Most Reserved 
+            Most Reserved
           </Typography>
-          <Typography
-              variant="h6"
-              fontWeight="600"
-              sx={{ padding: "20px" }}>
-                Title: <span style={{ color: colors.greenAccent[600],marginLeft:"7px" }}>{mostResApartemnt.title}</span>
+          <Typography variant="h6" fontWeight="600" sx={{ padding: "20px" }}>
+            Title:{" "}
+            <span style={{ color: colors.greenAccent[600], marginLeft: "7px" }}>
+              {mostResApartemnt.title}
+            </span>
           </Typography>
-          <Typography
-              variant="h6"
-              fontWeight="600"
-              sx={{ padding: "20px" }}>
-                Type: <span style={{ color: colors.greenAccent[600],marginLeft:"7px" }}>{mostResApartemnt.type}</span>
+          <Typography variant="h6" fontWeight="600" sx={{ padding: "20px" }}>
+            Type:{" "}
+            <span style={{ color: colors.greenAccent[600], marginLeft: "7px" }}>
+              {mostResApartemnt.type}
+            </span>
           </Typography>
-          <Typography
-              variant="h6"
-              fontWeight="600"
-              sx={{ padding: "20px" }}>
-                Cost / Night : <span style={{ color: colors.greenAccent[600],marginLeft:"7px" }}>{mostResApartemnt.price} $</span>
+          <Typography variant="h6" fontWeight="600" sx={{ padding: "20px" }}>
+            Cost / Night :{" "}
+            <span style={{ color: colors.greenAccent[600], marginLeft: "7px" }}>
+              {mostResApartemnt.price} $
+            </span>
           </Typography>
-          <Typography
-              variant="h6"
-              fontWeight="600"
-              sx={{ padding: "20px" }}>
-                Owner : <span style={{ color: colors.greenAccent[600],marginLeft:"7px" }}>{mostResApartemnt.user?.fullName}</span> 
+          <Typography variant="h6" fontWeight="600" sx={{ padding: "20px" }}>
+            Owner :{" "}
+            <span style={{ color: colors.greenAccent[600], marginLeft: "7px" }}>
+              {mostResApartemnt.user?.fullName}
+            </span>
           </Typography>
-
         </Box>
         <Box
           gridColumn="span 4"

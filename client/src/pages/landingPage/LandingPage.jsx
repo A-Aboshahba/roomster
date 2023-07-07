@@ -6,6 +6,7 @@ import {
   getApartmentsState,
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
+import LandingPageFooter from "../../components/landingPageComponent/Footer/LandingPageFooter";
 
 function LandingPage() {
   const dispatch = useDispatch();
@@ -17,7 +18,6 @@ function LandingPage() {
 
   return (
     <>
-
       <Header />
       <Slider apartments={apartments} />
     </>

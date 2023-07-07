@@ -4,9 +4,16 @@ import Typography from "@mui/material/Typography";
 import EditProfile from "./EditProfile.jsx";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { useState } from "react";
-
+import "./style.css";
 const Profile = () => {
   const user = useSelector((state) => state.user.user);
   const [open, setOpen] = useState(false);
@@ -22,7 +29,7 @@ const Profile = () => {
   return (
     <>
       <Grid container sx={{ my: 3 }}>
-        <Grid item lg={3} xl={3} sm={4} md={3}  sx={{ margin: "16px auto" }}>
+        <Grid item lg={3} xl={3} sm={4} md={3} sx={{ margin: "16px auto" }}>
           <Box
             sx={{
               display: "flex",
@@ -81,12 +88,17 @@ const Profile = () => {
               <Box>
                 <Typography variant="subtitle1">Email:</Typography>
               </Box>
-              <Box sx={{ marginLeft: "8px",marginBottom:'30px' }}>
-                <Typography >{user.email}</Typography>
+              <Box sx={{ marginLeft: "8px", marginBottom: "30px" }}>
+                <Typography>{user.email}</Typography>
               </Box>
             </Grid>
           </Grid>
-          <Button variant="contained" color="primary" style={{marginTop:'20px !important'}} onClick={handleClickOpen}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginTop: "20px !important" }}
+            onClick={handleClickOpen}
+          >
             Edit Profile
           </Button>
         </Grid>
@@ -96,9 +108,7 @@ const Profile = () => {
           flexItem
           sx={{ mx: 6, display: { xs: "none", md: "block" } }}
         />
-        <Grid item lg={7} xl={7} sm={8} md={7}>
-          
-        </Grid>
+        <Grid item lg={7} xl={7} sm={8} md={7}></Grid>
       </Grid>
 
       <Dialog open={open} onClose={handleClose}>
@@ -106,9 +116,12 @@ const Profile = () => {
           <EditProfile setOpen={setOpen} />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" style={{backgroundColor:'rgb(236 0 11)',
-        color:"#ffff"}} onClick={handleClose}>
-          Cancel
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "rgb(236 0 11)", color: "#ffff" }}
+            onClick={handleClose}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

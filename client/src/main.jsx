@@ -11,6 +11,7 @@ import store from "./store/store.jsx";
 import { Provider } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import "sweetalert2/src/sweetalert2.scss";
+import "bootstrap/dist/js/bootstrap.bundle.js";
 
 
 

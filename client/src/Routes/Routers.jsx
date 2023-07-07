@@ -10,7 +10,8 @@ import MyTrips from "../pages/MyTrips/MyTrips";
 import UserGuard from "../Gurd/UserGurd";
 import UserApartments from "../pages/userApartments/UserApartments";
 
-import ConfirmationPage  from "../pages/ConfirmationPage ";
+import ConfirmationPage from "../pages/ConfirmationPage ";
+import ReservationDashboard from "../components/manageHousing/stepperComponents/ReservationDashboard/ReservationDashboard.jsx";
 
 function Routers() {
   return (
@@ -51,6 +52,14 @@ function Routers() {
         }
       />
       <Route
+        path="apartment/ReservationDashboard"
+        element={
+          <UserGuard>
+            <ReservationDashboard />
+          </UserGuard>
+        }
+      />
+      <Route
         path="wishlist/"
         element={
           <UserGuard>
@@ -70,7 +79,7 @@ function Routers() {
         path="success"
         element={
           <UserGuard>
-            <ConfirmationPage  />
+            <ConfirmationPage />
           </UserGuard>
         }
       />

@@ -63,6 +63,7 @@ export default function ManageHousing() {
     cancelPolicy: [],
     rules: [],
   });
+
   const demo = [
     {
       component: <Comp1 setIsChoosed={setIsChoosed} />,

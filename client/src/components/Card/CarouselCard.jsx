@@ -28,7 +28,15 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 import { useNavigate } from "react-router";
-// eslint-disable-next-line react/prop-types
+
+
+
+
+
+
+
+
+
 const CarouselCard = ({ location }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => {
@@ -68,6 +76,15 @@ const CarouselCard = ({ location }) => {
     dispatch(deleteFavorite({ userId: user._id, location: location }));
     setIsFavorite((prev) => !prev);
   };
+
+
+
+
+
+
+
+
+  
   return (
     <motion.div  whileHover={{ scale: 1.05 }}>
     <Box 

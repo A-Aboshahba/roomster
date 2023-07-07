@@ -81,7 +81,7 @@ export default function AppartmentCard({ apartment, deleteApartment }) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {"deleting this apartment will permenantly remove all it's data!"}
+              {"deleting this apartment will permanently remove all its data!"}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

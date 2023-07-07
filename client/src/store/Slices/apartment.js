@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   status: "idle",
   singleApartment: {},
   apartments: [],
+  isDataFetched: true,
   reviews: [],
   totalReviews: 0,
   // favourites: [],
@@ -102,7 +103,10 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.apartments.Push(...action.payload);
+      if (action.payload.length == 0) {
+        state.isDataFetched = false;
+      }
+      state.apartments.push(...action.payload);
     },
     [loadMoreApartments.pending]: (state) => {
       state.status = "loading";

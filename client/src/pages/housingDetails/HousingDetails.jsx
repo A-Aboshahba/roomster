@@ -204,7 +204,7 @@ export default function HousingDetails() {
                     height: "100%",
                   }}
                   src={
-                    singleApartment.images ? singleApartment.images[2].url : ""
+                    singleApartment.images ? singleApartment.images[2]?.url : ""
                   }
                   alt=""
                 />
@@ -216,7 +216,7 @@ export default function HousingDetails() {
                     height: "100%",
                   }}
                   src={
-                    singleApartment.images ? singleApartment.images[3].url : ""
+                    singleApartment.images ? singleApartment.images[3]?.url : ""
                   }
                   alt=""
                 />
@@ -228,7 +228,7 @@ export default function HousingDetails() {
                     height: "100%",
                   }}
                   src={
-                    singleApartment.images ? singleApartment.images[4].url : ""
+                    singleApartment.images ? singleApartment.images[4]?.url : ""
                   }
                   alt=""
                 />

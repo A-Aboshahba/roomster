@@ -258,7 +258,7 @@ const TellGuests = ({
       });
     }
   }, [collectedData]);
-  // React.useEffect(() => {
+    // React.useEffect(() => {
   //   setIsChoosed(false);
   //   if (apartment) {
   //     let newSpecifications = {};
@@ -290,7 +290,6 @@ const TellGuests = ({
   //     });
   //   }
   // }, []);
-  console.log("asdaxcvsdfgdfsdf", collectedData, selectedItemId);
 
   function handleClick(id, attr) {
     if (collectedData.apartmentSpecification.hasOwnProperty(attr)) {
@@ -312,8 +311,7 @@ const TellGuests = ({
       setSelectedItemId([...selectedItemId, id]);
     }
   }
-
-  return (
+return (
     <Box>
       <Typography>Tell your guests what tour place has to offer</Typography>
       <Grid

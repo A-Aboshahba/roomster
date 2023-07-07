@@ -10,27 +10,22 @@ import { Link } from "react-router-dom";
 
 const UserApartments = () => {
   const [apartments, setApartments] = useState([]);
-  // const [page, setPage] = useState(0);
   const { user } = useSelector((state) => state.user);
-  // console.log("here", user);
   const getUserApartments = async () => {
     if (user._id !== "") {
       try {
         const { data } = await Roomster.get(`user/${user._id}/apartments`);
-        // console.log("data", data);
         setApartments(data);
-        console.log("asdasdas", apartments);
       } catch (error) {
         console.log(error);
       }
     }
   };
+
   const deleteApartment = async (apartment) => {
     try {
       // deleting photos from cloudinary
-      console.log("delete apartment:", apartment);
       const deleteImagePromises = apartment.images.map(async (singleImg) => {
-        console.log(" delete image", singleImg);
         const response = await Roomster.delete(
           `apartments/${apartment._id}/image`,
           {
@@ -71,6 +66,15 @@ const UserApartments = () => {
           color="success"
           sx={{ float: "right", mt: 2, mr: 10 }}>
           New Apartment
+        </Button>
+      </Link>
+      <Link to={"/apartment/ReservationDashboard"}>
+        <Button
+          variant="contained"
+          size="large"
+          color="success"
+          sx={{ float: "right", mt: 2, mr: 3 }}>
+          All User Reservations
         </Button>
       </Link>
       <Box sx={{ mx: 2, my: 2 }}>

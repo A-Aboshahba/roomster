@@ -8,6 +8,8 @@ import "./PickerDate.css";
 import { Button, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import CurrencySign from "../../../utils/CurrencySign";
+
+
 const PickerDate = ({ reservationsArr = [], price = 1 }) => {
 
   const SignySelector = useSelector((state) => state.currency.selected);

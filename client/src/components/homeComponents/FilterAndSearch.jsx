@@ -6,7 +6,6 @@ import { getApartments } from "../../store/Slices/apartment";
 
 const FilterAndSearch = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
-  console.log(searchQuery);
   const dispatch = useDispatch();
   
     useEffect(() => {

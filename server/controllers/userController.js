@@ -289,6 +289,7 @@ module.exports.getUserApartments = (request, response, next) => {
         email: 1,
         _id: 1,
         image: 1,
+        
       },
     }),
     request.query

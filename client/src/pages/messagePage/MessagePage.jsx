@@ -362,7 +362,7 @@ function MessagePage() {
   return (
 
 
-    <div className="home-page__content messages-page" style={{backgroundColor:'#f2f2f2',border:'1px solid #f2f2f2'}}>
+    <div className="home-page__content messages-page" >
   <div className="container-fluid h-100">
     <div className="row px-0 h-100">
       {/* <!-- start message list section  --> */}

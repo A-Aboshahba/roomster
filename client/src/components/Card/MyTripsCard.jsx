@@ -112,10 +112,9 @@ const MyTripsCard = ({ reservation, getUserReservation }) => {
         <Box sx={flexBetween}>
           <Box sx={{ mt: 2, overflow: "hidden", textOverflow: "ellipsis" }}>
             <Typography
-              component="h3"
+              component="h5"
               sx={{
                 fontWeight: "bold",
-                fontSize: "0.9rem",
                 color: "#333",
                 marginBottom: "2px",
               }}
@@ -124,83 +123,13 @@ const MyTripsCard = ({ reservation, getUserReservation }) => {
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ display: flexBetween, my: 1 }}>
-          <Box>
-            <Typography
-              sx={{
-                color: "#8bc34a",
-                borderRadius: "5px",
-                width: 100,
-                height: 20,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-
-                fontSize: "0.9rem",
-                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              {`$ ${reservation.apartmentId.price} / night`}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              sx={{
-                color: "#1E90FF",
-                borderRadius: "5px",
-                width: 100,
-                height: 20,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-
-                fontSize: "0.9rem",
-                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              {`$${reservation.totalPrice} / total`}
-            </Typography>
-          </Box>
+        
+        <Box sx={flexBetween} className="user-profile__location">
+        {`From : ${moment(reservation.startDate).format("DD MMM")} To: ${moment(reservation.endDate).format("DD MMM")}`}
         </Box>
-        <Box sx={flexBetween}>
-          <Box sx={{ mt: 0 }}>
-            <Typography
-              sx={{
-                bgcolor: "#8bc34a",
-                color: "white",
-                borderRadius: "5px",
-                width: 100,
-                height: 20,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
+        <Box sx={{ display: flexBetween, my: 1 }}>
+        {`$${reservation.totalPrice} / total`}
 
-                fontSize: "0.7rem",
-                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              {`${moment(reservation.startDate).format("DD MMM YYYY")}`}
-            </Typography>
-          </Box>
-          <Box sx={{ mt: 0 }}>
-            <Typography
-              sx={{
-                bgcolor: "#1E90FF",
-                color: "white",
-                borderRadius: "5px",
-                width: 100,
-                height: 20,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-
-                fontSize: "0.7rem",
-                boxShadow: "2px 2px 6px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              {`${moment(reservation.endDate).format("DD MMM YYYY")}`}
-            </Typography>
-          </Box>
         </Box>
       </Link>
 

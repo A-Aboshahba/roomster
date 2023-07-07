@@ -6,6 +6,7 @@ const LandingPageFooter = () => {
         <div className="col-lg-4 col-md-6 mb-5">
           <div className="socail">
             <p>Roomster</p>
+            <h6 style={{color:'#ffff'}}>Our mission is to connect people with comfortable,<br/> affordable, and safe living spaces, wherever they may be. </h6>
             <div className="effect aeneas">
               <div className="buttons">
                 <a
@@ -42,6 +43,7 @@ const LandingPageFooter = () => {
                   <i className="fab fa-linkedin-in"></i>
                 </a>
               </div>
+              
             </div>
           </div>
         </div>

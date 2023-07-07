@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { selectCurrenct } from "../../store/Slices/currency";
 import { useDispatch } from "react-redux";
+import { color } from "@mui/system";
 function Footer() {
   const dispatch = useDispatch();
   const googleTranslateElementInit = () => {
@@ -25,6 +26,7 @@ function Footer() {
 
   return (
     <div id="footer">
+
       <div id="google_translate_element"></div>
       <select
         onChange={(event) => {
@@ -32,6 +34,8 @@ function Footer() {
         }}
         id="currency-select"
       >
+       <option value="" disabled selected>Change Currency</option>
+        <hr/>
         <option value="USD">USD</option>
         <option value="AED">AED</option>
         <option value="AFN">AFN</option>
@@ -194,8 +198,9 @@ function Footer() {
         <option value="XPF">ZMW</option>
         <option value="XPF">ZWL</option>
       </select>
+
       <div id="contact-info">
-        <a href="mailto:info@example.com">Romster@gmail.com</a>
+        <a className="text-light" href="mailto:info@example.com">@2023Roomster.com</a>
         <a href="tel:+1234567890">123-456-7890</a>
       </div>
     </div>

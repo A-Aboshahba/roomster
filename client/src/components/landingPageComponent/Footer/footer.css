@@ -1,6 +1,7 @@
 .footer {
     background-color: #232f3e;
-    padding: 25px 15px;
+    padding:25px 15px 31px 25px;
+    font-family: 'Roboto';
 }
 
 .socail p {
@@ -12,9 +13,9 @@
 .effect:nth-child(2) {
     margin-top: 50px;
 }
-.effect:nth-child(2n + 1) {
+/* .effect:nth-child(2n + 1) {
     background-color: #fff;
-}
+} */
 .effect:nth-child(2n + 1) h2 {
     color: #212121;
 }
@@ -29,23 +30,27 @@
 .effect a {
     text-decoration: none !important;
     color: #fff !important;
-    width: 65px;
-    height: 65px;
+    width: 47px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    margin: 0 20px;
+    /* margin: 5px 13px; */
+    margin-left: 19px;
+    margin-top: -20px;
     font-size: 25px;
     overflow: hidden;
     position: relative;
 }
+
 .effect a i {
     position: relative;
     z-index: 3;
 }
 .effect a.fb {
     background-color: #3b5998;
+    
 }
 .effect a.tw {
     background-color: #00aced;

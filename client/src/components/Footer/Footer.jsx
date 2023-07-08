@@ -35,7 +35,6 @@ function Footer() {
         id="currency-select"
       >
        <option value="" disabled selected>Change Currency</option>
-        <hr/>
         <option value="USD">USD</option>
         <option value="AED">AED</option>
         <option value="AFN">AFN</option>

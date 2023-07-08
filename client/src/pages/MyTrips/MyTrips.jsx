@@ -17,7 +17,7 @@ function MyTrips() {
     if (user._id !== "") {
       try {
         const { data } = await Roomster.get(
-          `user/${userId}/reservations?page=${page}`
+          `user/${userId}/reservations?page=${page}&limit=10000000000`
         );
         setReservation((prevReservations) => [...data]);
       } catch (error) {

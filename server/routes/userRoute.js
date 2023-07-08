@@ -10,6 +10,7 @@ const {
 } = require("./../middelwares/authenicatedMW");
 
 router.route("/all").get(isAdmin, controller.getAllUsers);
+router.route("/getStats").get(controller.getStats);
 router
   .route("/:id")
   .get(validator.getSingleUser, validationError, controller.getSingleUser)
@@ -108,4 +109,5 @@ router
     validationError,
     controller.changeSingleUserPassword
   );
+
 module.exports = router;

@@ -8,25 +8,16 @@ import Header from "../../../components/dashboardComponent/Header";
 import GeographyChart from "../../../components/dashboardComponent/GeographyChart";
 import StatBox from "../../../components/dashboardComponent/StatBox";
 import ProgressCircle from "../../../components/dashboardComponent/ProgressCircle";
-import { useSelector } from "react-redux";
 import { getApartmentsState } from "../../../store/Slices/apartment";
-import { getAllUserState } from "../../../store/Slices/AllUsersSlice";
+import Roomster from "../../../API/config";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const usersCount = useSelector(getAllUserState).length;
-  console.log(usersCount);
   const apartemnts = useSelector(getApartmentsState);
-  console.log(apartemnts);
-  let totalReservations = 0;
-
-  apartemnts.forEach((apartment) => {
-    apartment.reservationsArr.forEach((reservation) => {
-      totalReservations++;
-    });
-  });
-
   let totalPrice = 0;
   apartemnts.forEach((apartment) => {
     apartment.reservationsArr.forEach((reservation) => {
@@ -42,6 +33,27 @@ const Dashboard = () => {
     }
   }, []);
 
+  const [usersCount,setUsersCount]=useState(0);
+  const [apartmentsCount,setApartmentsCount]=useState(0);
+  const [reservationsCount,setReservationsCount]=useState(0);
+
+const RoomsterStates=async ()=>{
+  try{
+    const res =await Roomster.get('user/getStats');
+        console.log(res.data);
+        setUsersCount(res.data.usersCount);
+        setApartmentsCount(res.data.apartmentsCount);
+        setReservationsCount(res.data.reservationsCount);
+}
+catch(err){
+  console.log(err);
+}
+  }
+
+  useEffect(()=>{
+    RoomsterStates();
+  },[]);
+const webBenefits=(totalPrice*.004).toFixed(2);
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="center" alignItems="center">
@@ -83,10 +95,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={apartemnts.length}
+            title={apartmentsCount}
             subtitle="All Apartments"
-            progress={apartemnts.length / 100}
-            increase={`+${apartemnts.length / 100} %`}
+            progress={apartmentsCount / 100}
+            increase={`+${apartmentsCount / 100} %`}
             icon={
               <ApartmentIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -102,10 +114,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={totalReservations}
+            title={reservationsCount}
             subtitle="All Reservation"
-            progress={totalReservations / 10000}
-            increase={`+${totalReservations / 10000} %`}
+            progress={reservationsCount / 10000}
+            increase={`+${reservationsCount / 10000} %`}
             icon={
               <AddBusinessIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -121,10 +133,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title={`${totalPrice * 0.004} $`}
+            title={`${webBenefits} $`}
             subtitle="Website benefits"
-            progress={(totalPrice * 0.004) / totalPrice}
-            increase={`+${(totalPrice * 0.004) / totalPrice}%`}
+            progress={(webBenefits) / totalPrice}
+            increase={`+${(webBenefits) / totalPrice}%`}
             icon={
               <AttachMoneyIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

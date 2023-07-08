@@ -23,7 +23,6 @@ async function addUser(values){
         toastMessage("success","An account has been created")
     }catch(error){
         toastMessage("error",error)
-
     }
 }
 const validationSchema = Yup.object().shape({

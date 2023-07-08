@@ -28,6 +28,7 @@ export default function HousingDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const singleApartment = useSelector(getSingleApartmentState);
+  const hostImageUrl =singleApartment.userId?.image?.url;
   let counter = 0;
   const { user, loading } = useSelector((state) => {
     return state.user;
@@ -215,7 +216,7 @@ export default function HousingDetails() {
                 <Avatar
                   sx={{ width: 70, height: 70 }}
                   alt={singleApartment?.userId?.fullName}
-                  src={user.image?.url != "" ? user.image?.url : ""}
+                  src={hostImageUrl != "" ? hostImageUrl : ""}
                 />
                 <Box>
                   <Typography variant="h5" color="initial">

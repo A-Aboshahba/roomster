@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { setUserProfileImage } from "../../store/Slices/userSlice";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { toastMessage } from "../../utils/toasfiy";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -329,9 +330,8 @@ const Profile = () => {
                                   />
                                 </Avatar>
                               )}
-
                               <Box
-                                component={AddPhotoAlternateIcon}
+                                component={imageFile? CheckCircleIcon: AddPhotoAlternateIcon}
                                 alt="Add Photo Icon"
                                 sx={{
                                   position: "absolute",

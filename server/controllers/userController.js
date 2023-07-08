@@ -428,3 +428,96 @@ module.exports.getSingleReservations = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
+
+const Apartment = mongoose.model("Apartments");
+exports.getStats = async (request, response, next) => {
+  console.log('getStats working');
+  try {
+    const usersCount = await User.countDocuments({});
+    const apartmentsCount = await Apartment.countDocuments({ published: true });
+    const reservationsCount = await Reservation.countDocuments({});
+    const initialArray = [
+      {
+        $match: {
+          published: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "reviews",
+          localField: "_id",
+          foreignField: "apartmentId",
+          as: "reviews",
+        },
+      },
+      {
+        $addFields: {
+          avgRating: {
+            $avg: "$reviews.rate",
+          },
+        },
+      },
+      {
+        $addFields: {
+          avgRating: {
+            $ifNull: [{ $avg: "$reviews.rate" }, 0], // replace null with 0
+          },
+        },
+      },
+      {
+        $project: {
+          avgRating: 1,
+        },
+      },
+
+      {
+        $group: {
+          _id: "$avgRating",
+          count: { $sum: 1 },
+        },
+      },
+      // {
+      //   $group: {
+      //     _id: {
+      //       $cond: {
+      //         if: { $gte: ["$avgRating", 4] }, // >= 4
+      //         then: "4-5",
+      //         else: {
+      //           $cond: {
+      //             if: { $gte: ["$avgRating", 3] }, // >= 3
+      //             then: "3-4",
+      //             else: {
+      //               $cond: {
+      //                 if: { $gte: ["$avgRating", 2] }, // >= 2
+      //                 then: "2-3",
+      //                 else: {
+      //                   $cond: {
+      //                     if: { $eq: ["$avgRating", 0] }, // = 0
+      //                     then: "0",
+      //                     else: "1-2",
+      //                   },
+      //                 },
+      //               },
+      //             },
+      //           },
+      //         },
+      //       },
+      //     },
+      //     count: { $sum: 1 },
+      //   },
+      // },
+    ];
+    const apartmentsRatingclassification = await Apartment.aggregate(
+      initialArray
+    );
+    response.status(200).json({
+      apartmentsRatingclassification,
+      apartmentsCount,
+      usersCount,
+      reservationsCount,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};

@@ -73,6 +73,15 @@ const UserApartments = () => {
           New Apartment
         </Button>
       </Link>
+      <Link to={"/apartment/ReservationDashboard"}>
+        <Button
+          variant="contained"
+          size="large"
+          color="success"
+          sx={{ float: "right", mt: 2, mr: 3 }}>
+          All User Reservations
+        </Button>
+      </Link>
       <Box sx={{ mx: 2, my: 2 }}>
         <Grid container rowSpacing={3} columnSpacing={3}>
           {apartments &&

@@ -9,9 +9,9 @@ module.exports = class ApiFeature {
     console.log("paginate");
     let page = this.queryString.page * 1 || 1;
     if (this.mongooseQuery.page <= 0) page = 1;
-    let skip = (page - 1) * (this.queryString.limit || 12);
+    let skip = (page - 1) * (this.queryString.limit || 4);
     this.page = page;
-    this.mongooseQuery.skip(skip).limit(this.queryString.limit || 12);
+    this.mongooseQuery.skip(skip).limit(this.queryString.limit || 4);
 
     return this;
   }

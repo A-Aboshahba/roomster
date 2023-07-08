@@ -35,7 +35,7 @@ export default function ManageHousing() {
       setApartment(apartment);
     }
   }, []);
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(4);
   const [skipped, setSkipped] = useState(new Set());
   const [isChoosed, setIsChoosed] = useState(true);
   const { user } = useSelector((state) => state.user);
@@ -275,7 +275,7 @@ export default function ManageHousing() {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Box sx={{ width: "90%", mt: 7 }}>
+            <Box sx={{ width: "90%", mt: 2 }}>
               <Typography sx={{ fontSize: 25, mb: 1, fontWeight: "bold" }}>
                 {demo[activeStep].label}
               </Typography>
@@ -297,17 +297,17 @@ export default function ManageHousing() {
                 color="inherit"
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
+                sx={{ mr: 1,   mb:10 }}
               >
                 Back
               </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
+              <Box sx= {{ flex: "1 1 auto"}} />
               {activeStep === steps.length - 1 ? (
                 <Link to={"/Manage Housing"}>
                   <Button onClick={handleFinish}>Finish</Button>
                 </Link>
               ) : (
-                <Button onClick={() => handleNext()} disabled={isChoosed}>
+                <Button sx={{ mb:10}} onClick={() => handleNext()} disabled={isChoosed}>
                   Next
                 </Button>
               )}

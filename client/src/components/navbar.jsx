@@ -22,7 +22,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   ResetRedux,
   addUnseen,
@@ -196,7 +196,7 @@ function Navbar() {
                 className="profile_image"
                 src={user?.image?.url}
                 alt="profile-pic"
-                style={{ width: 40, height: 40 ,borderRadius:'50%'}}
+                style={{ width: 40, height: 40, borderRadius: "50%" }}
               />
             )}
           </IconButton>
@@ -238,7 +238,7 @@ function Navbar() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         {user._id !== "" ? (
-          <Link to="profile">
+          <NavLink to="profile">
             <MenuItem onClick={handleClose}>
               {user?.image?.url === "" ? (
                 <Avatar />
@@ -247,17 +247,23 @@ function Navbar() {
                   className="profile_image"
                   src={user?.image?.url}
                   alt="profile-pic"
-                  style={{ width: 40, height: 40 ,borderRadius:'50%',marginRight: "15px"}}                />
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    marginRight: "15px",
+                  }}
+                />
               )}
               Profile
             </MenuItem>
             <Divider />
-          </Link>
+          </NavLink>
         ) : (
           ""
         )}
         {user._id !== "" ? (
-          <Link to="wishlist">
+          <NavLink to="wishlist">
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <ShoppingCartIcon fontSize="small" />
@@ -266,19 +272,19 @@ function Navbar() {
                 wishlist
               </Badge>
             </MenuItem>
-          </Link>
+          </NavLink>
         ) : (
           ""
         )}
         {user.isAdmin && (
-          <Link to="dashboard">
+          <NavLink to="dashboard">
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <DashboardIcon fontSize="small" />
               </ListItemIcon>
               Dashboard
             </MenuItem>
-          </Link>
+          </NavLink>
         )}
         {user._id !== "" ? (
           <MenuItem
@@ -301,7 +307,7 @@ function Navbar() {
         )}
         {user._id === "" ? (
           <MenuItem
-            component={Link}
+            component={NavLink}
             to={"/register"}
             onClick={() => {
               handleClose();
@@ -317,7 +323,7 @@ function Navbar() {
         )}
         {user._id === "" ? (
           <MenuItem
-            component={Link}
+            component={NavLink}
             to={"/login"}
             onClick={() => {
               handleClose();
@@ -333,7 +339,7 @@ function Navbar() {
         )}
         {user._id === "" ? (
           <MenuItem
-            component={Link}
+            component={NavLink}
             to={"/help"}
             onClick={() => {
               handleClose();
@@ -358,9 +364,9 @@ function Navbar() {
         <img src={image} className="logo" />
       </Typography>
       <Divider />
-      <List>
+      <List className="Links">
         {navItems.map((item) => (
-          <Link to={item} key={item}>
+          <NavLink to={item} key={item}>
             {!(item === "Message") && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }}>
@@ -377,11 +383,11 @@ function Navbar() {
                 </ListItem>
               </Badge>
             )}
-          </Link>
+          </NavLink>
         ))}
         <Divider />
         {user._id !== "" ? (
-          <ListItem disablePadding component={Link} to={"/profile"}>
+          <ListItem disablePadding component={NavLink} to={"/profile"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Profile" />
             </ListItemButton>
@@ -390,7 +396,7 @@ function Navbar() {
           ""
         )}
         {user._id !== "" ? (
-          <ListItem disablePadding component={Link} to={"/wishlist"}>
+          <ListItem disablePadding component={NavLink} to={"/wishlist"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <Badge
                 badgeContent={user.favourites.length}
@@ -405,7 +411,7 @@ function Navbar() {
           ""
         )}
         {user.isAdmin && (
-          <ListItem disablePadding component={Link} to={"/dashboard"}>
+          <ListItem disablePadding component={NavLink} to={"/dashboard"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="dashboard" />
             </ListItemButton>
@@ -428,7 +434,7 @@ function Navbar() {
           ""
         )}
         {user._id !== "" ? (
-          <ListItem disablePadding component={Link} to={"/register"}>
+          <ListItem disablePadding component={NavLink} to={"/register"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Sign up" />
             </ListItemButton>
@@ -437,7 +443,7 @@ function Navbar() {
           ""
         )}
         {user._id !== "" ? (
-          <ListItem disablePadding component={Link} to={"/login"}>
+          <ListItem disablePadding component={NavLink} to={"/login"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Login in" />
             </ListItemButton>
@@ -446,7 +452,7 @@ function Navbar() {
           ""
         )}
         {user._id !== "" ? (
-          <ListItem disablePadding component={Link} to={"/help"}>
+          <ListItem disablePadding component={NavLink} to={"/help"}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="Help" />
             </ListItemButton>
@@ -458,22 +464,27 @@ function Navbar() {
     </Box>
   );
 
-  const[bgcolor,setColor]=useState(true);
+  const [bgcolor, setColor] = useState(true);
 
-  const changeColor=()=>{
-    if(window.scrollY >=50){
-      setColor(false)
-    }else{setColor(true)}
-  }
-  window.addEventListener('scroll',changeColor)
+  const changeColor = () => {
+    if (window.scrollY >= 50) {
+      setColor(false);
+    } else {
+      setColor(true);
+    }
+  };
+  window.addEventListener("scroll", changeColor);
   return (
     <Box sx={{ display: "flex", mb: 12 }}>
-      <AppBar component="nav" position="fixed"
-       sx={{height:'80px',
-       backgroundColor: bgcolor ? "transparent" : "#ffffff",
-       boxShadow: bgcolor ? "none" : "0px 2px 8px rgba(0, 0, 0, 0.32)",
-       transition: "all 0.18s ease-in",
-     }}
+      <AppBar
+        component="nav"
+        position="fixed"
+        sx={{
+          height: "80px",
+          backgroundColor: bgcolor ? "transparent" : "#ffffff",
+          boxShadow: bgcolor ? "none" : "0px 2px 8px rgba(0, 0, 0, 0.32)",
+          transition: "all 0.18s ease-in",
+        }}
       >
         <Toolbar>
           <IconButton
@@ -492,7 +503,9 @@ function Navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-           <Link to='/Home'><img src={image} className="logo" /></Link> 
+            <NavLink to="/Home">
+              <img src={image} className="logo" />
+            </NavLink>
           </Typography>
 
           <Box
@@ -500,20 +513,38 @@ function Navbar() {
             className="center"
           >
             {navItems.map((item) => (
-              <Link to={item} key={item}>
+              <NavLink to={item} key={item}>
                 {!(item === "Message") && (
-                  <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.2rem'}}>
+                  <Button
+                    component="div"
+                    size="large"
+                    sx={{
+                      color: "#000",
+                      fontFamily: "Outfit",
+                      fontWeight: "500",
+                      fontSize: "1.2rem",
+                    }}
+                  >
                     {item}
                   </Button>
                 )}
                 {item === "Message" && (
                   <Badge badgeContent={unseenConvo.length} color="error">
-                    <Button component="div" size="large" sx={{color: "#000",fontFamily: 'Outfit',fontWeight:'500',fontSize:'1.2rem'}}>
+                    <Button
+                      component="div"
+                      size="large"
+                      sx={{
+                        color: "#000",
+                        fontFamily: "Outfit",
+                        fontWeight: "500",
+                        fontSize: "1.2rem",
+                      }}
+                    >
                       {item}
                     </Button>
                   </Badge>
                 )}
-              </Link>
+              </NavLink>
             ))}
             <IconButton
               aria-label="show notifications"

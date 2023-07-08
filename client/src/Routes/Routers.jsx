@@ -88,11 +88,8 @@ function Routers({ getPathName }) {
       <Route
         path="Message"
         element={
-          // <UserGuard>
           <MessagePage
-          // socket={socket}
-          />
-          // </UserGuard>
+          />    
         }
       />
       <Route

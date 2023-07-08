@@ -19,8 +19,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ModeNightIcon from "@mui/icons-material/ModeNight";
-import Brightness6OutlinedIcon from "@mui/icons-material/Brightness6Outlined";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -34,7 +32,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
-const navItems = ["Home", "Book", "Messages", "My Trips", "Manage Housing"];
+const navItems = ["Home", "Book", "Message", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
 import {
   Badge,
@@ -57,7 +55,7 @@ function Navbar() {
   const [anchorNotification, setAnchorNotification] = useState(null);
   const openNotification = Boolean(anchorNotification);
   const [unseenNumber, setUnseenNumber] = useState(null);
-  const [unseenConversations, setUnseenConversations] = useState([]);
+  const [unseenConversations] = useState([]);
   const socket = useSelector((state) => {
     return state.user?.socket;
   });
@@ -367,14 +365,14 @@ function Navbar() {
       <List className="Links">
         {navItems.map((item) => (
           <NavLink to={item} key={item}>
-            {!(item === "Messages") && (
+            {!(item === "Message") && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }}>
                   <ListItemText primary={item} />
                 </ListItemButton>
               </ListItem>
             )}
-            {item === "Messages" && (
+            {item === "Message" && (
               <Badge badgeContent={unseenConvo.length} color="error">
                 <ListItem disablePadding>
                   <ListItemButton sx={{ textAlign: "center" }}>

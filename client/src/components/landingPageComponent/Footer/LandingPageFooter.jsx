@@ -64,7 +64,7 @@ const LandingPageFooter = () => {
             <h5>Support</h5>
 
             <ul>
-            <Link to href="/terms"><li>Terms</li></Link>
+            <Link to ="/terms"><li>Terms</li></Link>
             <li>Help Center</li>
              <li>FAQ</li>
              <li>Bookmarks</li>

@@ -34,7 +34,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 const drawerWidth = 240;
-const navItems = ["Home", "Book", "Message", "My Trips", "Manage Housing"];
+const navItems = ["Home", "Book", "Messages", "My Trips", "Manage Housing"];
 import image from "../assets/41KUZDZwSeL.png";
 import {
   Badge,
@@ -367,14 +367,14 @@ function Navbar() {
       <List className="Links">
         {navItems.map((item) => (
           <NavLink to={item} key={item}>
-            {!(item === "Message") && (
+            {!(item === "Messages") && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }}>
                   <ListItemText primary={item} />
                 </ListItemButton>
               </ListItem>
             )}
-            {item === "Message" && (
+            {item === "Messages" && (
               <Badge badgeContent={unseenConvo.length} color="error">
                 <ListItem disablePadding>
                   <ListItemButton sx={{ textAlign: "center" }}>
@@ -467,7 +467,7 @@ function Navbar() {
   const [bgcolor, setColor] = useState(true);
 
   const changeColor = () => {
-    if (window.scrollY >= 50) {
+    if (window.scrollY >= 35) {
       setColor(false);
     } else {
       setColor(true);
@@ -481,7 +481,7 @@ function Navbar() {
         position="fixed"
         sx={{
           height: "80px",
-          backgroundColor: bgcolor ? "transparent" : "#ffffff",
+          backgroundColor: "#ffffff",
           boxShadow: bgcolor ? "none" : "0px 2px 8px rgba(0, 0, 0, 0.32)",
           transition: "all 0.18s ease-in",
         }}

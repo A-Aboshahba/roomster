@@ -1,5 +1,5 @@
 .footer {
-    background-color: #232f3e;
+    background-color: rgb(97 147 100);
     padding:25px 15px 31px 25px;
     font-family: 'Roboto';
 }
@@ -91,6 +91,7 @@
     color: #fff !important;
 }
 .row .List ul li:hover {
-    color: rgb(0, 225, 56) !important;
+    color: rgb(8, 9, 9) !important;
+    font-size:large;
     transform: translateX(10px);
 }

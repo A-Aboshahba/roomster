@@ -34,7 +34,7 @@
   padding: 0 10px;
   box-sizing: border-box;
   z-index: 1000;
-  outline: 3px solid;
+
 }
 
 /* Style the Google Translate Element */
@@ -209,9 +209,31 @@ a {
 
 .dashBoard {
   display: flex;
+  width: 100vw !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
 /* this for active link in navbar */
 a.active div {
   color: #8bc34a !important;
+}
+.filterSearch{
+flex-direction: row;
+  margin-top: -8px;
+  width: calc(105% + 8px);
+  margin-left: -8px;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 17vh !important;
+  margin-bottom: 45px !important;
+  background-color: white !important;
+  position: sticky !important;
+  top: 77px !important;
+  z-index: 500 !important;
 }

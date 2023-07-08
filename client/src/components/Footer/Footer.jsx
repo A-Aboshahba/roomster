@@ -8,7 +8,7 @@ function Footer() {
   const googleTranslateElementInit = () => {
     new window.google.translate.TranslateElement(
       {
-        pageLanguage: "en",
+        pageLanguage: "ar",
         layout: window.google.translate.TranslateElement.FloatPosition.TOP_LEFT,
       },
       "google_translate_element"
@@ -36,7 +36,7 @@ function Footer() {
            dispatch(selectCurrenct(event.target.value));
          }}
          id="currency-select"
-         style={{maxWidth:"130px"}}
+         style={{maxWidth:"140px"}}
        >
         <option value="" disabled selected>Change Currency</option>
          <hr/>
@@ -204,7 +204,7 @@ function Footer() {
        </select>
    </div>
       <div id="contact-info" >
-        <div className="fs-5 text-white">copyright 	&#169; Roomster</div>
+        <div className="fs-5 text-white me-5">copyright 	&#169; Roomster</div>
       </div>
     </div>
   );

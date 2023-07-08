@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -28,18 +26,35 @@ async function addUser(values){
 
     }
 }
-
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().max(15, "Must be 15 characters or less").required("Required"),
-    lastName: Yup.string().max(20, "Must be 20 characters or less").required("Required"),
-    fullName: Yup.string().required("Required"),
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required").min(6, "Must be at least 6 characters"),
-    confirmPassword: Yup.string().required("Required").oneOf([Yup.ref("password"), null], "Passwords must match"),
-    address: Yup.object().shape({
-    country: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
-    }), });
+    firstName: Yup.string()
+        .max(15, "First name must be 15 characters or less")
+        .required("First name is required").matches(/^[a-zA-Z ]+$/, "First name can only contain letters and spaces"),
+    lastName: Yup.string()
+        .max(20, "Last name must be 20 characters or less")
+        .required("Last name is required").matches(/^[a-zA-Z ]+$/, "Last name can only contain letters and spaces"),
+    fullName: Yup.string()
+        .matches(/^[a-zA-Z ]+$/, "Full name can only contain letters and spaces")
+        .max(50, "Full name must be 50 characters or less")
+        .required("Full name is required"),
+    email: Yup.string()
+        .email("Invalid email address")
+        .required("Email address is required"),
+    password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm password is required"),
+        address: Yup.object().shape({
+            country: Yup.string()
+                .matches(/^[a-zA-Z ]+$/, "Country name can only contain letters and spaces")
+                .required("Country is required"),
+            city: Yup.string()
+                .max(30, "City name must be 30 characters or less")
+                .required("City is required").matches(/^[a-zA-Z ]+$/, "City name can only contain letters and spaces"),
+    }),});
+
 const formik = useFormik({
     initialValues: {
     firstName: "",
@@ -54,10 +69,20 @@ const formik = useFormik({
     },
     },
     validationSchema: validationSchema,
+    // validateOnBlur: true, 
+    validateOnChange: true, 
+
     onSubmit: (values) => {
     addUser(values);
     navigate('/login')
     },});
+    const styles = {
+        errorText: {
+            color: 'red',
+            fontSize: '0.8rem',
+            marginTop: '0.2rem',
+        },
+        };
 
     return (
         <ThemeProvider theme={createTheme()}>
@@ -90,8 +115,9 @@ const formik = useFormik({
                                     autoFocus
                                     value={formik.values.firstName}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                                    helperText={formik.touched.firstName && formik.errors.firstName}
+                                    helperText={formik.touched.firstName && <div style={styles.errorText}>{formik.errors.firstName}</div>}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -104,8 +130,9 @@ const formik = useFormik({
                                     autoComplete="family-name"
                                     value={formik.values.lastName}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                                    helperText={formik.touched.lastName && formik.errors.lastName}
+                                    helperText={formik.touched.lastName && <div style={styles.errorText}>{formik.errors.lastName}</div>}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -116,23 +143,26 @@ const formik = useFormik({
                                     label="Full Name"
                                     name="fullName"
                                     autoComplete="name"
-                                    value={formik.valuesfullName}
+                                    value={formik.values.fullName}
                                     onChange={formik.handleChange}
-                                    error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-                                    helperText={formik.touched.fullName && formik.errors.fullName}/>
+                                    onBlur={formik.handleBlur} 
+                                    error={formik.touched?.fullName && Boolean(formik.errors.fullName)}
+                                    helperText={formik.touched.fullName &&<div style={styles.errorText}>{formik.errors.fullName}</div>}/>
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="address.country"
-                                    label="Country"
-                                    name="address.country"
-                                    autoComplete="country"
-                                    value={formik.values.address.country}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.address?.country && Boolean(formik.errors.address?.country)}
-                                    helperText={formik.touched.address?.country && formik.errors.address?.country}/>
+                            <TextField
+                                required
+                                fullWidth
+                                id="address.country"
+                                label="Country"
+                                name="address.country"
+                                autoComplete="country"
+                                value={formik.values.address.country}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.address?.country && Boolean(formik.errors.address?.country)}
+                                helperText={formik.touched.address?.country && <div style={styles.errorText}>{formik.errors.address?.country}</div>}
+/>
                             </Grid>
                             <Grid item xs={12}>
                                     <TextField
@@ -144,8 +174,9 @@ const formik = useFormik({
                                     autoComplete="city"
                                     value={formik.values.address.city}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}                                    
                                     error={formik.touched.address?.city && Boolean(formik.errors.address?.city)}
-                                    helperText={formik.touched.address?.city && formik.errors.address?.city} />
+                                    helperText={formik.touched.address?.city && <div style={styles.errorText}>{formik.errors.address?.city}</div>} />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -157,8 +188,9 @@ const formik = useFormik({
                                     autoComplete="email"
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     error={formik.touched.email && Boolean(formik.errors.email)}
-                                    helperText={formik.touched.email && formik.errors.email}
+                                    helperText={formik.touched.email && <div style={styles.errorText}>{formik.errors.email}</div>}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -172,8 +204,9 @@ const formik = useFormik({
                                     autoComplete="new-password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     error={formik.touched.password && Boolean(formik.errors.password)}
-                                    helperText={formik.touched.password && formik.errors.password}
+                                    helperText={formik.touched.password && <div style={styles.errorText}>{formik.errors.password}</div>}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -187,10 +220,10 @@ const formik = useFormik({
                                     autoComplete="new-password"
                                     value={formik.values.confirmPassword}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword} />
-                            </Grid>
-                           
+                                    helperText={formik.touched.confirmPassword && <div style={styles.errorText}>{formik.errors.confirmPassword}</div>} />
+                            </Grid>                          
                         </Grid>
                         <Button
                             type="submit"

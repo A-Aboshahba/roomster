@@ -23,17 +23,21 @@ import { toastMessage } from "../utils/toasfiy";
 function SignInSide() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required"),
-  });
 
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+        .email("Invalid email address")
+        .required("Email address is required"),
+    password: Yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters") });
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: validationSchema,
+    validateOnBlur:true,
     onSubmit: async (values) => {
       try {
         const { data } = await Roomster.post("auth/login", values);
@@ -51,6 +55,13 @@ function SignInSide() {
     },
   });
 
+  const styles = {
+    errorText: {
+      color: 'red',
+      fontSize: '0.8rem',
+      marginTop: '0.2rem',
+    },
+  };
   return (
     <ThemeProvider theme={createTheme()}>
       <Grid container component="main" sx={{ height: "85vh" }}>
@@ -110,7 +121,8 @@ function SignInSide() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                onBlur={formik.handleBlur}
+                helperText={formik.touched.email && <div style={styles.errorText}>{formik.errors.email}</div>}
               />
               <TextField
                 margin="normal"
@@ -120,13 +132,15 @@ function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
-                helperText={formik.touched.password && formik.errors.password}
+                helperText={formik.touched.password && <div style={styles.errorText}>{formik.errors.password}</div>}
+            
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

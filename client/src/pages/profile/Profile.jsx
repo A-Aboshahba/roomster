@@ -3,7 +3,6 @@ import {
   Avatar,
   Button,
   FormControl,
-  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -25,6 +24,8 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const Profile = () => {
+
+
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
   const [imageSrc, setImageSrc] = useState(null);
@@ -45,16 +46,19 @@ const Profile = () => {
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .max(12, "Must be 15 characters or less")
-      .required("Required"),
+        .max(15, "First name must be 15 characters or less")
+        .required("First name is required").matches(/^[a-zA-Z ]+$/, "First name can only contain letters and spaces"),
     lastName: Yup.string()
-      .max(12, "Must be 20 characters or less")
-      .required("Required"),
-    address: Yup.object().shape({
-      country: Yup.string().required("Required"),
-      city: Yup.string().required("Required"),
-    }),
-  });
+        .max(20, "Last name must be 20 characters or less")
+        .required("Last name is required").matches(/^[a-zA-Z ]+$/, "Last name can only contain letters and spaces"),
+        address: Yup.object().shape({
+            country: Yup.string()
+                .matches(/^[a-zA-Z ]+$/, "Country name can only contain letters and spaces")
+                .required("Country is required"),
+            city: Yup.string()
+                .max(30, "City name must be 30 characters or less")
+                .required("City is required").matches(/^[a-zA-Z ]+$/, "City name can only contain letters and spaces"),
+    }),});
 
   const formik = useFormik({
     initialValues: {
@@ -66,6 +70,7 @@ const Profile = () => {
       },
     },
     validationSchema: validationSchema,
+    validateOnBlur:true,
     onSubmit: (values) => {
       EditData(values);
     }
@@ -150,7 +155,13 @@ const Profile = () => {
       console.log(error);
     }
   };
-
+  const styles = {
+    errorText: {
+      color: 'red',
+      fontSize: '0.8rem',
+      marginTop: '0.2rem',
+    },
+  };
   return (
     <>
       <main id="main" className="main">
@@ -365,12 +376,9 @@ const Profile = () => {
                               label="First Name"
                               value={formik.values.firstName}
                               onChange={formik.handleChange}
-                              helperText={
-                                formik.touched.firstName ? formik.errors.firstName: ''
-                              }                              error={
-                                formik.touched.firstName &&
-                                Boolean(formik.errors.firstName)
-                              }
+                              onBlur={formik.handleBlur}
+                              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                              helperText={formik.touched.firstName && <div style={styles.errorText}>{formik.errors.firstName}</div>}
                               
                               sx={{
                                 m: "1%",
@@ -389,13 +397,9 @@ const Profile = () => {
                               name="lastName"
                               value={formik.values.lastName}
                               onChange={formik.handleChange}
-                              error={
-                                formik.touched.lastName &&
-                                Boolean(formik.errors.lastName)
-                              }
-                              helperText={
-                                formik.touched.lastName ? formik.errors.lastName: ''
-                              }   
+                              onBlur={formik.handleBlur}
+                              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                              helperText={formik.touched.lastName && <div style={styles.errorText}>{formik.errors.lastName}</div>}  
                               sx={{
                                 m: "1%",
                                 width: "48%",
@@ -421,10 +425,10 @@ const Profile = () => {
                                 label="Country"
                                 name="address.country"
                                 value={formik.values.address?.country}
-                                helperText={
-                                  formik.touched.address?.country ? formik.errors.address?.country: ''
-                                } 
-                                onChange={formik.handleChange}
+                                onChange={formik.handleChange} onBlur={formik.handleBlur}
+                                error={formik.touched.address?.country && Boolean(formik.errors.address?.country)}
+                                helperText={formik.touched.address?.country && <div style={styles.errorText}>{formik.errors.address?.country}</div>} 
+
                               />
                             </FormControl>
                             <FormControl
@@ -446,10 +450,10 @@ const Profile = () => {
                                 name="address.city"
                                 autoComplete="city"
                                 value={formik.values.address?.city}
-                                helperText={
-                                  formik.touched.address?.city ? formik.errors.address?.city: ''
-                                } 
                                 onChange={formik.handleChange}
+                                error={formik.touched.address?.city && Boolean(formik.errors.address?.city)}
+                                helperText={formik.touched.address?.city && <div style={styles.errorText}>{formik.errors.address?.city}</div>} 
+
                               />
                             </FormControl>
 

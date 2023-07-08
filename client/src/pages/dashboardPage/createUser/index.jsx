@@ -68,13 +68,7 @@ function CreateUser () {
     setFormValues(initialValues);
   };
 
-  const styles = {
-    errorText: {
-        color: 'red',
-        fontSize: '0.8rem',
-        marginTop: '0.2rem',
-    },
-    };
+ 
 
   return (
     <Box m="20px">
@@ -250,6 +244,6 @@ function CreateUser () {
       </Formik>
     </Box>
   );
-};
+}
 
 export default CreateUser;

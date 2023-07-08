@@ -1,9 +1,42 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import CarouselCard from "./CarouselCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+// import { loadMoreApartments } from "../../store/Slices/apartment";
+import { loadMoreApartments } from "../../store/Slices/apartment";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LocationCards = ({ cards }) => {
+  const dispatch = useDispatch();
+  const [pageNum, setPageNum] = useState(1);
+  const [loading, setLoading] = useState(true)
+  const isDataFetched = useSelector(state => state.apartments.isDataFetched); //true
+
+  function handleScroll() {
+    if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+      setLoading(true);
+      setPageNum((prev) => prev + 1);
+    }
+  }
+
+  useEffect(() => {
+    if (isDataFetched) {
+      window.addEventListener("scroll", handleScroll);
+    } else {
+      window.removeEventListener("scroll", handleScroll)
+    }
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isDataFetched])
+
+  useEffect(() => {
+    dispatch(loadMoreApartments({ page: pageNum, filterString : "", keyword : "" })).then(() => {
+      setLoading(false);
+    }).catch((err) => {
+      console.log(err, "error")
+    })
+  }, [pageNum]);
+
   if (!cards?.length) {
     return null;
   }
@@ -18,6 +51,8 @@ const LocationCards = ({ cards }) => {
           );
         })}
       </Grid>
+      {!isDataFetched && <Grid marginTop="20px" textAlign="center" fontSize={20}>NO Longer Data Available</Grid>}
+      {loading && <Grid textAlign="center"><CircularProgress /></Grid>}
     </Box>
   );
 };

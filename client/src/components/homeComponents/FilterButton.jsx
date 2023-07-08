@@ -31,16 +31,16 @@ import SailingIcon from '@mui/icons-material/Sailing';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import CameraOutdoorOutlinedIcon from '@mui/icons-material/CameraOutdoorOutlined';
 import GiteOutlinedIcon from '@mui/icons-material/GiteOutlined';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getApartments } from "../../store/Slices/apartment.js";
+import { useDispatch } from "react-redux";
 
 
 
 const CustomG = styled(Grid)({
-  // Your default styles here
-  width: "20%",
-  height: 85,
+  width: "21%",
+  height: 100,
   border: '2px solid #ddd',
-  // margin: "0 2%",
   cursor: "pointer",
   display: "flex",
   flexDirection: "column",
@@ -64,11 +64,13 @@ const CustomGrid = styled(Grid)({
   borderRadius: '15px',
   width: '8%',
   textAlign: 'center',
+  cursor: 'pointer',
   '&:hover': {
     borderColor: "#000",
   },
   '&.selected': {
-    borderColor: "#000",
+    backgroundColor: "#000",
+    color: "#fff"
   },
 })
 
@@ -78,16 +80,18 @@ export default function FilterButton() {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
   const [clicked, setIsClicked] = useState(false);
+  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
+  const [selectedPartId, setSelectedPartId] = useState({
+    roomNo: null,
+    kitchenNo: null,
+    balconyNo: null,
+    bedNo: null,
+  });
   const [wholeObj, setWholeObj] = useState({
     minPrice: "",
     maxPrice: "",
-    type: '',
-    noOfRooms: '',
-    noOfKitchens: '',
-    noOfBalcony: '',
-    noOfBeds: '',
   });
-
+  const dispatch = useDispatch();
 
 
 
@@ -105,6 +109,9 @@ export default function FilterButton() {
     })
     .join('&');
 
+  useEffect(() => {
+    dispatch(getApartments({ filterString: queryString, keyword: "" }))
+  }, [queryString]);
 
 
   const handleCheckboxChange = (event) => {
@@ -113,27 +120,52 @@ export default function FilterButton() {
   };
 
   function handlePropertyTypeClick(id, title) {
-    setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, type: title })
+    if (wholeObj.hasOwnProperty("type")) {
+      if (wholeObj.type == title) {
+        setSelectedPropertyId(null);
+        setWholeObj((prev) => {
+          const updatedApartmentSpec = { ...prev }
+          delete updatedApartmentSpec["type"];
+          return updatedApartmentSpec
+        })
+      } else {
+        setSelectedPropertyId(id)
+        setWholeObj((prev) => {
+          return { ...prev, type: title }
+        })
+      }
+
+
+    } else {
+      setSelectedPropertyId(id);
+      setIsClicked(!clicked)
+      setWholeObj({ ...wholeObj, type: title })
+    }
   }
 
-  function handleRoomClick(ele) {
+function handleItemClick(type, state, id, ele) {
+  if (wholeObj.hasOwnProperty(type)) {
+    if (wholeObj[type] == ele) {
+      setSelectedPartId({ ...selectedPartId, [state]: null });
+      setWholeObj((prev) => {
+        const updatedApartmentSpec = { ...prev }
+        delete updatedApartmentSpec[type];
+        return updatedApartmentSpec
+      })
+    } else {
+      setSelectedPartId({ ...selectedPartId, [state]: id });
+      setWholeObj((prev) => {
+        return { ...prev, [type]: ele }
+      })
+    }
+  } else {
+    setSelectedPartId({ ...selectedPartId, [state]: id });;
     setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfRooms: ele })
+    setWholeObj({ ...wholeObj, [type]: ele })
+  }
+}
 
-  }
-  function handleBalconyClick(ele) {
-    setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfBalcony: ele })
-  }
-  function handleKitchenClick(ele) {
-    setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfKitchens: ele })
-  }
-  function handleBedsClick(ele) {
-    setIsClicked(!clicked)
-    setWholeObj({ ...wholeObj, noOfBeds: ele})
-  }
+
 
   let apartments = [
     {
@@ -221,7 +253,7 @@ export default function FilterButton() {
           textAlign: 'cnter',
           width: '100%',
           height: '45px',
-          
+
         }}
         variant="outlined"
         onClick={handleClickOpen}
@@ -250,7 +282,7 @@ export default function FilterButton() {
               width: "fit-content",
             }}
           >
-            <FormControl sx={{ mt: 2, minWidth: 140  }}>
+            <FormControl sx={{ mt: 2, minWidth: 140 }}>
               <InputLabel htmlFor="max-width">maxWidth</InputLabel>
               <Select
                 autoFocus
@@ -334,49 +366,45 @@ export default function FilterButton() {
           <Grid container sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <DialogContentText>number of rooms</DialogContentText>
             <Grid sx={{ display: 'flex', }}>
-              <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
-              {[1, 2, 3, 4, 5, 6].map((room, id) => (
+              {["Any", 1, 2, 3, 4, 5, 6].map((item, id) => (
                 <CustomGrid item key={id}
-                  className={wholeObj.noOfRooms == room ? 'selected' : ''}
-                  onClick={() => handleRoomClick(room)}
+                  className={selectedPartId.roomNo == id ? 'selected' : ''}
+                  onClick={() => handleItemClick("noOfRooms", "roomNo", id, item)}
                 >
-                  {room}
+                  {item}
                 </CustomGrid>
               ))}
             </Grid>
             <DialogContentText>number of kitchens</DialogContentText>
             <Grid sx={{ display: 'flex', }}>
-              <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
-              {[1, 2, 3, 4, 5, 6].map((room, id) => (
+              {["Any", 1, 2, 3, 4, 5, 6].map((item, id) => (
                 <CustomGrid item key={id}
-                  className={wholeObj.noOfKitchens == room ? 'selected' : ''}
-                  onClick={() => handleKitchenClick(room)}
+                  className={selectedPartId.kitchenNo == id ? 'selected' : ''}
+                  onClick={() => handleItemClick("noOfKitchens", "kitchenNo", id, item)}
                 >
-                  {room}
+                  {item}
                 </CustomGrid>
               ))}
             </Grid>
             <DialogContentText>number of balcony</DialogContentText>
             <Grid sx={{ display: 'flex', }}>
-              <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
-              {[1, 2, 3, 4, 5, 6].map((room, id) => (
+              {["Any", 1, 2, 3, 4, 5, 6].map((item, id) => (
                 <CustomGrid item key={id}
-                  className={wholeObj.noOfBalcony == room ? 'selected' : ''}
-                  onClick={() => handleBalconyClick(room)}
+                  className={selectedPartId.balconyNo == id ? 'selected' : ''}
+                  onClick={() => handleItemClick("noOfBalcony", "balconyNo", id, item)}
                 >
-                  {room}
+                  {item}
                 </CustomGrid>
               ))}
             </Grid>
             <DialogContentText>number of Beds</DialogContentText>
             <Grid sx={{ display: 'flex', }}>
-              <CustomGrid bgcolor="#000" color="white">Any</CustomGrid>
-              {[1, 2, 3, 4, 5, 6].map((room, id) => (
+              {["Any", 1, 2, 3, 4, 5, 6].map((item, id) => (
                 <CustomGrid item key={id}
-                  className={wholeObj.noOfBeds == room ? 'selected' : ''}
-                  onClick={() => handleBedsClick(room)}
+                  className={selectedPartId.bedNo == id ? 'selected' : ''}
+                  onClick={() => handleItemClick("noOfBeds", "bedNo", id, item)}
                 >
-                  {room}
+                  {item}
                 </CustomGrid>
               ))}
             </Grid>
@@ -393,7 +421,7 @@ export default function FilterButton() {
           <Grid container sx={{ display: 'flex', gap: 2 }}>
             {apartments.map((apart, i) => (
               <CustomG item key={i}
-                className={wholeObj.type == apart.title ? 'selected' : ''}
+                className={selectedPropertyId == apart.key ? 'selected' : ''}
                 onClick={() => handlePropertyTypeClick(apart.key, apart.title)}
               >
                 <Box sx={{ fontSize: 3 }} >{apart.icon}</Box>
@@ -402,6 +430,7 @@ export default function FilterButton() {
             ))}
           </Grid>
         </DialogContent>
+
 
         <Divider sx={{
           width: '80%',

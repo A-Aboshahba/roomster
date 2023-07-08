@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   status: "idle",
   singleApartment: {},
   apartments: [],
+  isDataFetched: true,
   reviews: [],
   totalReviews: 0,
   // favourites: [],
@@ -50,7 +51,7 @@ export const loadMoreApartments = createAsyncThunk(
       const response = await Roomster.get(
         `apartments/all?page=${page}${filterString}${keyword}`
       );
-      return response.data.data;
+      return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
@@ -145,6 +146,10 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
+      console.log(action.payload)
+      if (action.payload.length == 0) {
+        state.isDataFetched = false;
+      }
       state.apartments.push(...action.payload);
     },
     [loadMoreApartments.pending]: (state) => {

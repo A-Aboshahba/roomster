@@ -35,7 +35,6 @@ import {
 
 
 const CustomBox = styled(Grid)({
-  // Your default styles here
   width: "30%",
   height: 85,
   border: "2px solid #ddd",
@@ -290,7 +289,6 @@ const TellGuests = ({
   //     });
   //   }
   // }, []);
-  console.log("asdaxcvsdfgdfsdf", collectedData, selectedItemId);
 
   function handleClick(id, attr) {
     if (collectedData.apartmentSpecification.hasOwnProperty(attr)) {
@@ -356,7 +354,6 @@ const TellGuests = ({
         maxWidth={800}
         container
         sx={{ p: 2, display: "flex", flexWrap: "wrap" }}>
-
         {safetyItems.map((apart, i) => (
           <CustomBox
             item

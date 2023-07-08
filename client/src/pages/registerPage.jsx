@@ -86,7 +86,7 @@ const formik = useFormik({
 
     return (
         <ThemeProvider theme={createTheme()}>
-            <Container component="main" maxWidth="xs" margin="10px" >
+            <Container component="main" maxWidth="xs" sx={{ marginBottom: "50px" }}  >
                 <CssBaseline />
                 <Box
                     sx={{

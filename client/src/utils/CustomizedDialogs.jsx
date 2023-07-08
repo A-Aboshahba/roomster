@@ -47,7 +47,6 @@ export default function CustomizedDialogs({ reservation, getUserReservation }) {
       setOpen(false);
     } catch (error) {
       toastMessage("error", " canceled failed!");
-      console.log("errrrrrrrrrrrrr", error);
     }
   };
   return (

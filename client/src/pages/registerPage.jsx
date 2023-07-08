@@ -15,12 +15,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Roomster from '../API/config';
 import { useNavigate } from 'react-router';
+import { toastMessage } from '../utils/toasfiy';
 
 function Signup() {
 const navigate= useNavigate();
 async function addUser(values){
-const res =await  Roomster.post('auth/signup',values);
-console.log(res.message);
+    try{
+        await  Roomster.post('auth/signup',values);
+        toastMessage("success","An account has been created")
+    }catch(error){
+        toastMessage("error",error)
+
+    }
 }
 
 const validationSchema = Yup.object().shape({

@@ -18,6 +18,7 @@ import { useNavigate } from "react-router";
 import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
 import {  fetchUser } from "../store/Slices/userSlice";
+import { toastMessage } from "../utils/toasfiy";
 
 function SignInSide() {
   const navigate = useNavigate();
@@ -41,8 +42,10 @@ function SignInSide() {
         const decodedToken = jwt_decode(data.accessToken);
         console.log("decoded token", decodedToken._id);
         dispatch(fetchUser(decodedToken._id));
+        toastMessage('success','login Successfully')
         navigate("/");
       } catch (err) {
+        toastMessage('error','email or password is incorrect')
         console.log(err);
       }
     },

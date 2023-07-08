@@ -12,6 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useNavigate } from "react-router-dom";
+import { toastMessage } from "../../../utils/toasfiy";
 export default function AppartmentCard({ apartment, deleteApartment }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -31,11 +32,13 @@ export default function AppartmentCard({ apartment, deleteApartment }) {
           userId: apartment.userId._id,
         });
         setPublishedState(false);
+        toastMessage("success","your apartment is now unpublished")
       } else {
         const response = await Roomster.patch(`apartments/${apartment._id}`, {
           published: true,
           userId: apartment.userId._id,
         });
+        toastMessage("success","your apartment is now published")
         setPublishedState(true);
       }
     } catch (error) {

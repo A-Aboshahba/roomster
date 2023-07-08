@@ -486,7 +486,7 @@ function Navbar() {
           transition: "all 0.18s ease-in",
         }}
       >
-        <Toolbar>
+        <Toolbar >
           <IconButton
             aria-label="open drawer"
             edge="start"
@@ -558,18 +558,6 @@ function Navbar() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-
-            {/* icon dark mode  */}
-            <ModeNightIcon
-              size="large"
-              sx={{ mx: 1, ml: 8, cursor: "pointer" }}
-            />
-            {/* icon Brightness mode  */}
-            <Brightness6OutlinedIcon
-              size="large"
-              sx={{ mx: 1, ml: 8, cursor: "pointer", display: "none" }}
-            />
-
             {/* icon language start */}
             <>
               <Box

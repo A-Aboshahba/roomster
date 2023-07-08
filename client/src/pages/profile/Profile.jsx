@@ -3,11 +3,13 @@ import {
   Avatar,
   Button,
   FormControl,
+  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   TextField,
+  Typography,
 
 } from "@mui/material";
 import "./style.css";
@@ -28,8 +30,9 @@ const Profile = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  console.log(user);
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const userId = user._id;
   const publicId = user?.image?.publicId;
@@ -42,10 +45,10 @@ const Profile = () => {
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .max(15, "Must be 15 characters or less")
+      .max(12, "Must be 15 characters or less")
       .required("Required"),
     lastName: Yup.string()
-      .max(20, "Must be 20 characters or less")
+      .max(12, "Must be 20 characters or less")
       .required("Required"),
     address: Yup.object().shape({
       country: Yup.string().required("Required"),
@@ -65,8 +68,7 @@ const Profile = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       EditData(values);
-      // console.log(values);
-    },
+    }
   });
 
   const handleImageUpload = (event) => {
@@ -110,7 +112,6 @@ const Profile = () => {
             }
           );
           setLoading(false);
-
           toastMessage("success", response.data.message);
           dispatch(setUserProfileImage(response.data.image));
         }
@@ -121,9 +122,18 @@ const Profile = () => {
       }
     }
   };
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    if (!value) {
+      setPasswordError("Password is required");
+    } else if (value.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+    } else {
+      setPasswordError("");
+      setPassword(value);
+    }
+  };
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -346,7 +356,7 @@ const Profile = () => {
                           </LoadingButton>
                         </Box>
                         <Box component="form" onSubmit={formik.handleSubmit}>
-                          <div>
+                          <div>      
                             <TextField
                               name="firstName"
                               required
@@ -355,18 +365,23 @@ const Profile = () => {
                               label="First Name"
                               value={formik.values.firstName}
                               onChange={formik.handleChange}
-                              error={
+                              helperText={
+                                formik.touched.firstName ? formik.errors.firstName: ''
+                              }                              error={
                                 formik.touched.firstName &&
                                 Boolean(formik.errors.firstName)
                               }
+                              
                               sx={{
                                 m: "1%",
                                 width: "48%",
                                 my: 1,
                               }}
                             />
-
+                  
+                          
                             <TextField
+
                               label="Last Name"
                               id="outlined-controlled"
                               required
@@ -378,6 +393,9 @@ const Profile = () => {
                                 formik.touched.lastName &&
                                 Boolean(formik.errors.lastName)
                               }
+                              helperText={
+                                formik.touched.lastName ? formik.errors.lastName: ''
+                              }   
                               sx={{
                                 m: "1%",
                                 width: "48%",
@@ -403,6 +421,9 @@ const Profile = () => {
                                 label="Country"
                                 name="address.country"
                                 value={formik.values.address?.country}
+                                helperText={
+                                  formik.touched.address?.country ? formik.errors.address?.country: ''
+                                } 
                                 onChange={formik.handleChange}
                               />
                             </FormControl>
@@ -425,6 +446,9 @@ const Profile = () => {
                                 name="address.city"
                                 autoComplete="city"
                                 value={formik.values.address?.city}
+                                helperText={
+                                  formik.touched.address?.city ? formik.errors.address?.city: ''
+                                } 
                                 onChange={formik.handleChange}
                               />
                             </FormControl>
@@ -474,8 +498,8 @@ const Profile = () => {
                           required
                           fullWidth
                           name="password"
-                          onChange={(e) => setPassword(e.target.value)}
-                          type={showPassword ? "text" : "password"}
+                          onChange={handlePasswordChange}
+                          type={showPassword ? "text" : "password"}                        
                           endAdornment={
                             <InputAdornment position="end">
                               <IconButton
@@ -493,6 +517,11 @@ const Profile = () => {
                             </InputAdornment>
                           }
                         />
+                        {passwordError && (
+                        <Typography variant="caption" color="error">
+                       {passwordError}
+                       </Typography> )}
+
                       </FormControl>
                       <Box
                         sx={{
@@ -504,6 +533,7 @@ const Profile = () => {
                           variant="contained"
                           color="success"
                           onClick={() => handleChangePassword()}
+                          disabled={passwordError ||password===false}
                         >
                           Change Password
                         </Button>

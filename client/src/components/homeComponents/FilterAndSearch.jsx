@@ -18,7 +18,8 @@ const FilterAndSearch = () => {
       spacing={1}
       alignItems="center"
       sx={{ height: "60px", marginBottom: "120px" }}
-      className="center"
+      
+      className="center filterSearch"
     >
       <Grid item xs={12} sm={9} md={10} lg={11}>
         <TextField

@@ -1,11 +1,7 @@
 import {
   Box,
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { Formik } from "formik";
@@ -14,7 +10,8 @@ import Header from "../../../components/dashboardComponent/Header";
 import Roomster from "../../../API/config";
 import { useState } from "react";
 
-const CreateUser = () => {
+function CreateUser () {
+
   const handleFormSubmit = async (values) => {
     try {
       await Roomster.post("auth/signup", values);
@@ -25,23 +22,33 @@ const CreateUser = () => {
     }
   };
   const checkoutSchema = yup.object().shape({
-    firstName: yup.string().required("required"),
-    lastName: yup.string().required("required"),
-    fullName: yup.string().required("Required"),
-    email: yup.string().email("invalid email").required("required"),
-    password: yup
-      .string()
-      .required("Required")
-      .min(6, "Must be at least 6 characters"),
-    confirmPassword: yup
-      .string()
-      .required("Required")
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
-    address: yup.object().shape({
-      country: yup.string().required("Required"),
-      city: yup.string().required("Required"),
-    }),
-  });
+    firstName: yup.string()
+        .max(15, "First name must be 15 characters or less")
+        .required("First name is required").matches(/^[a-zA-Z ]+$/, "First name can only contain letters and spaces"),
+    lastName: yup.string()
+        .max(20, "Last name must be 20 characters or less")
+        .required("Last name is required").matches(/^[a-zA-Z ]+$/, "Last name can only contain letters and spaces"),
+    fullName: yup.string()
+        .matches(/^[a-zA-Z ]+$/, "Full name can only contain letters and spaces")
+        .max(50, "Full name must be 50 characters or less")
+        .required("Full name is required"),
+    email: yup.string()
+        .email("Invalid email address")
+        .required("Email address is required"),
+    password: yup.string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters"),
+    confirmPassword: yup.string()
+        .oneOf([yup.ref("password"), null], "Passwords must match")
+        .required("Confirm password is required"),
+        address: yup.object().shape({
+            country: yup.string()
+                .matches(/^[a-zA-Z ]+$/, "Country name can only contain letters and spaces")
+                .required("Country is required"),
+            city: yup.string()
+                .max(30, "City name must be 30 characters or less")
+                .required("City is required").matches(/^[a-zA-Z ]+$/, "City name can only contain letters and spaces"),
+    }),});
 
   const initialValues = {
     firstName: "",
@@ -56,11 +63,18 @@ const CreateUser = () => {
     },
     // isAdmin: false,
   };
+  const [formValues, setFormValues] = useState(initialValues);
   const resetFormValues = () => {
     setFormValues(initialValues);
   };
 
-  const [formValues, setFormValues] = useState(initialValues);
+  const styles = {
+    errorText: {
+        color: 'red',
+        fontSize: '0.8rem',
+        marginTop: '0.2rem',
+    },
+    };
 
   return (
     <Box m="20px">
@@ -93,6 +107,7 @@ const CreateUser = () => {
                   name="firstName"
                   error={!!touched.firstName && !!errors.firstName}
                   helperText={touched.firstName && errors.firstName}
+                  
                   sx={{ gridColumn: "span 2" }}
                 />
               </Grid>

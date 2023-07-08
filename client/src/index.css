@@ -27,13 +27,14 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgb(35, 47, 62);
+  background-color: rgb(97 147 100);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
   z-index: 1000;
+  outline: 3px solid;
 }
 
 /* Style the Google Translate Element */
@@ -51,15 +52,16 @@
   padding: 8px;
   border: none;
   border-radius: 4px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
+
   margin: 0px 0;
-  transform: translateX(155px);
+  /* transform: translateX(155px); */
   font-size: 11px;
   height: 35px;
   cursor: pointer;
+  /* -webkit-transform: translateX(155px);
+  -moz-transform: translateX(155px);
+  -ms-transform: translateX(155px);
+  -o-transform: translateX(155px); */
 }
 
 /* Style the translation button */
@@ -83,16 +85,16 @@
 }
 
 /* Style the contact information links and "About Us" link */
-#contact-info a {
+/* #contact-info a {
   color: #fff;
   text-decoration: none;
   margin-left: 10px;
-}
+} */
 
 /* Style the Twitter link */
-#contact-info a:nth-child(3) {
+/* #contact-info a:nth-child(3) {
   margin-left: 20px;
-}
+} */
 
 /* Style the "About Us" link */
 #contact-info a:last-child {
@@ -118,7 +120,7 @@
   color: transparent !important;
   display: flex;
   justify-content: space-around;
-  width: 0;
+  /* width: 0; */
   align-items: center;
 }
 
@@ -142,10 +144,12 @@
   color: #333;
   cursor: pointer;
   height: 35px;
+  position: absolute;
+  top: 27px;
+  left: 35px;
+  transform: translateY(-50%);
 }
-.skiptranslate span {
-  display: none;
-}
+
 .swal2-container.swal2-center.swal2-backdrop-show {
   z-index: 10000;
 }

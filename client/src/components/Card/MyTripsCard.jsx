@@ -25,11 +25,13 @@ import {
 import "./CarouselCard.css";
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
+import CurrencySign from "../../utils/CurrencySign.jsx";
+import { useSelector } from "react-redux";
 
 // eslint-disable-next-line react/prop-types
 const MyTripsCard = ({ reservation, getUserReservation }) => {
-  console.log(reservation);
-
+  const SignySelector = useSelector((state) => state.currency.selected);
+  const currencySelector = useSelector((state) => state.currency.currency);
   const [activeStep, setActiveStep] = React.useState(0);
 
   const maxSteps = reservation.apartmentId.images.length;
@@ -128,7 +130,7 @@ const MyTripsCard = ({ reservation, getUserReservation }) => {
         {`From : ${moment(reservation.startDate).format("DD MMM")} To: ${moment(reservation.endDate).format("DD MMM")}`}
         </Box>
         <Box sx={{ display: flexBetween, my: 1 }}>
-        {`$${reservation.totalPrice} / total`}
+        Total \ {reservation.totalPrice * currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}
 
         </Box>
       </Link>

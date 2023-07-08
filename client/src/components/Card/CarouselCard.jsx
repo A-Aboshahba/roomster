@@ -29,9 +29,12 @@ import { deleteFavorite, addFavorite } from "../../store/Slices/userSlice.jsx";
 import { useNavigate } from "react-router";
 import "sweetalert2/src/sweetalert2.scss";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import CurrencySign from "../../utils/CurrencySign.jsx";
 // eslint-disable-next-line react/prop-types
 const CarouselCard = ({ location }) => {
   const navigate = useNavigate();
+  const SignySelector = useSelector((state) => state.currency.selected);
+  const currencySelector = useSelector((state) => state.currency.currency);
   const { user } = useSelector((state) => {
     return state.user;
   });
@@ -189,7 +192,7 @@ const CarouselCard = ({ location }) => {
 
               {/* <Typography component="h4"> {location.days}</Typography> */}
 
-              <Typography component="h5"> {location.price}</Typography>
+              <Typography component="h5"> {location.price * currencySelector[SignySelector]}{' '}{CurrencySign[SignySelector]}</Typography>
             </Box>
             <Box sx={{ mt: 2 }}>
               <Box sx={dFlex}>

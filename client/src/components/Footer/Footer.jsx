@@ -28,7 +28,6 @@ function Footer() {
 
   return (
     <div id="footer" className="flex-wrap">
-
    <div >
        <div id="google_translate_element"></div>
        
@@ -204,7 +203,6 @@ function Footer() {
          <option value="XPF">ZWL</option>
        </select>
    </div>
-
       <div id="contact-info" >
         <div className="fs-5 text-white">copyright 	&#169; Roomster</div>
       </div>

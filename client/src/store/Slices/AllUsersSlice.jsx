@@ -3,8 +3,8 @@ import Roomster from "../../API/config";
 
 export const fetchUsers = createAsyncThunk(
   "users/fetchUsers",
-  async (pageNumber=1) => {
-    const { data } = await Roomster.get(`user/all?page=${pageNumber}`);
+  async () => {
+    const { data } = await Roomster.get(`user/all`);
     console.log(data);
     return data;
   }

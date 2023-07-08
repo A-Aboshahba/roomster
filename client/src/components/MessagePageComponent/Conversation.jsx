@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 
 function Conversation({ conversation, user }) {
   const [online, setOnline] = useState(false);
+  const unseen = useSelector((state) => {
+    return state.user?.unseen;
+  });
   const [friend, setFreiend] = useState(
     conversation.members.find((m) => m._id !== user._id)
   );
@@ -88,7 +91,9 @@ function Conversation({ conversation, user }) {
           
         </div>
       </div> */}
-           <li className="messaging-member messaging-member--online">
+           <li  className={`messaging-member messaging-member--online  ${
+          unseen.includes(friend._id) ? "unseen" : "seen"
+        }`} >
                 <div className="messaging-member__wrapper" >
                   <div className="messaging-member__avatar">
                   <StyledBadge

@@ -23,7 +23,6 @@ module.exports.getAllUsers = (request, response, next) => {
     request.query
   );
   apiFeature
-    .paginate()
     .search()
     .sort()
     .mongooseQuery.then((data) => {

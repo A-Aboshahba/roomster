@@ -19,8 +19,8 @@ const Dashboard = () => {
   console.log(usersCount);
   const apartemnts = useSelector(getApartmentsState);
   console.log(apartemnts);
-
   let totalReservations = 0;
+
   apartemnts.forEach((apartment) => {
     apartment.reservationsArr.forEach((reservation) => {
       totalReservations++;
@@ -41,10 +41,6 @@ const Dashboard = () => {
       return acc;
     }
   }, []);
-
-  // console.log(totalPrice);
-  // console.log(totalReservations);
-  // console.log(mostResApartemnt);
 
   return (
     <Box m="20px">

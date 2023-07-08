@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./footer.css";
 const LandingPageFooter = () => {
   return (
@@ -52,7 +53,7 @@ const LandingPageFooter = () => {
             <h5>Useful Links</h5>
             <ul>
               <a href="https://www.linkedin.com/company/roomster-corp-/"><li>About us</li></a>
-              <a href="/profile"><li>My profile</li></a>
+              <Link to="/profile"><li>My profile</li></Link>
               <a href="https://www.linkedin.com/company/roomster-corp-/"> <li>Pricing plans</li></a>
               <a href="https://www.linkedin.com/company/roomster-corp-/"><li>Contacts Us</li></a>
             </ul>
@@ -63,7 +64,7 @@ const LandingPageFooter = () => {
             <h5>Support</h5>
 
             <ul>
-            <a href="/terms"><li>Terms</li></a>
+            <Link to href="/terms"><li>Terms</li></Link>
             <li>Help Center</li>
              <li>FAQ</li>
              <li>Bookmarks</li>
@@ -74,7 +75,7 @@ const LandingPageFooter = () => {
           <div className="List">
             <h5>Latest News</h5>
             <ul>
-            <a href="/privacy"> <li>Privacy</li></a>
+            <Link to="/privacy"> <li>Privacy</li></Link>
             <li>Collections</li>
              <li>News</li>
              <li>Affiliate Program</li>

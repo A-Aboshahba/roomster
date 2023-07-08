@@ -8,6 +8,7 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
+
 } from "@mui/material";
 import "./style.css";
 import { Box } from "@mui/system";
@@ -19,14 +20,17 @@ import { setUserProfileImage } from "../../store/Slices/userSlice";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { toastMessage } from "../../utils/toasfiy";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Profile = () => {
   const user = useSelector((state) => state.user?.user);
   const dispatch = useDispatch();
   const [imageSrc, setImageSrc] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   console.log(user);
+
   const userId = user._id;
   const publicId = user?.image?.publicId;
   const imageUrl = user?.image?.url;
@@ -43,6 +47,10 @@ const Profile = () => {
     lastName: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
+    address: Yup.object().shape({
+      country: Yup.string().required("Required"),
+      city: Yup.string().required("Required"),
+    }),
   });
 
   const formik = useFormik({
@@ -57,6 +65,7 @@ const Profile = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       EditData(values);
+      // console.log(values);
     },
   });
 
@@ -72,6 +81,7 @@ const Profile = () => {
 
   const handleImageSubmit = async () => {
     if (imageFile) {
+      setLoading(true);
       try {
         const formData = new FormData();
         formData.append("image", imageFile);
@@ -87,8 +97,8 @@ const Profile = () => {
             }
           );
           dispatch(setUserProfileImage(response.data.image));
+          setLoading(false);
         } else {
-          console.log(publicId);
           formData.append("imageId", `${publicId}`);
           const response = await Roomster.patch(
             `user/${userId}/image`,
@@ -99,10 +109,11 @@ const Profile = () => {
               },
             }
           );
+          setLoading(false);
+
           toastMessage("success", response.data.message);
           dispatch(setUserProfileImage(response.data.image));
         }
-        // setOpen(false);
         setImageFile(null);
         setImageSrc(null);
       } catch (error) {
@@ -148,7 +159,7 @@ const Profile = () => {
                       style={{ width: "120px", height: "120px" }}
                     />
                   )}
-                  <h2>{user?.fullName}</h2>
+                  <h2>{`${user?.firstName} ${user?.lastName}`}</h2>
                 </div>
               </div>
             </div>
@@ -198,7 +209,7 @@ const Profile = () => {
                           Full Name
                         </div>
                         <div className="col-lg-9 col-md-8">
-                          {user?.fullName}
+                          {`${user?.firstName} ${user.lastName}`}
                         </div>
                       </div>
 
@@ -316,110 +327,129 @@ const Profile = () => {
                             </Box>
                           </label>
 
-                          <Button
+                          <LoadingButton
                             onClick={() => handleImageSubmit()}
-                            style={{
+                            sx={{
                               backgroundColor: "#4caf50",
                               color: "#ffff",
                               fontWeight: "bold",
                               borderRadius: "5px",
-                              border: "2px solid",
                               padding: "4px 12px",
                               marginLeft: "27px",
+                              cursor: "pointer",
                             }}
+                            variant="contained"
+                            loading={loading}
                             disabled={imageFile === null}
                           >
-                            Update
-                          </Button>
+                            <span>Update</span>
+                          </LoadingButton>
                         </Box>
-                        <TextField
-                          name="firstName"
-                          required
-                          fullWidth
-                          id="outlined-controlled"
-                          label="First Name"
-                          value={formik.values.firstName}
-                          onChange={formik.handleChange}
-                          error={
-                            formik.touched.firstName &&
-                            Boolean(formik.errors.firstName)
-                          }
-                          sx={{
-                            m: "1%",
-                            width: "48%",
-                            my: 1,
-                          }}
-                        />
-                        <TextField
-                          label="Last Name"
-                          id="outlined-controlled"
-                          required
-                          fullWidth
-                          name="lastName"
-                          value={formik.values.lastName}
-                          onChange={formik.handleChange}
-                          error={
-                            formik.touched.lastName &&
-                            Boolean(formik.errors.lastName)
-                          }
-                          sx={{
-                            m: "1%",
-                            width: "48%",
-                            my: 1,
-                          }}
-                        />
+                        <Box component="form" onSubmit={formik.handleSubmit}>
+                          <div>
+                            <TextField
+                              name="firstName"
+                              required
+                              fullWidth
+                              id="outlined-controlled"
+                              label="First Name"
+                              value={formik.values.firstName}
+                              onChange={formik.handleChange}
+                              error={
+                                formik.touched.firstName &&
+                                Boolean(formik.errors.firstName)
+                              }
+                              sx={{
+                                m: "1%",
+                                width: "48%",
+                                my: 1,
+                              }}
+                            />
 
-                        <FormControl
-                          sx={{
-                            m: "1%",
-                            width: "48%",
-                            my: 1,
-                          }}
-                          variant="outlined"
-                        >
-                          <InputLabel htmlFor="outlined-controlled">
-                            Country
-                          </InputLabel>
-                          <OutlinedInput
-                            id="outlined-controlled"
-                            required
-                            fullWidth
-                            label="Country"
-                            name="address.country"
-                            value={formik.values.address?.country || ""}
-                            onChange={formik.handleChange}
-                          />
-                        </FormControl>
-                        <FormControl
-                          sx={{
-                            m: "1%",
-                            width: "48%",
-                            my: 1,
-                          }}
-                          variant="outlined"
-                        >
-                          <InputLabel htmlFor="outlined-controlled">
-                            City
-                          </InputLabel>
-                          <OutlinedInput
-                            id="outlined-controlled"
-                            required
-                            fullWidth
-                            label="City"
-                            name="address.city"
-                            autoComplete="city"
-                            value={formik.values.address?.city || ""}
-                            onChange={formik.handleChange}
-                          />
-                        </FormControl>
+                            <TextField
+                              label="Last Name"
+                              id="outlined-controlled"
+                              required
+                              fullWidth
+                              name="lastName"
+                              value={formik.values.lastName}
+                              onChange={formik.handleChange}
+                              error={
+                                formik.touched.lastName &&
+                                Boolean(formik.errors.lastName)
+                              }
+                              sx={{
+                                m: "1%",
+                                width: "48%",
+                                my: 1,
+                              }}
+                            />
 
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          sx={{ m: 1, color: "white" }}
-                        >
-                          Save Changes
-                        </Button>
+                            <FormControl
+                              sx={{
+                                m: "1%",
+                                width: "48%",
+                                my: 1,
+                              }}
+                              variant="outlined"
+                            >
+                              <InputLabel htmlFor="outlined-controlled">
+                                Country
+                              </InputLabel>
+                              <OutlinedInput
+                                id="outlined-controlled"
+                                required
+                                fullWidth
+                                label="Country"
+                                name="address.country"
+                                value={formik.values.address?.country}
+                                onChange={formik.handleChange}
+                              />
+                            </FormControl>
+                            <FormControl
+                              sx={{
+                                m: "1%",
+                                width: "48%",
+                                my: 1,
+                              }}
+                              variant="outlined"
+                            >
+                              <InputLabel htmlFor="outlined-controlled">
+                                City
+                              </InputLabel>
+                              <OutlinedInput
+                                id="outlined-controlled"
+                                required
+                                fullWidth
+                                label="City"
+                                name="address.city"
+                                autoComplete="city"
+                                value={formik.values.address?.city}
+                                onChange={formik.handleChange}
+                              />
+                            </FormControl>
+
+                            <Button
+                              type="submit"
+                              variant="contained"
+                              sx={{ m: 1, color: "white" }}
+                              disabled={
+                                formik.values?.firstName === user.firstName ||
+                                (formik.values?.firstName === "" &&
+                                  formik.values?.lastName === user.lastName) ||
+                                (formik.values?.lastName === "" &&
+                                  formik.values?.address?.country ===
+                                    user.address?.country) ||
+                                (formik.values?.address?.country === "" &&
+                                  formik.values?.address?.city ===
+                                    user.address?.city) ||
+                                formik.values?.address?.city === ""
+                              }
+                            >
+                              Save Changes
+                            </Button>
+                          </div>
+                        </Box>
                       </div>
                     </div>
 

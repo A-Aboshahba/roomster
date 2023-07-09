@@ -49,7 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       {!path.includes("/dashboard") && <Navbar />}
-      <Container  maxWidth="xl" sx={{ minHeight: "80vh" }}>
+      <Container maxWidth="xl" sx={{ minHeight: "80vh" }}>
         <Routers getPathName={getPathName} />
       </Container>
       {["/", "/Home"].includes(path) && <LandingPageFooter />}

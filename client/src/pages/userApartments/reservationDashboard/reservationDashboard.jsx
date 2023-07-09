@@ -54,14 +54,14 @@ const ReservationDashboard = () => {
             <table className="table table-bordered border border-1 border-dark collaps" style={{background:'#ddf4cd'}} >
                 <thead className="thead-dark">
                     <tr>
-                        <th className='h4 text-center ' style={{background:'#7dc240'}} colSpan={Math.floor(items.length / 2 -1)}>Apartments</th>
-                        <th className='h4 text-center ' style={{background:'#7dc240'}} colSpan={Math.floor(items.length / 2)}>Reservations</th>
+                        <th className='h4 text-center text-white ' style={{background:'rgb(97 147 100)'}} colSpan={Math.floor(items.length / 2 -1)}>Apartments</th>
+                        <th className='h4 text-center text-white ' style={{background:'rgb(97 147 100)'}} colSpan={Math.floor(items.length / 2)}>Reservations</th>
                     </tr>
                 </thead>
                 <tbody>
                     {groups.map((group) => (
                         <tr key={group.id} style={{marginBottom: '10px'}}>
-                            <td className='w-content table-warning border-1 border-dark w-25 text-center p-3 '>{group.title}</td>
+                            <td className='w-content  table-warning border-1 border-dark w-25 text-center p-3 '>{group.title}</td>
                             {items.map((item) =>
                                 item.group === group.id && (
                                     <td className="table-success border border-1 border-dark text-center p-3"  key={`${group.id}-${item.id}`}>

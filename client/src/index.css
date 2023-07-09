@@ -19,6 +19,7 @@
 
 #root {
   padding-bottom: 45px;
+  overflow-x: hidden;
 }
 
 /* Position the footer at the bottom of the page */
@@ -34,7 +35,6 @@
   padding: 0 10px;
   box-sizing: border-box;
   z-index: 1000;
-
 }
 
 /* Style the Google Translate Element */
@@ -221,8 +221,8 @@ a {
 a.active div {
   color: #8bc34a !important;
 }
-.filterSearch{
-flex-direction: row;
+.filterSearch {
+  flex-direction: row;
   margin-top: -8px;
   width: calc(105% + 8px);
   margin-left: -8px;

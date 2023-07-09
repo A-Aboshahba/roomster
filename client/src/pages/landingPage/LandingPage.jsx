@@ -6,6 +6,7 @@ import {
   getApartmentsState,
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
+import CounterUp from "../../components/landingPageComponent/CounterUp/CounterUp";
 
 function LandingPage() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ function LandingPage() {
     <>
       <Header />
       <Slider apartments={apartments} />
+      <CounterUp />
     </>
   );
 }

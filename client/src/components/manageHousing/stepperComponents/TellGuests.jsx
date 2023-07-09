@@ -1,3 +1,5 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable react/prop-types */
 import { Box, Grid } from "@mui/material";
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
@@ -19,7 +21,6 @@ import {
   faHotTubPerson,
   faHouseFire,
   faKitMedical,
-  faMoneyBill,
   faMusic,
   faNetworkWired,
   faPersonSkiingNordic,

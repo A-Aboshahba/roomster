@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unescaped-entities */
 import {
   Autocomplete,
@@ -15,7 +16,6 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { MdRemoveCircleOutline } from "react-icons/md";
 import image1 from "../../../assets/c0634c73-9109-4710-8968-3e927df1191c.webp";
 import image2 from "../../../assets/bfc0bc89-58cb-4525-a26e-7b23b750ee00.webp";
-import apartment from "../../../store/Slices/apartment.js";
 
 function Comp1({ setIsChoosed }) {
   React.useEffect(() => {

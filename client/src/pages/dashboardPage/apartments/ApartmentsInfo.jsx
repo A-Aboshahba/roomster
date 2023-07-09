@@ -49,6 +49,7 @@ const ApartmentsInfo = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  
   const columns = [
     { field: "_id", headerName: "ID", flex: 0.5 },
     {

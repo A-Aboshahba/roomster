@@ -14,7 +14,7 @@ const CounterCard = ({ end = 10 }) => {
       scrollSpyOnce={true}
       start={0}
       end={end}
-      duration={10}
+      duration={4}
       delay={0.5}
       style={{
         color: "#9b9183",
@@ -25,7 +25,6 @@ const CounterCard = ({ end = 10 }) => {
     />
   );
 };
-
 function CounterUp() {
   return (
     <Grid
@@ -48,7 +47,7 @@ function CounterUp() {
         }}
       />
       <Typography sx={{fontSize:'16px'}}> All users </Typography>
-      <CounterCard end={150} className="mb-0" />
+      <CounterCard end={700} className="mb-0" />
     </div>
   </Grid>
   <Grid item xs={12} sm={6} md={2} className="p-4 mx-3 text-center">
@@ -74,7 +73,7 @@ function CounterUp() {
         }}
       />
       <Typography sx={{fontSize:'16px'}}> All Reservations </Typography>
-      <CounterCard end={140} className="mb-0" />
+      <CounterCard end={390} className="mb-0" />
     </div>
   </Grid>
   <Grid item xs={12} sm={6} md={2} className="p-4 mx-3 text-center">
@@ -87,7 +86,7 @@ function CounterUp() {
         }}
       />
       <Typography sx={{fontSize:'16px'}}> FIVE STAR RATINGS </Typography>
-      <CounterCard end={100} style={{ marginBottom: "0 !important"}} />
+      <CounterCard end={345} style={{ marginBottom: "0 !important"}} />
     </div>
   </Grid>
     </Grid>

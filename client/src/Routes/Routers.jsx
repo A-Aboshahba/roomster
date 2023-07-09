@@ -25,7 +25,7 @@ import { useMode, ColorModeContext } from "../theme";
 import LandingPage from "../pages/landingPage/LandingPage";
 import Terms from "../pages/Terms/Terms";
 import Privacy from "../pages/Privacy/Privacy";
-import ReservationDashboard from './../pages/userApartments/reservationDashboard/reservationDashboard';
+import ReservationDashboard from "./../pages/userApartments/reservationDashboard/reservationDashboard";
 
 function Routers({ getPathName }) {
   // function checkIsAdmin(props) {
@@ -85,13 +85,7 @@ function Routers({ getPathName }) {
           </UserGuard>
         }
       />
-      <Route
-        path="Message"
-        element={
-          <MessagePage
-          />    
-        }
-      />
+      <Route path="Message" element={<MessagePage />} />
       <Route
         path="apartment/modify"
         element={
@@ -212,8 +206,8 @@ function Routers({ getPathName }) {
           }
         />
       </Route>
-        <Route path="/terms" element={<Terms/>}/>
-        <Route path="/privacy" element={<Privacy/>}/>
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
       <Route path="*" element={<LandingPage />} />
     </Routes>
   );

@@ -20,8 +20,8 @@ import {
 import { addFavorite, deleteFavorite } from "../../store/Slices/userSlice";
 import { createAllIcons } from "../../utils/createIcons";
 import { SkeletonPageDetails } from "../../utils/SkeletonPage";
-import './HousingDetails.css'
-import ShareIcon from '@mui/icons-material/Share';
+import "./HousingDetails.css";
+import ShareIcon from "@mui/icons-material/Share";
 import Modal from "@mui/material/Modal";
 import {
   EmailShareButton,
@@ -43,7 +43,6 @@ import {
   VKShareButton,
   WhatsappShareButton,
   WorkplaceShareButton,
-
   EmailIcon,
   FacebookIcon,
   FacebookMessengerIcon,
@@ -64,8 +63,12 @@ import {
   VKIcon,
   WeiboIcon,
   WhatsappIcon,
-  WorkplaceIcon
+  WorkplaceIcon,
 } from "react-share";
+import BalconyIcon from "@mui/icons-material/Balcony";
+import CountertopsIcon from "@mui/icons-material/Countertops";
+import WeekendIcon from "@mui/icons-material/Weekend";
+import BedIcon from "@mui/icons-material/Bed";
 
 export default function HousingDetails() {
   const params = useParams();
@@ -101,7 +104,6 @@ export default function HousingDetails() {
     overflow: "auto",
   };
 
-
   useEffect(() => {
     dispatch(getSingleApartment({ id: params.apartmentId }));
     dispatch(getApartmentReviews({ apartmentId: params.apartmentId }));
@@ -131,27 +133,27 @@ export default function HousingDetails() {
 
   const currentUrl = window.location.href;
   const socialIcons = [
-    {icon:FacebookIcon,component:FacebookShareButton},
-    {icon:WhatsappIcon,component:WhatsappShareButton},
-    {icon:TwitterIcon,component:TwitterShareButton},
-    {icon:TelegramIcon,component:TelegramShareButton},
-    {icon:LinkedinIcon,component:LinkedinShareButton},
-    {icon:EmailIcon,component:EmailShareButton},
-    {icon:HatenaIcon,component:HatenaShareButton},
-    {icon:InstapaperIcon,component:InstapaperShareButton},
-    {icon:LineIcon,component:LineShareButton},
-    {icon:LivejournalIcon,component:LivejournalShareButton},
-    {icon:MailruIcon,component:MailruShareButton},
-    {icon:OKIcon,component:OKShareButton},
-    {icon:PinterestIcon,component:PinterestShareButton},
-    {icon:PocketIcon,component:PocketShareButton},
-    {icon:RedditIcon,component:RedditShareButton},
-    {icon:TumblrIcon,component:TumblrShareButton},
-    {icon:ViberIcon,component:ViberShareButton},
-    {icon:VKIcon,component:VKShareButton},
-    {icon:WorkplaceIcon,component:WorkplaceShareButton},
+    { icon: FacebookIcon, component: FacebookShareButton },
+    { icon: WhatsappIcon, component: WhatsappShareButton },
+    { icon: TwitterIcon, component: TwitterShareButton },
+    { icon: TelegramIcon, component: TelegramShareButton },
+    { icon: LinkedinIcon, component: LinkedinShareButton },
+    { icon: EmailIcon, component: EmailShareButton },
+    { icon: HatenaIcon, component: HatenaShareButton },
+    { icon: InstapaperIcon, component: InstapaperShareButton },
+    { icon: LineIcon, component: LineShareButton },
+    { icon: LivejournalIcon, component: LivejournalShareButton },
+    { icon: MailruIcon, component: MailruShareButton },
+    { icon: OKIcon, component: OKShareButton },
+    { icon: PinterestIcon, component: PinterestShareButton },
+    { icon: PocketIcon, component: PocketShareButton },
+    { icon: RedditIcon, component: RedditShareButton },
+    { icon: TumblrIcon, component: TumblrShareButton },
+    { icon: ViberIcon, component: ViberShareButton },
+    { icon: VKIcon, component: VKShareButton },
+    { icon: WorkplaceIcon, component: WorkplaceShareButton },
   ];
-  
+
   return (
     <>
       {!loading ? (
@@ -161,7 +163,7 @@ export default function HousingDetails() {
               flexGrow: 1,
               position: "relative",
               marginTop: "6rem",
-              marginBottom: '8rem'
+              marginBottom: "8rem",
             }}
           >
             <Box className="betweenItem" component="div" sx={{ mb: "1rem" }}>
@@ -181,7 +183,11 @@ export default function HousingDetails() {
                 ) : (
                   <FaRegHeart size={30} color="#000" onClick={() => Like()} />
                 )}
-                <IconButton sx={{ ml: 2 }} onClick={handleOpen} aria-label="delete">
+                <IconButton
+                  sx={{ ml: 2 }}
+                  onClick={handleOpen}
+                  aria-label="delete"
+                >
                   <ShareIcon />
                 </IconButton>
               </Box>
@@ -196,7 +202,6 @@ export default function HousingDetails() {
               }}
             >
               <Grid item xs={12} md={6}>
-
                 <img
                   style={{
                     width: " 100%",
@@ -204,9 +209,7 @@ export default function HousingDetails() {
                     borderRadius: 5,
                   }}
                   src={
-                    singleApartment.images
-                      ? singleApartment.images[0].url
-                      : ""
+                    singleApartment.images ? singleApartment.images[0].url : ""
                   }
                   alt=""
                 />
@@ -227,7 +230,7 @@ export default function HousingDetails() {
                       style={{
                         width: "100%",
                         height: "100%",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                       src={
                         singleApartment.images
@@ -241,7 +244,7 @@ export default function HousingDetails() {
                       style={{
                         width: "100%",
                         height: "100%",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                       src={
                         singleApartment.images
@@ -256,7 +259,7 @@ export default function HousingDetails() {
                       style={{
                         width: " 100%",
                         height: "100%",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                       src={
                         singleApartment.images
@@ -271,7 +274,7 @@ export default function HousingDetails() {
                       style={{
                         width: " 100%",
                         height: "100%",
-                        borderRadius: 5
+                        borderRadius: 5,
                       }}
                       src={
                         singleApartment.images
@@ -300,7 +303,11 @@ export default function HousingDetails() {
             }}
             spacing={2}
           >
-            <Grid item md={7} sx={{ backgroundColor: '#f2f2f2', borderRadius: 3, px: 2 }}>
+            <Grid
+              item
+              md={7}
+              sx={{ backgroundColor: "#f2f2f2", borderRadius: 3, px: 2 }}
+            >
               <Box sx={{ mb: 1 }}>
                 <Avatar
                   sx={{ width: 70, height: 70 }}
@@ -311,23 +318,24 @@ export default function HousingDetails() {
                   <Typography variant="h5" color="initial">
                     Entire villa hosted by {singleApartment?.userId?.fullName}
                     {user._id !== singleApartment?.userId?._id && (
-
-                      <button class="chatBtn" onClick={() => openChat(singleApartment?.userId?._id)}>
-                        <svg height="1.6em" fill="white" xml:space="preserve" viewBox="0 0 1000 1000" y="0px" x="0px" version="1.1">
+                      <button
+                        className="chatBtn"
+                        onClick={() => openChat(singleApartment?.userId?._id)}
+                      >
+                        <svg
+                          height="1.6em"
+                          fill="white"
+                          xmlSpace="preserve"
+                          viewBox="0 0 1000 1000"
+                          y="0px"
+                          x="0px"
+                          version="1.1"
+                        >
                           <path d="M881.1,720.5H434.7L173.3,941V720.5h-54.4C58.8,720.5,10,671.1,10,610.2v-441C10,108.4,58.8,59,118.9,59h762.2C941.2,59,990,108.4,990,169.3v441C990,671.1,941.2,720.5,881.1,720.5L881.1,720.5z M935.6,169.3c0-30.4-24.4-55.2-54.5-55.2H118.9c-30.1,0-54.5,24.7-54.5,55.2v441c0,30.4,24.4,55.1,54.5,55.1h54.4h54.4v110.3l163.3-110.2H500h381.1c30.1,0,54.5-24.7,54.5-55.1V169.3L935.6,169.3z M717.8,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.5,24.7,54.5,55.2C772.2,420.2,747.8,444.8,717.8,444.8L717.8,444.8z M500,444.8c-30.1,0-54.4-24.7-54.4-55.1c0-30.4,24.3-55.2,54.4-55.2c30.1,0,54.4,24.7,54.4,55.2C554.4,420.2,530.1,444.8,500,444.8L500,444.8z M282.2,444.8c-30.1,0-54.5-24.7-54.5-55.1c0-30.4,24.4-55.2,54.5-55.2c30.1,0,54.4,24.7,54.4,55.2C336.7,420.2,312.3,444.8,282.2,444.8L282.2,444.8z"></path>
                         </svg>
-                        <span class="tooltip">Chat</span>
+                        <span className="tooltip">Chat</span>
                       </button>
-
                     )}
-                  </Typography>
-                  <Typography variant="p" color="initial">
-                    Balcony (
-                    {singleApartment.apartmentSpecification?.noOfBalcony})- Beds
-                    ({singleApartment.apartmentSpecification?.noOfBeds})-
-                    Kitchens (
-                    {singleApartment.apartmentSpecification?.noOfKitchens}) -
-                    Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
                   </Typography>
                 </Box>
               </Box>
@@ -341,6 +349,50 @@ export default function HousingDetails() {
                 title="cancelation policy"
                 body={singleApartment.cancelPolicy}
               />
+              <Grid container spacing={2} sx={{ mt: "2rem" }}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  className="d-flex justify-content-center align-items-center p-3 shadow flex-column"
+                >
+                  <BalconyIcon color="primary" />
+                  Balcony ({singleApartment.apartmentSpecification?.noOfBalcony}
+                  )
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  className="d-flex justify-content-center align-items-center p-3 shadow flex-column"
+                >
+                  <BedIcon color="primary" />
+                  Beds({singleApartment.apartmentSpecification?.noOfBeds})
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  className="d-flex justify-content-center align-items-center p-3 shadow flex-column"
+                >
+                  <CountertopsIcon color="primary" />
+                  Kitchens (
+                  {singleApartment.apartmentSpecification?.noOfKitchens})
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  className="d-flex justify-content-center align-items-center p-3 shadow flex-column"
+                >
+                  <WeekendIcon color="primary" />
+                  Rooms ({singleApartment.apartmentSpecification?.noOfRooms})
+                </Grid>
+              </Grid>
               <Box sx={{ mt: 2, mb: 1 }}>
                 <Typography variant="h5" color="initial" sx={{ mb: 4 }}>
                   What this home has to offer
@@ -383,7 +435,7 @@ export default function HousingDetails() {
                   padding: "10px",
                   width: "fit-content",
                   margin: "auto",
-                  backgroundColor: '#f2f2f2'
+                  backgroundColor: "#f2f2f2",
                 }}
               >
                 <PickerDate
@@ -413,18 +465,24 @@ export default function HousingDetails() {
             component="h2"
             sx={{ mb: 2 }}
           >
-            Share Apartment : 
+            Share Apartment :
           </Typography>
           {/*//! here we will mapping on item coming from db */}
 
-        {socialIcons.map((item,index)=>{
-          return (
-            <item.component className="m-2"  key={index} title={"Welcome home! Our modern, spacious apartment is waiting for you. Schedule a tour today to experience the perfect living space."} url={currentUrl} >
-            <item.icon round={true} />
-          </item.component>
-          )
-        })}
-
+          {socialIcons.map((item, index) => {
+            return (
+              <item.component
+                className="m-2"
+                key={index}
+                title={
+                  "Welcome home! Our modern, spacious apartment is waiting for you. Schedule a tour today to experience the perfect living space."
+                }
+                url={currentUrl}
+              >
+                <item.icon round={true} />
+              </item.component>
+            );
+          })}
         </Box>
       </Modal>
     </>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import PersonIcon from "@mui/icons-material/Person";
 import CottageIcon from "@mui/icons-material/Cottage";
-const CounterCard = ({ end }) => {
+const CounterCard = ({ end = 10 }) => {
   return (
     <CountUp
       enableScrollSpy={true}
@@ -30,7 +30,7 @@ function CounterUp() {
       sx={{
         background: "#EFEBE1",
         width: "100vw",
-        height: "250px",
+        minHeight: "250px",
       }}
     >
       <Grid item xs={12} sm={6} md={2} className="p-4 text-center">

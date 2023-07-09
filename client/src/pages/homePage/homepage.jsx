@@ -24,7 +24,7 @@ function Homepage() {
       {!loading ? (
         <>
           <FilterAndSearch />
-          <Grid container columnSpacing={2} rowSpacing={4}>
+          <Grid container columnSpacing={2} rowSpacing={4} style={{marginLeft: '-7px' ,marginTop: "208px"}}>
             <LocationCards cards={apartments} />;
           </Grid>
         </>

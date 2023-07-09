@@ -226,6 +226,20 @@ a.active div {
   color: #8bc34a !important;
 }
 .filterSearch {
+  /* flex-direction: row;
+  margin-top: -8px;
+  width: calc(105% + 8px);
+  margin-left: -8px;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 25vh !important;
+  margin-bottom: 45px !important;
+  background-color: white !important;
+  position: sticky !important;
+  top: 77px !important;
+  z-index: 500 !important; */
   flex-direction: row;
   margin-top: -8px;
   width: calc(105% + 8px);
@@ -235,9 +249,12 @@ a.active div {
   -ms-flex-align: center;
   align-items: center;
   height: 17vh !important;
-  margin-bottom: 45px !important;
-  background-color: white !important;
-  position: sticky !important;
-  top: 77px !important;
-  z-index: 500 !important;
+  margin-bottom: 86px !important;
+  background-color: #ffffff !important;
+  position: fixed!important;
+  top: 81px !important;
+  z-index: 17 !important;
+  /* margin-right: 40px; */
+  width: 97vw !important;
+  padding-right: 17px;
 }

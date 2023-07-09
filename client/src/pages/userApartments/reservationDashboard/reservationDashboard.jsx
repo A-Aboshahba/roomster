@@ -55,7 +55,7 @@ const ReservationDashboard = () => {
                 <thead className="thead-dark">
                     <tr>
                         <th className='h4 text-center text-white ' style={{background:'rgb(97 147 100)'}} colSpan={Math.floor(items.length / 2 -1)}>Apartments</th>
-                        <th className='h4 text-center text-white ' style={{background:'rgb(97 147 100)'}} colSpan={Math.floor(items.length / 2)}>Reservations</th>
+                        <th className='h4 text-center text-white ' style={{background:'rgb(97 147 100)'}} colSpan={Math.floor(items.length)}>Reservations</th>
                     </tr>
                 </thead>
                 <tbody>

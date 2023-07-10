@@ -8,6 +8,7 @@ import {
 import { useEffect } from "react";
 import CounterUp from "../../components/landingPageComponent/CounterUp/CounterUp";
 import Reviews from "../../components/landingPageComponent/ReviewsComponent/Reviews";
+import Faq from "../../components/landingPageComponent/FAQ";
 
 function LandingPage() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function LandingPage() {
       <Slider apartments={apartments} />
       <CounterUp />
       <Reviews></Reviews>
+      <Faq></Faq>
     </>
   );
 }

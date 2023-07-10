@@ -1,14 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Roomster from "../../API/config";
 
-export const fetchUsers = createAsyncThunk(
-  "users/fetchUsers",
-  async () => {
-    const { data } = await Roomster.get(`user/all`);
-    console.log(data);
-    return data;
-  }
-);
+export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
+  const { data } = await Roomster.get(`user/all`);
+  console.log(data);
+  return data;
+});
 
 const initialState = {
   users: {

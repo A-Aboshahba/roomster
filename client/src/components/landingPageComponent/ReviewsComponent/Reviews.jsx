@@ -89,7 +89,7 @@ function Reviews() {
   }
   console.log(subarrays);
   return (
-    <div style={{ width: "100vw",marginTop:"100px" }} className="mt-5">
+    <div style={{ width: "100vw", marginTop: "100px" }} className="mt-5 ">
       <h5
         className="sliderHeader text-center"
         style={{ fontWeight: "600", color: "#9B9183" }}
@@ -129,8 +129,8 @@ function Reviews() {
           ></button>
         </div>
         <div
-          className="carousel-inner review-height"
-          style={{ width: "100vw" }}
+          className="carousel-inner review-height p-1"
+          style={{ width: "95vw" }}
         >
           <div className="carousel-item active ">
             <div className="  row   justify-content-center  align-items-center">

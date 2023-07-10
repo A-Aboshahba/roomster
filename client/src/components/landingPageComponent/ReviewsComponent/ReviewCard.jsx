@@ -6,8 +6,15 @@ import React from "react";
 
 function ReviewCard({ review }) {
   return (
-    <div className=" p-4 shadow rounded-2 mx-3 my-2 col-11 col-md-5 col-lg-3  ">
-      <p style={{ width: "98%" }} className="mb-3">
+    <div className=" review-card p-4 shadow rounded-2 mx-3 my-2 col-11 col-md-5 col-lg-3  ">
+      <p
+        style={{
+          width: "100%",
+          textAlign: "start",
+          // height: "110px",
+        }}
+        className="mb-3 small-card-review "
+      >
         {review.description}
       </p>
       <Divider></Divider>

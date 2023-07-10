@@ -1,5 +1,14 @@
 .review-height {
-  height: 900px;
+  height: 750px;
+}
+
+.small-card-review {
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 /* @media (max-width: 600px) {
   .review-height {
@@ -20,18 +29,28 @@
   --bs-shadow-color: #9b9183;
 }
 
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
   .review-height {
     height: 750px;
   }
-}
-@media (min-width: 768px) {
+} */
+@media (max-width: 640px) {
   .review-height {
-    height: 700px;
+    height: 920px;
+  }
+}
+@media (min-width: 800px) {
+  .review-height {
+    height: 650px;
   }
 }
 @media (min-width: 992px) {
   .review-height {
-    height: 430px;
+    height: 400px;
+  }
+}
+@media (min-width: 1100px) {
+  .review-height {
+    height: 350px;
   }
 }

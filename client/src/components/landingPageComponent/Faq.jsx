@@ -4,7 +4,7 @@ const Faq = () => {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={1}
       justifyContent="space-around"
       alignItems="center"
       sx={{ height: "70vh", mt: 3, mb: 20 }}>
@@ -39,15 +39,14 @@ const Faq = () => {
           height: " 75%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
         }}>
         <div>
-          <h1>Frequently Asked Questions</h1>
+          <h1 style={{marginBottom:"30px",fontFamily: "Gilda Display",fontSize: "60px",fontWeight: 600,lineHeight: "1.2em", color: "rgb(155, 145, 131)", marginTop: "-42px"}} >Frequently Asked Questions</h1>
         </div>
         <div>
           <div className="accordion accordion-flush" id="accordionFlushExample">
             <div className="accordion-item">
-              <h2 className="accordion-header">
+              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -72,7 +71,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header">
+              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -100,7 +99,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header">
+              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -127,7 +126,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header">
+              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
                 <button
                   className="accordion-button collapsed"
                   type="button"

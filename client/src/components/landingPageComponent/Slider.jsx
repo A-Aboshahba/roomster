@@ -44,9 +44,9 @@ const Slider = ({ apartments }) => {
 
   return (
     <div className='container' style={{ mt: "4rem",paddingBottom:'110px' }}>
-      <h5 className="sliderHeader" style={{mt:10}}> 
+      <h5 className="sliderHeader" style={{mt:10 }}> 
         Our Best apartments </h5> 
-      <Typography variant="h6" sx={{mb:2}}>
+      <Typography variant="h6" sx={{mb:2, color: "rgb(155, 145, 131)"}}>
       Plenty of services to assure your relaxation and comfortability.
       </Typography>
       <Carousel

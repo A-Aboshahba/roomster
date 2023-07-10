@@ -24,7 +24,7 @@ function LandingPage() {
       <Slider apartments={apartments} />
       <CounterUp />
       <Reviews></Reviews>
-      <Faq></Faq>
+      <Faq/>
     </>
   );
 }

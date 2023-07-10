@@ -89,7 +89,7 @@ function Reviews() {
   }
   console.log(subarrays);
   return (
-    <div style={{ width: "100vw" }} className="mt-2">
+    <div style={{ width: "100vw",marginTop:"100px" }} className="mt-5">
       <h5
         className="sliderHeader text-center"
         style={{ fontWeight: "600", color: "#9B9183" }}

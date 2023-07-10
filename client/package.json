@@ -61,6 +61,7 @@
     "react-google-translate": "^1.0.12",
     "react-icons": "^4.8.0",
     "react-input-emoji": "^5.1.1",
+    "react-material-ui-carousel": "^2.3.11",
     "react-multi-carousel": "^2.6.5",
     "react-pro-sidebar": "^0.7.1",
     "react-redux": "^8.1.0",

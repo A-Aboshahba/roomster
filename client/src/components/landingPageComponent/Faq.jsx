@@ -7,7 +7,7 @@ const Faq = () => {
       spacing={2}
       justifyContent="space-around"
       alignItems="center"
-      sx={{ height: "70vh", mt: 3 }}>
+      sx={{ height: "70vh", mt: 3, mb: 20 }}>
       <Grid
         item
         lg={5}
@@ -31,12 +31,16 @@ const Faq = () => {
       </Grid>
       <Grid
         item
+        component={"div"}
         xs={9}
         md={4}
         lg={5}
-        textAlign={"center"}
-        flexDirection={"column"}
-        justifyContent={"space-between"}>
+        style={{
+          height: " 75%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}>
         <div>
           <h1>Frequently Asked Questions</h1>
         </div>

@@ -23,8 +23,11 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   ResetRedux,
+  addNotificationsNo,
   addUnseen,
+  resetNotificationsNo,
   resetUnseen,
+  setNotificationsNo,
   setUnseen,
 } from "../store/Slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,13 +57,16 @@ function Navbar() {
   const open = Boolean(anchorEl);
   const [anchorNotification, setAnchorNotification] = useState(null);
   const openNotification = Boolean(anchorNotification);
-  const [unseenNumber, setUnseenNumber] = useState(null);
-  const [unseenConversations] = useState([]);
+  const [notifications, setNotifications] = useState({ data: [] });
+  // const [unseenNumber, setUnseenNumber] = useState(null);
   const socket = useSelector((state) => {
     return state.user?.socket;
   });
   const unseenConvo = useSelector((state) => {
     return state.user?.unseen;
+  });
+  const unseenNumber = useSelector((state) => {
+    return state.user?.notificationsNo;
   });
   // const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
@@ -85,24 +91,29 @@ function Navbar() {
   };
   const handleNotificationClose = () => {
     setAnchorNotification(null);
+    let newState = notifications?.data?.map((notification) => {
+      return { ...notification, seen: true };
+    });
+    setNotifications({ data: newState });
+
+    // console.log(document.querySelectorAll(".unseen"));
   };
   const handelSeen = async () => {
     try {
       await Roomster.patch(`notifications/${user._id}`);
-      setUnseenNumber(0);
+      dispatch(resetNotificationsNo());
     } catch (error) {
       console.log(error);
     }
   };
 
-  const [notifications, setNotifications] = useState({ data: [] });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (user._id == "") {
-      setUnseenNumber(null);
+      dispatch(resetNotificationsNo());
       setNotifications({ data: [] });
       dispatch(resetUnseen());
     } else {
@@ -112,12 +123,11 @@ function Navbar() {
 
   useEffect(() => {
     if (unseenNumber == null && user._id != "") {
+      console.log("Asdasdlkasd");
       const getNotifications = async () => {
         const { data } = await Roomster.get(`notifications/${user._id}`);
-        if (data.noOfUnseen != 0) setUnseenNumber(data.noOfUnseen);
-        else {
-          setUnseenNumber(0); // set unseenNumber to 1 if there are no unseen notifications
-        }
+        // if (data.noOfUnseen != 0) dispatch(setNotifications(data.noOfUnseen));
+        dispatch(setNotificationsNo(data.noOfUnseen));
       };
       getNotifications();
     }
@@ -133,7 +143,7 @@ function Navbar() {
   }, [user._id, unseenNumber]);
   useEffect(() => {
     socket?.on("getNotification", (notification) => {
-      setUnseenNumber(unseenNumber + 1);
+      dispatch(addNotificationsNo());
       setNotifications((prevState) => ({
         data: [
           { senderId: notification.sender, text: notification.text },
@@ -144,7 +154,7 @@ function Navbar() {
     socket?.on("getMessage", (data) => {
       dispatch(addUnseen(data.sender._id));
     });
-  }, [socket, unseenConversations, unseenNumber]);
+  }, [socket]);
 
   const fetchNotifications = async (page) => {
     const { data } = await Roomster.get(
@@ -162,6 +172,7 @@ function Navbar() {
     if (newData.data.length === 0) {
       setHasMore(false);
     } else {
+      console.log(newData.data);
       setNotifications((prevState) => ({
         data: [...prevState.data, ...newData.data],
       }));
@@ -185,8 +196,7 @@ function Navbar() {
             size="large"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
+            aria-expanded={open ? "true" : undefined}>
             {user?.image?.url === "" ? (
               <Avatar sx={{ width: 32, height: 32 }}></Avatar>
             ) : (
@@ -233,8 +243,7 @@ function Navbar() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         {user._id !== "" ? (
           <NavLink to="profile">
             <MenuItem onClick={handleClose}>
@@ -293,8 +302,7 @@ function Navbar() {
               socket.disconnect();
               navigate("/home");
             }}
-            sx={{ color: "#CD1818" }}
-          >
+            sx={{ color: "#CD1818" }}>
             <ListItemIcon>
               <Logout fontSize="small" sx={{ color: "#CD1818" }} />
             </ListItemIcon>
@@ -309,8 +317,7 @@ function Navbar() {
             to={"/register"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>
@@ -325,8 +332,7 @@ function Navbar() {
             to={"/login"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <ListItemIcon>
               <LoginIcon fontSize="small" />
             </ListItemIcon>
@@ -341,8 +347,7 @@ function Navbar() {
             to={"/help"}
             onClick={() => {
               handleClose();
-            }}
-          >
+            }}>
             <Divider />
             <ListItemIcon>
               <HelpOutlineOutlinedIcon fontSize="small" />
@@ -399,8 +404,7 @@ function Navbar() {
               <Badge
                 badgeContent={user.favourites.length}
                 sx={{ margin: "auto" }}
-                color="primary"
-              >
+                color="primary">
                 <ListItemText primary="wishlist" />
               </Badge>
             </ListItemButton>
@@ -422,8 +426,7 @@ function Navbar() {
             onClick={() => {
               localStorage.clear();
               dispatch(ResetRedux());
-            }}
-          >
+            }}>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary="LogOut" />
             </ListItemButton>
@@ -482,9 +485,8 @@ function Navbar() {
           backgroundColor: "#ffffff",
           boxShadow: bgcolor ? "none" : "0px 2px 8px rgba(0, 0, 0, 0.32)",
           transition: "all 0.18s ease-in",
-        }}
-      >
-        <Toolbar >
+        }}>
+        <Toolbar>
           <IconButton
             aria-label="open drawer"
             edge="start"
@@ -492,15 +494,13 @@ function Navbar() {
               handleDrawerToggle();
               handelSeen();
             }}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
+            sx={{ mr: 2, display: { sm: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
             <NavLink to="/Home">
               <img src={image} className="logo" />
             </NavLink>
@@ -508,8 +508,7 @@ function Navbar() {
 
           <Box
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            className="center"
-          >
+            className="center">
             {navItems.map((item) => (
               <NavLink to={item} key={item}>
                 {!(item === "Message") && (
@@ -521,8 +520,7 @@ function Navbar() {
                       fontFamily: "Outfit",
                       fontWeight: "500",
                       fontSize: "1.2rem",
-                    }}
-                  >
+                    }}>
                     {item}
                   </Button>
                 )}
@@ -536,8 +534,7 @@ function Navbar() {
                         fontFamily: "Outfit",
                         fontWeight: "500",
                         fontSize: "1.2rem",
-                      }}
-                    >
+                      }}>
                       {item}
                     </Button>
                   </Badge>
@@ -550,8 +547,7 @@ function Navbar() {
                 handleNotificationOpen(event);
                 handelSeen();
               }}
-              sx={{ color: "#000" }}
-            >
+              sx={{ color: "#000" }}>
               <Badge badgeContent={unseenNumber} color="error">
                 <NotificationsIcon />
               </Badge>
@@ -563,8 +559,7 @@ function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   textAlign: "center",
-                }}
-              ></Box>
+                }}></Box>
               <Menu
                 anchorEl={anchorLanguage}
                 id="language-menu"
@@ -598,8 +593,7 @@ function Navbar() {
                   },
                 }}
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
                 <MenuItem onClick={handleClose}>English</MenuItem>
                 <MenuItem onClick={handleClose}>Arabic</MenuItem>
               </Menu>
@@ -626,8 +620,7 @@ function Navbar() {
               boxSizing: "border-box",
               width: drawerWidth,
             },
-          }}
-        >
+          }}>
           {drawer}
         </Drawer>
       </Box>
@@ -642,8 +635,7 @@ function Navbar() {
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
-        }}
-      >
+        }}>
         <ListSubheader>Notifications</ListSubheader>
         <List
           sx={{
@@ -657,21 +649,20 @@ function Navbar() {
             maxHeight: 400,
             "& ul": { paddingBottom: 0 },
           }}
-          onScroll={handleScroll}
-        >
-          {notifications?.data.map((notification, index) => {
+          onScroll={handleScroll}>
+          {notifications?.data?.map((notification, index) => {
             return (
               <Box
                 key={index}
                 component={"div"}
                 sx={{ my: 2, px: 3 }}
-                className="betweenItem"
-              >
+                className={`betweenItem ${
+                  notification.seen ? "seen" : "unseen"
+                }`}>
                 <ListItemAvatar>
                   <Avatar
                     alt={notification.senderId.fullName}
-                    src={notification.senderId.image.url}
-                  ></Avatar>
+                    src={notification.senderId.image.url}></Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={notification.senderId.fullName}

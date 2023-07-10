@@ -7,6 +7,7 @@ import {
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
 import CounterUp from "../../components/landingPageComponent/CounterUp/CounterUp";
+import Reviews from "../../components/landingPageComponent/ReviewsComponent/Reviews";
 
 function LandingPage() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ function LandingPage() {
       <Header />
       <Slider apartments={apartments} />
       <CounterUp />
+      <Reviews></Reviews>
     </>
   );
 }

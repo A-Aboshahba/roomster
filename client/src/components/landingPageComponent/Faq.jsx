@@ -4,7 +4,7 @@ const Faq = () => {
   return (
     <Grid
       container
-      spacing={1}
+      spacing={2}
       justifyContent="space-around"
       alignItems="center"
       sx={{ height: "70vh", mt: 3, mb: 20 }}>
@@ -23,7 +23,7 @@ const Faq = () => {
         }}>
         <Box
           component="img"
-          sx={{ width: "470px", height: "440px" }}
+          sx={{ width: "470px", pl: 5, height: "440px" }}
           src={
             "https://a0.muscache.com/im/pictures/88c7620c-0c19-476f-ba25-ba5db2c52119.jpg?im_w=720"
           }
@@ -33,20 +33,21 @@ const Faq = () => {
         item
         component={"div"}
         xs={9}
-        md={4}
+        md={5}
         lg={5}
         style={{
           height: " 75%",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "space-between",
         }}>
         <div>
-          <h1 style={{marginBottom:"30px",fontFamily: "Gilda Display",fontSize: "60px",fontWeight: 600,lineHeight: "1.2em", color: "rgb(155, 145, 131)", marginTop: "-42px"}} >Frequently Asked Questions</h1>
+          <h1>Frequently Asked Questions</h1>
         </div>
         <div>
           <div className="accordion accordion-flush" id="accordionFlushExample">
             <div className="accordion-item">
-              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
+              <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -71,7 +72,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
+              <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -99,7 +100,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
+              <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
                   type="button"
@@ -126,7 +127,7 @@ const Faq = () => {
               </div>
             </div>
             <div className="accordion-item">
-              <h2 className="accordion-header" style={{fontFamily: "Montserrat",fontWeight: "600"}}>
+              <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
                   type="button"

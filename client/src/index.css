@@ -35,7 +35,7 @@
   align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 1000000000000;
 }
 
 /* Style the Google Translate Element */

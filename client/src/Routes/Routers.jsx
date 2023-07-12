@@ -26,6 +26,7 @@ import LandingPage from "../pages/landingPage/LandingPage";
 import Terms from "../pages/Terms/Terms";
 import Privacy from "../pages/Privacy/Privacy";
 import ReservationDashboard from "./../pages/userApartments/reservationDashboard/reservationDashboard";
+import NotFoundPage from "../pages/Not Found Page/NotFound";
 
 function Routers({ getPathName }) {
   // function checkIsAdmin(props) {
@@ -49,6 +50,7 @@ function Routers({ getPathName }) {
 
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="Home" element={<LandingPage />} />
       <Route path="login" element={<SignInSide />} />
       <Route path="register" element={<Signup />} />
@@ -208,7 +210,7 @@ function Routers({ getPathName }) {
       </Route>
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
-      <Route path="*" element={<LandingPage />} />
+    <Route path='*' element={ <NotFoundPage />}/>
     </Routes>
   );
 }

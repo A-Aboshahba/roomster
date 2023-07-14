@@ -35,7 +35,6 @@ exports.getApartmentReviews = (request, response, next) => {
     Review.find({ apartmentId: request.params.id })
       .populate({
         path: "userId",
-        // select: { fullName: 1, email: 1, _id: 0 },
       })
       .populate({ path: "apartmentId" }),
     request.query

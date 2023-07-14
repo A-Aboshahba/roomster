@@ -35,7 +35,7 @@ export const getApartmentReviews = createAsyncThunk(
   async ({ page = 1, apartmentId }, thunkAPI) => {
     try {
       const response = await Roomster.get(
-        `reviews/apartment/${apartmentId}?page=${page}`
+        `reviews/apartment/${apartmentId}?page=${page}&limit=100`
       );
 
       return response.data;
@@ -146,7 +146,7 @@ const apartmentsSlice = createSlice({
     },
     [loadMoreApartments.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      console.log(action.payload)
+      console.log(action.payload);
       if (action.payload.length == 0) {
         state.isDataFetched = false;
       }

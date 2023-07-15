@@ -35,7 +35,7 @@ export default function ManageHousing() {
       setApartment(apartment);
     }
   }, []);
-  const [activeStep, setActiveStep] = useState(4);
+  const [activeStep, setActiveStep] = useState(1);
   const [skipped, setSkipped] = useState(new Set());
   const [isChoosed, setIsChoosed] = useState(true);
   const { user } = useSelector((state) => state.user);

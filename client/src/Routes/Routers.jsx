@@ -87,7 +87,11 @@ function Routers({ getPathName }) {
           </UserGuard>
         }
       />
-      <Route path="Message" element={<MessagePage />} />
+      <Route path="Message" element={
+        <UserGuard>
+          <MessagePage />
+        </UserGuard>
+      } />
       <Route
         path="apartment/modify"
         element={
@@ -210,7 +214,7 @@ function Routers({ getPathName }) {
       </Route>
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
-    <Route path='*' element={ <NotFoundPage />}/>
+      <Route path='*' element={<NotFoundPage />} />
     </Routes>
   );
 }

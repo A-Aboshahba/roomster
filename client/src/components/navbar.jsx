@@ -541,17 +541,18 @@ function Navbar() {
                 )}
               </NavLink>
             ))}
-            <IconButton
-              aria-label="show notifications"
-              onClick={(event) => {
-                handleNotificationOpen(event);
-                handelSeen();
-              }}
-              sx={{ color: "#000" }}>
-              <Badge badgeContent={unseenNumber} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            {user._id !== "" ? (
+              <IconButton
+                aria-label="show notifications"
+                onClick={(event) => {
+                  handleNotificationOpen(event);
+                  handelSeen();
+                }}
+                sx={{ color: "#000" }}>
+                <Badge badgeContent={unseenNumber} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>) : ''}
             {/* icon language start */}
             <>
               <Box
@@ -656,9 +657,8 @@ function Navbar() {
                 key={index}
                 component={"div"}
                 sx={{ my: 2, px: 3 }}
-                className={`betweenItem ${
-                  notification.seen ? "seen" : "unseen"
-                }`}>
+                className={`betweenItem ${notification.seen ? "seen" : "unseen"
+                  }`}>
                 <ListItemAvatar>
                   <Avatar
                     alt={notification.senderId.fullName}

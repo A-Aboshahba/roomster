@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import CounterUp from "../../components/landingPageComponent/CounterUp/CounterUp";
 import Reviews from "../../components/landingPageComponent/ReviewsComponent/Reviews";
-import Faq from "../../components/landingPageComponent/FAQ";
+import Faq from "../../components/landingPageComponent/Faq";
 
 function LandingPage() {
   const dispatch = useDispatch();

@@ -10,7 +10,7 @@ import {
   getApartmentTotalReviwsState,
 } from "../../store/Slices/apartment";
 import { useEffect } from "react";
-import AddReview from "./addReview";
+import AddReview from "./AddReview";
 import { Box } from "@mui/system";
 
 function ReviewSection() {

@@ -3,7 +3,7 @@ import Homepage from "../pages/homePage/homepage";
 import SignInSide from "../pages/loginPage";
 import Signup from "../pages/registerPage";
 import Profile from "../pages/profile/Profile";
-import HousingDetails from "../pages/housingDetails/housingDetails";
+import HousingDetails from "../pages/housingDetails/HousingDetails";
 import ManageHousing from "../pages/manageHousing/manageHousing";
 import WishList from "../pages/WishList/WishList";
 import MyTrips from "../pages/MyTrips/MyTrips";
